@@ -5,6 +5,10 @@ import dotenv from 'dotenv'
 import configureDB from './config/db.js'
 
 import userRouter from './config/routes/auth.route.js'
+import profileRouter from './config/routes/profile.route.js'
+import petRouter from './config/routes/pet.route.js'
+import petTypeRouter from './config/routes/pet-type-route.js'
+
 const app = express()
 configureDB()
 dotenv.config()
@@ -17,6 +21,10 @@ app.use(function(req,res,next){
 })
 
 app.use('/api/auth',userRouter)
+app.use('/api/profile',profileRouter)
+app.use('/api/pet',petRouter)
+app.use('/api/pet-types', petTypeRouter);
+
 
 app.listen(process.env.PORT, () => {
     console.log('server is running on the port:', process.env.PORT)
