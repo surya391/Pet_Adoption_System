@@ -14,24 +14,16 @@ export const requestSchema = {
 //     },
 //   },
   petId: {
-    exists: {
-      errorMessage: "Pet ID is required.",
-    },
-    isMongoId: {
-      errorMessage: "Pet ID must be a valid MongoDB ObjectId.",
-    },
-    custom: {
-      options: (value) => {
-        return mongoose.Types.ObjectId.isValid(value);
+    petId: {
+        in: ['body'],
+        isMongoId: {
+          errorMessage: "Invalid pet ID",
+        },
       },
-    },
   },
   phone: {
     exists: {
       errorMessage: "Phone number is required.",
-    },
-    isString: {
-      errorMessage: "Phone number must be a string.",
     },
     notEmpty: {
       errorMessage: "Phone number cannot be empty.",
@@ -67,42 +59,37 @@ export const requestSchema = {
     trim: true,
   },
   description: {
-    optional: true,
-    options: { min: 0, max: 250 },
+    in: ['body'],
+    optional: true, // Allow this field to be optional
     isString: {
-      errorMessage: "Description must be a string.",
+      errorMessage: "Description must be a string",
     },
-    trim: true,
   },
   startDatetime: {
-    exists: {
-      errorMessage: "Start date and time are required.",
-    },
+    in: ['body'],
     custom: {
       options: (value) => {
-        // Regular expression to match yyyy-mm-dd and time
-        const regex = /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(Z|[\+\-]\d{2}:\d{2})?)?$/;
-        if (!regex.test(value)) {
-          throw new Error("Start date and time must be in valid format (yyyy-mm-ddTHH:MM:SSZ or yyyy-mm-dd HH:MM:SS).");
-        }
-        return true;
+        return (
+          !isNaN(Date.parse(value)) || // Check if ISO 8601 or parseable
+          /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(value) // Validate "yyyy-mm-dd HH:MM:SS"
+        );
       },
+      errorMessage:
+        "Start date and time must be in valid format (yyyy-mm-ddTHH:MM:SSZ or yyyy-mm-dd HH:MM:SS).",
     },
   },
   endDatetime: {
-    exists: {
-      errorMessage: "End date and time are required.",
-    },
+    in: ['body'],
     custom: {
       options: (value) => {
-        // Regular expression to match yyyy-mm-dd and time
-        const regex = /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(Z|[\+\-]\d{2}:\d{2})?)?$/;
-        if (!regex.test(value)) {
-          throw new Error("End date and time must be in valid format (yyyy-mm-ddTHH:MM:SSZ or yyyy-mm-dd HH:MM:SS).");
-        }
-        return true;
+        return (
+          !isNaN(Date.parse(value)) || // Check if ISO 8601 or parseable
+          /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(value) // Validate "yyyy-mm-dd HH:MM:SS" ; it can be interally same in the UTC formate.
+        );
       },
-    },
+      errorMessage:
+        "End date and time must be in valid format (yyyy-mm-ddTHH:MM:SSZ or yyyy-mm-dd HH:MM:SS).",
+    }
   },
   status: {
     optional: true,

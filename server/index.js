@@ -8,6 +8,7 @@ import userRouter from './config/routes/auth.route.js'
 import profileRouter from './config/routes/profile.route.js'
 import petRouter from './config/routes/pet.route.js'
 import petTypeRouter from './config/routes/pet-type-route.js'
+import requestRouter from './config/routes/request-route.js'
 
 const app = express()
 configureDB()
@@ -24,6 +25,7 @@ app.use('/api/auth',userRouter)
 app.use('/api/profile',profileRouter)
 app.use('/api/pet',petRouter)
 app.use('/api/pet-types', petTypeRouter);
+app.use('/api/request', requestRouter);
 
 
 app.listen(process.env.PORT, () => {

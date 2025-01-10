@@ -4,10 +4,10 @@ const RequestSchema = new Schema(
   {
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     petId: { type: Schema.Types.ObjectId, ref: "Pet", required: true },
-    phone: { type: String, required: true },
+    phone: { type: Number, required: true },
     requestType: { type: String, enum: ['temp_adoption', 'walking'], required: true },
     location: { type: String, required: true },
-    description: { type: String },
+    description: { type: String, required: true },
     startDatetime: { type: Date, required: true },
     endDatetime: { type: Date, required: true },
     status: { type: String, enum: ["pending", "approved", "rejected"], default: "pending" },
@@ -15,6 +15,6 @@ const RequestSchema = new Schema(
   { timestamps: true }
 );
 
-const Request = mongoose.model('Request', RequestSchema);
+const Request = model('Request', RequestSchema);
 
-module.exports = Request;
+export default Request
