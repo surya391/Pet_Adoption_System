@@ -41,10 +41,13 @@ export const requestSchema = {
     exists: {
       errorMessage: "Request type is required.",
     },
-    isIn: {
-      options: [['temp_adoption', 'walking']],
-      errorMessage: "Request type must be either 'temp_adoption' or 'walking'.",
+    notEmpty: {
+      errorMessage: "Pet request type cannot be empty.",
     },
+    isMongoId: {
+      errorMessage: 'id is invalid'
+    },
+    trim : true
   },
   location: {
     exists: {
