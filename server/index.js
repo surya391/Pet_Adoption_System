@@ -10,6 +10,7 @@ import petRouter from './config/routes/pet.route.js'
 import petTypeRouter from './config/routes/pet-type-route.js'
 import requestRouter from './config/routes/request-route.js'
 import requestTypeRouter from './config/routes/request-type-route.js'
+import reviewRouter from './config/routes/review-router.js'
 
 const app = express()
 configureDB()
@@ -28,6 +29,7 @@ app.use('/api/pet',petRouter)
 app.use('/api/pet-types', petTypeRouter);
 app.use('/api/request', requestRouter);
 app.use('/api/request-types', requestTypeRouter);
+app.use('/api/review',reviewRouter)
 
 
 app.listen(process.env.PORT, () => {
