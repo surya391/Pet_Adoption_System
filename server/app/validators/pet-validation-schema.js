@@ -1,5 +1,4 @@
 
-
 export const petSchema = {
   petName: {
     exists: {

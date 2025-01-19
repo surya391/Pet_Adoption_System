@@ -158,7 +158,7 @@ export const userRegisterSchema = {
         normalizeEmail:true,
         custom:{
             options :async function (value) {
-                const user = await User.findOne({ email:value})
+                const user = await User.findOne({ email:value })
                 if(user){
                     throw new Error("email is already taken")
                 }

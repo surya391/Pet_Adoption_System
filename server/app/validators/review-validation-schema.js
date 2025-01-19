@@ -1,6 +1,3 @@
-import { body } from 'express-validator';
-import mongoose from 'mongoose';
-
 export const reviewSchema = {
   serviceProviderId: {
     in: ["body"],

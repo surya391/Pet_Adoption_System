@@ -7,7 +7,7 @@ export const requestTypeSchema = {
       notEmpty: {
         errorMessage: 'Pet requst type is required.',
       },
-      trim: true, // Optional: trims whitespace
+      trim: true,
       custom: {
         options: async function (value) {
             const petrequestType = await RequestType.findOne({ requestType: value })

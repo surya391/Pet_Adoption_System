@@ -19,7 +19,7 @@ export const profileSchema = {
     //   },
     // },
     profilePic: {
-      optional: true, // Allow this field to be optional
+      optional: true, 
       isString: {
         errorMessage: "Profile picture must be a valid string (e.g., a URL).",
       },

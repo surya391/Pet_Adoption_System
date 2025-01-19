@@ -63,7 +63,7 @@ export const requestSchema = {
   },
   description: {
     in: ['body'],
-    optional: true, // Allow this field to be optional
+    optional: true, 
     isString: {
       errorMessage: "Description must be a string",
     },
@@ -86,7 +86,7 @@ export const requestSchema = {
     custom: {
       options: (value) => {
         return (
-          !isNaN(Date.parse(value)) || // Check if ISO 8601 or parseable
+          !isNaN(Date.parse(value)) ||
           /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(value) // Validate "yyyy-mm-dd HH:MM:SS" ; it can be interally same in the UTC formate.
         );
       },

@@ -7,7 +7,7 @@ export const petTypeSchema = {
       notEmpty: {
         errorMessage: 'Pet type is required.',
       },
-      trim: true, // Optional: trims whitespace
+      trim: true, 
       custom: {
         options: async function (value) {
             const pettype = await PetType.findOne({ petType: value })
