@@ -80,23 +80,23 @@ interestCltr.destroy = async (req, res) => {
 };
 
 // Get all interests of a provider or based on filters
-interestCltr.index = async (req, res) => {
-  const { providerId, requestId, status } = req.query;
+// interestCltr.index = async (req, res) => {
+//   const { providerId, requestId, status } = req.query;
 
-  const filter = {};
-  if (providerId) filter.providerId = providerId;
-  if (requestId) filter.requestId = requestId;
-  if (status) filter.status = status;
+//   const filter = {};
+//   if (providerId) filter.providerId = providerId;
+//   if (requestId) filter.requestId = requestId;
+//   if (status) filter.status = status;
 
-  try {
-    const interests = await Interest.find(filter)
-      .populate("providerId", "name email") // Adjust fields as necessary
-      .populate("requestId"); // Adjust fields as necessary
-    res.json(interests);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong." });
-  }
-};
+//   try {
+//     const interests = await Interest.find(filter)
+//       .populate("providerId", "name email") // Adjust fields as necessary
+//       .populate("requestId"); // Adjust fields as necessary
+//     res.json(interests);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ error: "Something went wrong." });
+//   }
+// };
 
 export default interestCltr;
