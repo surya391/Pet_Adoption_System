@@ -36,48 +36,48 @@ interestCltr.show = async (req, res) => {
   }
 };
 
-// Update an interest
-interestCltr.update = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+// // Update an interest
+// interestCltr.update = async (req, res) => {
+//   const errors = validationResult(req);
+//   if (!errors.isEmpty()) {
+//     return res.status(400).json({ errors: errors.array() });
+//   }
 
-  const { id } = req.params;
-  const updates = req.body;
+//   const { id } = req.params;
+//   const updates = req.body;
 
-  try {
-    const interest = await Interest.findOneAndUpdate(
-      id, 
-      { $set: updates },
-      { new: true, runValidators: true }
-    );
-    console.log(interest); 
-    if (!interest) {
-      return res.status(404).json({ error: "Interest not found." });
-    }
-    res.json(interest);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong." });
-  }
-};
+//   try {
+//     const interest = await Interest.findOneAndUpdate(
+//       id, 
+//       { $set: updates },
+//       { new: true, runValidators: true }
+//     );
+//     console.log(interest); 
+//     if (!interest) {
+//       return res.status(404).json({ error: "Interest not found." });
+//     }
+//     res.json(interest);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ error: "Something went wrong." });
+//   }
+// };
 
 
-// Delete an interest
-interestCltr.destroy = async (req, res) => {
-  const { id } = req.params;
-  try {
-    const interest = await Interest.findByIdAndDelete(id);
-    if (!interest) {
-      return res.status(404).json({ error: "Interest not found." });
-    }
-    res.json({ message: "Interest deleted successfully." });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong." });
-  }
-};
+// // Delete an interest
+// interestCltr.destroy = async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const interest = await Interest.findByIdAndDelete(id);
+//     if (!interest) {
+//       return res.status(404).json({ error: "Interest not found." });
+//     }
+//     res.json({ message: "Interest deleted successfully." });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ error: "Something went wrong." });
+//   }
+// };
 
 // Get all interests of a provider or based on filters
 // interestCltr.index = async (req, res) => {
