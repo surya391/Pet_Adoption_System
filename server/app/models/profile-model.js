@@ -12,7 +12,7 @@ const ProfileSchema = new Schema(
     },
     age: {
       type: Number,
-      min: 0, // Ensure age cannot be negative
+      min: 0, 
     },
     bio: {
       type: String,

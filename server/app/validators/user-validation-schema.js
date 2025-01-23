@@ -272,3 +272,20 @@ export const userLoginSchema = {
         trim: true,
     },
 };
+
+export const tokenValidatorSchema = {
+    userId: {
+        in:['query'],
+        isMongoId:{errorMessage : 'UserId is invalid' }
+    },
+    token : {
+        in:['query'],
+        isLength: {
+            options:{
+                min : 32,
+                max : 32
+            },
+            errorMessage:'token should be 32 digits'
+        }
+    }
+}

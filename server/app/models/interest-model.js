@@ -3,7 +3,7 @@ import { Schema, model } from "mongoose"
 const InterestSchema = new Schema(
     {
       providerId: { type: Schema.Types.ObjectId, ref: "User", required: true }, // Service provider ID
-      requestId:  { type: Schema.Types.ObjectId, ref: "Request", required: true }, // Request ID
+      requestId:  { type: Schema.Types.ObjectId, ref: "Request", required: true }, // Request owner ID
       status: {
         type: String,
         enum: ["accepted", "rejected", "pending"],

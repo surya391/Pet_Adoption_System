@@ -14,12 +14,13 @@ export const requestSchema = {
 //     },
 //   },
   petId: {
-    petId: {
-        in: ['body'],
-        isMongoId: {
-          errorMessage: "Invalid pet ID",
-        },
-      },
+    in: ['body'], // Define where the field exists (e.g., 'body')
+    exists: {
+      errorMessage: "Pet ID is required.",
+    },
+    isMongoId: {
+      errorMessage: "Pet ID must be a valid MongoDB ObjectId.",
+    },
   },
   phone: {
     exists: {

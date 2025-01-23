@@ -36,21 +36,21 @@ interestRouter.get(
 );
 
 // Update an interest by ID
-interestRouter.put(
-  '/update/:id', 
-  authenticationUser, 
-  authorizeUser(permittedRole), 
-  checkSchema(interestValidationSchema),
-  interestCltr.update
-);
+// interestRouter.put(
+//   '/update/:id', 
+//   authenticationUser, 
+//   authorizeUser(permittedRole), 
+//   checkSchema(interestValidationSchema),
+//   interestCltr.update
+// );
 
 // Delete an interest by ID
-interestRouter.delete(
-  '/delete/:id', 
-  authenticationUser, 
-  authorizeUser(permittedRole), 
-  interestCltr.destroy
-);
+// interestRouter.delete(
+//   '/delete/:id', 
+//   authenticationUser, 
+//   authorizeUser(permittedRole), 
+//   interestCltr.destroy
+// );
 
 export default interestRouter;
 

@@ -10,7 +10,7 @@ const reviewSchema = new Schema({
      type: Schema.Types.ObjectId, 
     ref: 'User', 
     required: true },
-  rating: {
+    rating: {
     type: Number,
     required: true,
     
