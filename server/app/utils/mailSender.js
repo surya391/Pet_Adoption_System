@@ -1,7 +1,6 @@
 import nodemailer from 'nodemailer'
-import { TOKEN_EMAIL_TEMPLATE } from './mailTemplate.js'
 
-const mailSender = async(email, subject, url)=>{
+const mailSender = async(email, subject, html)=>{
     try{
         const transporter = nodemailer.createTransport({
             host: process.env.HOST,
@@ -17,7 +16,7 @@ const mailSender = async(email, subject, url)=>{
             from: process.env.USER,
             to: email,
             subject:subject,
-            html: TOKEN_EMAIL_TEMPLATE.replace("{token}",url)
+            html: html
         })
         console.log('email sent successfully')
         return true

@@ -61,6 +61,8 @@ import jwt from 'jsonwebtoken'
 import randToken from 'rand-token'
 import Token from '../models/token-model.js'
 import mailSender from "../utils/mailSender.js";
+import { TOKEN_EMAIL_TEMPLATE } from '../utils/mailTemplate.js'
+
 
 
 const userCltr = {}
@@ -108,7 +110,8 @@ userCltr.signUp = async(req,res) =>{
         const base_url = process.env.BASE_URL;
         const token = randToken.generate(32);
         const url = `${base_url}/verify?userId=${user._id}&token=${token}` //slugs verify /:userId/:token using params
-        await mailSender(user.email, "Account Verification", url)
+        const html = TOKEN_EMAIL_TEMPLATE.replace("{token}",url)
+        await mailSender(user.email, "Account Verification", html)
         await new Token({ userId : user._id, token }).save()
         await user.save()
         const body = _.pick(user, ['_id','name','email','phoneNumber','role'])
