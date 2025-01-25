@@ -165,6 +165,7 @@ userCltr.signIn = async ( req,res ) =>{
             userId: user._id,
             email: user.email,
             role: user.role,
+            name: user.name,
             isVerified: user.isVerified
         } 
         const {JWT_SECRET, JWT_EXPIRE_IN } = process.env
@@ -201,13 +202,13 @@ userCltr.verify = async(req,res) =>{
     }
 }
 
-userCltr.profile = async (req, res) => {
+userCltr.account = async (req, res) => {
     try {
         const user = await User.findById(req.currentUser.userId);
         if (!user) {
             return res.status(404).json({ error: 'User not found.' });
         }
-        res.json(_.pick(user,['_id','email','role','phoneNumber']));
+        res.json(_.pick(user,['_id','email','role','phoneNumber','name']));
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Something went wrong.' });

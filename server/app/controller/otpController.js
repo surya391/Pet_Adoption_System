@@ -80,8 +80,9 @@ otpCltr.verifyOtp = async (req, res) => {
                 userId: user._id,
                 email: user.email,
                 role: user.role,
+                name: user.name,
                 isVerified: user.isVerified
-            }
+            } 
             const { JWT_SECRET, JWT_EXPIRE_IN } = process.env
             const token = await jwt.sign(tokenData, JWT_SECRET, { expiresIn: JWT_EXPIRE_IN })
             res.json({ token: `Bearer ${token}` })

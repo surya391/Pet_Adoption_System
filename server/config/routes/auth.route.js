@@ -10,7 +10,7 @@ const userRouter = express.Router()
 
 userRouter.post("/signUp", checkSchema( userRegisterSchema), userCltr.signUp)
 userRouter.post("/signIn", checkSchema( userLoginSchema), userCltr.signIn)
-userRouter.get('/profile', authenticationUser, userCltr.profile);
+userRouter.get('/account', authenticationUser, userCltr.account);
 userRouter.put('/verify',checkSchema(tokenValidatorSchema),userCltr.verify)
 userRouter.post('/sendEmail/otp', checkSchema(emailValidationSchema),otpCltr.sendEmailOtp)
 userRouter.post('/EmailVerify', checkSchema(otpValidationSchema),otpCltr.verifyOtp)
