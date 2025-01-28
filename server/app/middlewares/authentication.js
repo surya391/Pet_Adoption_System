@@ -1,11 +1,12 @@
 import jwt from 'jsonwebtoken';
 
 export default function authenticationUser(req, res, next) {
-    const token = req.headers['authorization'];
+    let token = req.headers['authorization'];
     if (!token) {
         return res.status(401).json({ error: "Token is required." });
     }
     try {
+        token = token.split(' ')[1]
         const tokenData = jwt.verify(token, process.env.JWT_SECRET);
         if(!tokenData){
             return res.status(403).json({error:[{msg:"Token is invalid"}]})

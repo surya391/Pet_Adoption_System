@@ -1,5 +1,6 @@
 import Pet from "../models/pet-model.js";
 import { validationResult } from "express-validator";
+import uploadMedia from "../utils/uploadMedia.js";
 
 const petCltr = {};
 
@@ -12,7 +13,13 @@ petCltr.create = async (req, res) => {
 
   const body = req.body;
   try {
+    const file = req.file
+    if (!file) {
+      return res.status(400).json({ errors: [{ msg: " pet image required " }] })
+    }
+    const fileResult = await uploadMedia(file)
     const pet = new Pet({ ...body, userId: req.currentUser.userId });
+    pet.petImage = fileResult?.secure_url
     await pet.save();
     res.status(201).json(pet);
   } catch (err) {
