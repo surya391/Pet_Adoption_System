@@ -3,7 +3,7 @@ import { Routes, Route,Link } from 'react-router-dom'
 import AccountVerify from './pages/AccountVerify';
 import Home from './pages/Home'
 import Register from './pages/Register';
-
+import Login from './pages/Login';
 function App() {
 
  
@@ -17,7 +17,8 @@ function App() {
      
      <Routes>
     <Route path='/' element={<Home/>}/>
-    <Route path='/Register' element={<Register/>}/>
+    <Route path='/register' element={<Register/>}/>
+    <Route path='/login' element={<Login/>}/>
     <Route path='/verify' element={<AccountVerify/>}/>
   </Routes>
    </div>

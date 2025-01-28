@@ -1,9 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axiosInstance from '../utils/axiosInstance'
+import { toast } from 'react-toastify'
 
 export const userRegister = createAsyncThunk('post/userRegister',async(formData,{rejectWithValue})=>{
     try {
         const response = await axiosInstance.post(`/auth/signUp`,formData)
+        toast.success('User Register successfully')
         console.log(response.data)
         return response.data
     } catch (error) {
@@ -13,6 +15,7 @@ export const userRegister = createAsyncThunk('post/userRegister',async(formData,
 export const verifyAccount = createAsyncThunk('put/verifyAccount', async({  userId, token, isVerified }, { rejectWithValue })=>{
     try {
         const response = await axiosInstance.put(`/auth/verify?userId=${userId}&token=${token}`,{ isVerified })
+        toast.success('User verifyed successfully')
         console.log(response.data)
         return response.data
     } catch (error) {
@@ -22,6 +25,7 @@ export const verifyAccount = createAsyncThunk('put/verifyAccount', async({  user
 export const userLogin = createAsyncThunk('post/userLogin',async(formData,{rejectWithValue})=>{
     try {
         const response = await axiosInstance.post(`/auth/signIn`,formData)
+        toast.success('User Login successfully')
         localStorage.setItem('token',response.data.token)
         console.log(response.data)
         return response.data
@@ -43,7 +47,7 @@ export const getUser = createAsyncThunk(`get/getUser`,async(_,{rejectWithValue})
 const authSlice = createSlice({
     name:'auth',
     initialState:{
-        serverError:null,
+        serverError:[],
         isLoading:false,
         isLoggedIn:false,
         userInfo:null

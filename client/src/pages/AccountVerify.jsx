@@ -84,7 +84,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { verifyAccount } from '../slices/AuthSlice';
 import { ToastContainer, toast } from 'react-toastify'
-import './AccountVerify.css';
+// import './AccountVerify.css';
 
 const useQuery = () => {
     return new URLSearchParams(useLocation().search);
