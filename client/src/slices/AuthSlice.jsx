@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 export const userRegister = createAsyncThunk('post/userRegister',async(formData,{rejectWithValue})=>{
     try {
         const response = await axiosInstance.post(`/auth/signUp`,formData)
-        toast.success('User Register successfully')
+        toast.success("User registered successfully. Verification email sent.")
         console.log(response.data)
         return response.data
     } catch (error) {

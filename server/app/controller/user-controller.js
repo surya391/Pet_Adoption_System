@@ -157,6 +157,9 @@ userCltr.signIn = async ( req,res ) =>{
         if(!user){
             return res.status(404).json({error: [{msg: 'Email is not registered'}]})
         }
+        if(!user.isVerified){
+            return res.status(404).json({error: [{msg: 'User not verified'}]})
+        }
         const isValid = await bcryptjs.compare(password, user.password)
         if(!isValid){
             return res.status(400).json({error: [{ msg: 'Invalid email/password' }]})

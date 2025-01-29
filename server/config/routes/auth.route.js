@@ -8,10 +8,10 @@ import otpCltr from '../../app/controller/otpController.js';
 
 const userRouter = express.Router()
 
-userRouter.post("/signUp", checkSchema( userRegisterSchema), userCltr.signUp)
+userRouter.post("/signUp", checkSchema( userRegisterSchema ), userCltr.signUp)
 userRouter.post("/signIn", checkSchema( userLoginSchema), userCltr.signIn)
 userRouter.get('/account', authenticationUser, userCltr.account);
-userRouter.put('/verify',checkSchema(tokenValidatorSchema),userCltr.verify)
+userRouter.put('/verify', checkSchema(tokenValidatorSchema),userCltr.verify)
 userRouter.post('/sendEmail/otp', checkSchema(emailValidationSchema),otpCltr.sendEmailOtp)
 userRouter.post('/EmailVerify', checkSchema(otpValidationSchema),otpCltr.verifyOtp)
 
