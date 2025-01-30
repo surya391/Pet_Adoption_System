@@ -46,7 +46,7 @@ export const OTP_EMAIL_TEMPLATE = `
     <p>Enter this code to login.</p>
     <p>This code will expire in 5 minutes for security reasons.</p>
     <p>If you didn't try to login, please ignore this email.</p>
-    <p>Best regards,<br> DOCZY Team</p>
+    <p>Best regards,<br> Pet Adoption System</p>
   </div>
   <div style="text-align: center; margin-top: 20px; color: #888; font-size: 0.8em;">
     <p>This is an automated message, please do not reply to this email.</p>

@@ -10,10 +10,6 @@ const ProfileSchema = new Schema(
     profilePic: {
       type: String,
     },
-    age: {
-      type: Number,
-      min: 0, 
-    },
     bio: {
       type: String,
       maxlength: 500,
@@ -26,23 +22,16 @@ const ProfileSchema = new Schema(
     dateOfBirth: {
       type: Date,
     },
-    address: {
-      street: {
-        type: String,
-      },
-      city: {
-        type: String,
-      },
-      state: {
-        type: String,
-      },
-      country: {
-        type: String,
-      },
-      postalCode: {
-        type: String,
-      },
-    },
+    address : {
+      buildingNo: String,
+      street: String,
+      city : String,
+      state : String,
+      country : String,
+      pincode : Number,
+      latitude : Number,
+      longitude : Number
+  },
   },
   { timestamps: true }
 );
