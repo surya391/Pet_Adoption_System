@@ -33,6 +33,30 @@ export const userLogin = createAsyncThunk('post/userLogin',async(formData,{rejec
         return rejectWithValue(error?.response?.data?.error)
     }
 })
+
+export const sendEmailOtp = createAsyncThunk('post/sendEmailOtp',async(formData, {rejectWithValue})=>{
+try {
+    const response = await axiosInstance.post(`/auth/sendEmail/otp`,formData)
+    toast.success("OTP sent successfully!")
+    console.log('sendEmail', response.data)
+    return response.data
+} catch (error) {
+    console.log(error)
+    return rejectWithValue (error?.response?.data?.error)
+}
+})
+
+export const verifyEmail = createAsyncThunk('post/verifyEmail',async(formData,{rejectWithValue})=>{
+    try {
+        const response = await axiosInstance.post("auth/EmailVerify",formData)
+        localStorage.setItem("token", response.data.token)
+        toast.success("User Login Successfully")
+        return response.data
+    } catch (error) {
+        return rejectWithValue(error?.response?.data?.error)
+    }
+})
+
 export const getUser = createAsyncThunk(`get/getUser`,async(_,{rejectWithValue})=>{
     try {
         const response = await axiosInstance.get(`/auth/account`,{headers:{Authorization:localStorage.getItem('token')}})
@@ -72,6 +96,7 @@ const authSlice = createSlice({
             state.isLoading = false;
             state.serverError = action.payload; 
         })
+
         builders.addCase(verifyAccount.pending, (state)=>{
             state.isLoading = true
         })
@@ -83,6 +108,7 @@ const authSlice = createSlice({
             state.isLoading = false;
             state.serverError = action.payload; 
         })
+
         builders.addCase(userLogin.pending,(state)=>{
             state.isLoading = true
         })
@@ -92,6 +118,32 @@ const authSlice = createSlice({
             state.serverError = null;
         })
         builders.addCase(userLogin.rejected,(state,action)=>{
+            state.isLoading = false;
+            state.serverError = action.payload;
+        })
+
+        builders.addCase(sendEmailOtp.pending,(state)=>{
+            state.isLoading = true
+        })
+        builders.addCase(sendEmailOtp.fulfilled,(state)=>{
+            state.isLoading = false;
+            state.otpSent = true;
+            state.serverError = null
+        })
+        builders.addCase(sendEmailOtp.rejected,(state,action)=>{
+            state.isLoading = false
+            state.serverError = action.payload
+        })
+
+        builders.addCase(verifyEmail.pending,(state)=>{
+            state.isLoading = true
+        })
+        builders.addCase(verifyEmail.fulfilled,(state)=>{
+            state.isLoading = false;
+            state.otpSent = false;
+            state.serverError = null
+        })
+        builders.addCase(verifyEmail.rejected, (state,action)=>{
             state.isLoading = false;
             state.serverError = action.payload;
         })

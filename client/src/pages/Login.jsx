@@ -245,6 +245,8 @@ import { userLogin, getUser } from "../slices/AuthSlice";
 import { FiEyeOff, FiEye } from 'react-icons/fi';
 import petImage from "./image/petImage5.jpg";
 
+// import EmailLogin from "./Frontpage/EmailLogin";
+
 const Login = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -294,7 +296,7 @@ const Login = () => {
                     <h2 className="text-3xl font-bold text-blue-600">Login</h2>
                     <div className="mt-4 flex justify-between">
                         <span>
-                            <Link to="/register" className="text-blue-500 hover:underline">Register</Link>
+                            <Link to="/register" className="text-blue-500 hover:underline font-semibold">Register</Link>
                         </span>
                     </div>
                 </div>
@@ -343,9 +345,28 @@ const Login = () => {
                             Login
                         </button>
                     </div>
-                    <div className="text-center text-sm text-gray-600">
-                        <p>Forgot your password? <Link to="/forgot-password" className="text-blue-500 hover:underline">Reset it</Link></p>
+
+                    <div className="flex justify-center">
+                        <p className="text-sm font-semibold text-gray-600 text-center hover:text-gray-800">
+                            Login with{" "}
+                            <span
+                                className="cursor-pointer hover:underline text-blue-600"
+                                onClick={() => navigate("/loginwithemail")}
+                            >
+                                Email
+                            </span>
+                        </p>
                     </div>
+
+                    <div className="text-center font-semibold text-sm text-gray-600 mt-2 hover:text-gray-800">
+                        <p>
+                            Forgot your password?{" "}
+                            <Link to="/forgot-password" className="text-blue-500 hover:underline text-blue-600">
+                                Reset it
+                            </Link>
+                        </p>
+                    </div>
+
                 </form>
             </div>
         </div>

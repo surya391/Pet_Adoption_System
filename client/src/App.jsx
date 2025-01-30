@@ -7,6 +7,7 @@ import Login from './pages/Login';
 
 import Footer from './pages/Frontpage/Footer';
 import Navbar from './pages/Frontpage/Navbar';
+import EmailLogin from './pages/Frontpage/EmailLogin';
 function App() {
   return (
     <div className="flex flex-col ">
@@ -23,6 +24,7 @@ function App() {
           <Route path='/register' element={<Register />} />
           <Route path='/login' element={<Login />} />
           <Route path='/verify' element={<AccountVerify />} />
+          <Route path= '/loginwithemail' element= {<EmailLogin/>}/>
         </Routes>
       </div>
       {<Footer/>}
