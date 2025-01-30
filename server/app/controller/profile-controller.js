@@ -1,6 +1,8 @@
 import Profile from "../models/profile-model.js";
 import { validationResult } from "express-validator";
 import _ from "lodash";
+import uploadMedia from "../utils/uploadMedia.js";
+
 
 const profileCltr = {};
 
@@ -13,7 +15,13 @@ profileCltr.create = async (req, res) => {
 
   const body = req.body;
   try {
+    const file = req.file
+    // if (!file) {
+    //   return res.status(400).json({ errors: [{ msg: " profilePic is required " }] })
+    // }
+    const fileResult = await uploadMedia(file)
     const profile = new Profile({ ...body, userId: req.currentUser.userId });
+    profile.profilePic = fileResult?.secure_url
     await profile.save();
     res.status(201).json(profile);
   } catch (err) {

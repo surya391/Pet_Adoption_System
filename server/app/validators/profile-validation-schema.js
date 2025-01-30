@@ -18,21 +18,21 @@ export const profileSchema = {
     //     },
     //   },
     // },
-    profilePic: {
-      optional: true, 
-      isString: {
-        errorMessage: "Profile picture must be a valid string (e.g., a URL).",
-      },
-      custom: {
-        options: (value) => {
-          if (!value.endsWith(".jpg")) {
-            throw new Error("Profile picture must be a .jpg file.");
-          }
-          return true;
-        },
-      },
-      trim: true,
-    },
+    // profilePic: {
+    //   optional: true, 
+    //   isString: {
+    //     errorMessage: "Profile picture must be a valid string (e.g., a URL).",
+    //   },
+    //   custom: {
+    //     options: (value) => {
+    //       if (!value.endsWith(".jpg")) {
+    //         throw new Error("Profile picture must be a .jpg file.");
+    //       }
+    //       return true;
+    //     },
+    //   },
+    //   trim: true,
+    // },
     age: {
       optional: true,
       isInt: {
