@@ -32,7 +32,7 @@ function ProfilePage() {
                 profilePic: userDetails?.profilePic,
                 bio: userDetails?.bio,
                 gender: userDetails?.gender,
-                dateOfBirth: format(userDetails?.dateOfBirth,'yyyy-MM-dd'),
+                dateOfBirth: format(userDetails?.dateOfBirth, 'yyyy-MM-dd'),
                 address: {
                     buildingNo: userDetails?.address?.buildingNo,
                     street: userDetails?.address?.street,
@@ -128,131 +128,277 @@ function ProfilePage() {
         }
     };
 
+    /*  return (
+         <div>
+             <h2>Profile Page</h2>
+             <form onSubmit={handleSubmit}>
+                 <div>
+                     <label>Profile Picture:</label>
+                     <input type="file" accept="image/*" onChange={handleImageChange} />
+                     {formData.profilePic && <img src={formData.profilePic} alt="Profile Preview" width={100} />}
+                 </div>
+ 
+                 <div>
+                     <label>Bio:</label>
+                     <input
+                         type="text"
+                         placeholder="Bio"
+                         value={formData.bio}
+                         onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                     />
+                     {clientErrors?.bio && <p className="error">{clientErrors.bio}</p>}
+                 </div>
+ 
+                 <div>
+                     <label>Gender:</label>
+                     <input
+                         type="text"
+                         placeholder="Gender"
+                         value={formData.gender}
+                         onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+                     />
+                     {clientErrors?.gender && <p className="error">{clientErrors.gender}</p>}
+                 </div>
+ 
+                 <div>
+                     <label>Date of Birth:</label>
+                     <input
+                         type="date"
+                         value={formData.dateOfBirth}
+                         onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
+                     />
+                     {clientErrors?.dateOfBirth && <p className="error">{clientErrors.dateOfBirth}</p>}
+                 </div>
+ 
+                 <h3>Address</h3>
+                 <div>
+                     <label>Building No:</label>
+                     <input
+                         type="text"
+                         value={formData.address.buildingNo}
+                         onChange={(e) => setFormData({ 
+                             ...formData, 
+                             address: { ...formData.address, buildingNo: e.target.value }
+                         })}
+                     />
+                     {clientErrors?.buildingNo && <p className="error">{clientErrors.buildingNo}</p>}
+                 </div>
+ 
+                 <div>
+                     <label>Street:</label>
+                     <input
+                         type="text"
+                         value={formData.address.street}
+                         onChange={(e) => setFormData({ 
+                             ...formData, 
+                             address: { ...formData.address, street: e.target.value }
+                         })}
+                     />
+                     {clientErrors?.street && <p className="error">{clientErrors.street}</p>}
+                 </div>
+ 
+                 <div>
+                     <label>City:</label>
+                     <input
+                         type="text"
+                         value={formData.address.city}
+                         onChange={(e) => setFormData({ 
+                             ...formData, 
+                             address: { ...formData.address, city: e.target.value }
+                         })}
+                     />
+                     {clientErrors?.city && <p className="error">{clientErrors.city}</p>}
+                 </div>
+ 
+                 <div>
+                     <label>State:</label>
+                     <input
+                         type="text"
+                         value={formData.address.state}
+                         onChange={(e) => setFormData({ 
+                             ...formData, 
+                             address: { ...formData.address, state: e.target.value }
+                         })}
+                     />
+                     {clientErrors?.city && <p className="error">{clientErrors.city}</p>}
+                 </div>
+ 
+                 <div>
+                     <label>Country:</label>
+                     <input
+                         type="text"
+                         value={formData.address.country}
+                         onChange={(e) => setFormData({ 
+                             ...formData, 
+                             address: { ...formData.address, country: e.target.value }
+                         })}
+                     />
+                     {clientErrors?.country && <p className="error">{clientErrors.country}</p>}
+                 </div>
+ 
+                 <div>
+                     <label>Pincode:</label>
+                     <input
+                         type="number"
+                         value={formData.address.pincode}
+                         onChange={(e) => setFormData({ 
+                             ...formData, 
+                             address: { ...formData.address, pincode: e.target.value }
+                         })}
+                     />
+                     {clientErrors?.pincode && <p className="error">{clientErrors.pincode}</p>}
+                 </div>
+ 
+                 <button type="submit">Submit</button>
+             </form>
+         </div>
+     );
+ } */
+
     return (
-        <div>
-            <h2>Profile Page</h2>
-            <form onSubmit={handleSubmit}>
+        <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+            <h2 className="text-3xl font-semibold text-gray-800 mb-4 text-center">Profile Page</h2>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <div>
-                    <label>Profile Picture:</label>
-                    <input type="file" accept="image/*" onChange={handleImageChange} />
-                    {formData.profilePic && <img src={formData.profilePic} alt="Profile Preview" width={100} />}
+                    <label className="block text-gray-700 font-medium mb-1">Profile Picture:</label>
+                    {formData.profilePic && <img src={formData.profilePic} alt="Profile Preview" width={100} className="mt-2 rounded-md shadow-md" />}<br/>
+                    <input type="file" accept="image/*" onChange={handleImageChange} className="p-1 border border-gray-300 rounded-md" />
                 </div>
-                
+
                 <div>
-                    <label>Bio:</label>
+                    <label className="block text-gray-700 font-medium mb-1">Bio:</label>
                     <input
                         type="text"
                         placeholder="Bio"
                         value={formData.bio}
                         onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    {clientErrors?.bio && <p className="error">{clientErrors.bio}</p>}
+                    {clientErrors?.bio && <p className="text-sm text-red-500 mt-1">{clientErrors.bio}</p>}
                 </div>
-                
+
                 <div>
-                    <label>Gender:</label>
-                    <input
-                        type="text"
-                        placeholder="Gender"
+                    <label className="block text-gray-700 font-medium mb-1">Gender:</label>
+                    <select
                         value={formData.gender}
                         onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                    />
-                    {clientErrors?.gender && <p className="error">{clientErrors.gender}</p>}
+                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                    >
+                        <option value="" disabled>Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                    {clientErrors?.gender && <p className="text-sm text-red-500 mt-1">{clientErrors.gender}</p>}
                 </div>
-                
+
+
                 <div>
-                    <label>Date of Birth:</label>
+                    <label className="block text-gray-700 font-medium mb-1">Date of Birth:</label>
                     <input
                         type="date"
                         value={formData.dateOfBirth}
                         onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
+                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    {clientErrors?.dateOfBirth && <p className="error">{clientErrors.dateOfBirth}</p>}
+                    {clientErrors?.dateOfBirth && <p className="text-sm text-red-500 mt-1">{clientErrors.dateOfBirth}</p>}
                 </div>
-                
-                <h3>Address</h3>
+
+                <h3 className="text-xl font-semibold">Address</h3>
                 <div>
-                    <label>Building No:</label>
+                    <label className="block text-gray-700 font-medium mb-1">Building No:</label>
                     <input
                         type="text"
                         value={formData.address.buildingNo}
-                        onChange={(e) => setFormData({ 
-                            ...formData, 
+                        onChange={(e) => setFormData({
+                            ...formData,
                             address: { ...formData.address, buildingNo: e.target.value }
                         })}
+                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    {clientErrors?.buildingNo && <p className="error">{clientErrors.buildingNo}</p>}
+                    {clientErrors?.buildingNo && <p className="text-sm text-red-500 mt-1">{clientErrors.buildingNo}</p>}
                 </div>
-                
+
                 <div>
-                    <label>Street:</label>
+                    <label className="block text-gray-700 font-medium mb-1">Street:</label>
                     <input
                         type="text"
                         value={formData.address.street}
-                        onChange={(e) => setFormData({ 
-                            ...formData, 
+                        onChange={(e) => setFormData({
+                            ...formData,
                             address: { ...formData.address, street: e.target.value }
                         })}
+                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    {clientErrors?.street && <p className="error">{clientErrors.street}</p>}
+                    {clientErrors?.street && <p className="text-sm text-red-500 mt-1">{clientErrors.street}</p>}
                 </div>
-                
+
                 <div>
-                    <label>City:</label>
+                    <label className="block text-gray-700 font-medium mb-1">City:</label>
                     <input
                         type="text"
                         value={formData.address.city}
-                        onChange={(e) => setFormData({ 
-                            ...formData, 
+                        onChange={(e) => setFormData({
+                            ...formData,
                             address: { ...formData.address, city: e.target.value }
                         })}
+                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    {clientErrors?.city && <p className="error">{clientErrors.city}</p>}
+                    {clientErrors?.city && <p className="text-sm text-red-500 mt-1">{clientErrors.city}</p>}
                 </div>
-                
+
                 <div>
-                    <label>State:</label>
+                    <label className="block text-gray-700 font-medium mb-1">State:</label>
                     <input
                         type="text"
                         value={formData.address.state}
-                        onChange={(e) => setFormData({ 
-                            ...formData, 
+                        onChange={(e) => setFormData({
+                            ...formData,
                             address: { ...formData.address, state: e.target.value }
                         })}
+                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    {clientErrors?.city && <p className="error">{clientErrors.city}</p>}
+                    {clientErrors?.state && <p className="text-sm text-red-500 mt-1">{clientErrors.state}</p>}
                 </div>
-                
+
                 <div>
-                    <label>Country:</label>
+                    <label className="block text-gray-700 font-medium mb-1">Country:</label>
                     <input
                         type="text"
                         value={formData.address.country}
-                        onChange={(e) => setFormData({ 
-                            ...formData, 
+                        onChange={(e) => setFormData({
+                            ...formData,
                             address: { ...formData.address, country: e.target.value }
                         })}
+                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    {clientErrors?.country && <p className="error">{clientErrors.country}</p>}
+                    {clientErrors?.country && <p className="text-sm text-red-500 mt-1">{clientErrors.country}</p>}
                 </div>
-                
+
                 <div>
-                    <label>Pincode:</label>
+                    <label className="block text-gray-700 font-medium mb-1">Pincode:</label>
                     <input
                         type="number"
                         value={formData.address.pincode}
-                        onChange={(e) => setFormData({ 
-                            ...formData, 
+                        onChange={(e) => setFormData({
+                            ...formData,
                             address: { ...formData.address, pincode: e.target.value }
                         })}
+                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    {clientErrors?.pincode && <p className="error">{clientErrors.pincode}</p>}
+                    {clientErrors?.pincode && <p className="text-sm text-red-500 mt-1">{clientErrors.pincode}</p>}
                 </div>
-                
-                <button type="submit">Submit</button>
+
+                <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition duration-300">
+                    Submit
+                </button>
             </form>
         </div>
     );
 }
-
 export default ProfilePage;
+
+
+
+
+

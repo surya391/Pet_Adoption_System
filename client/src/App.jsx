@@ -1,20 +1,30 @@
 import './App.css';
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import AccountVerify from './pages/AccountVerify';
-import Home from './pages/Home'
+import { useDispatch, useSelector } from 'react-redux'
+
 import Register from './pages/Register';
 import Login from './pages/Login';
-
-import Footer from './pages/Frontpage/Footer';
+import AccountVerify from './pages/AccountVerify';
+import Home from './pages/Home'
 import Navbar from './pages/Frontpage/Navbar';
+import Footer from './pages/Frontpage/Footer';
 import EmailLogin from './pages/Frontpage/EmailLogin';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
-import { getProfile } from "./slices/ProfileSlice"
-import { getUser} from "./slices/AuthSlice"
+import Dashboard from './pages/Dashboard';
+
+import PrivateRoute from './pages/components/PrivateRoute';
+
+import { getProfile } from "./slices/ProfileSlice";
+import { getUser} from "./slices/AuthSlice";
+import RegisterLoading from './pages/Frontpage/RegisterLoading';
+
 function App() {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const { userInfo } = useSelector(state => state.auth)
+  const token = localStorage.getItem("token");
+  const showFooter = ["/", "/login", "/register"];
   useEffect(()=>{
     const token = localStorage.getItem('token')
     if(token){
@@ -22,6 +32,9 @@ function App() {
       dispatch(getProfile())
     }
 },[])
+if(token && !userInfo){
+  return <RegisterLoading/>
+}
   return (
     <div className="flex flex-col ">
       {<Navbar/>}
@@ -38,10 +51,12 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/verify' element={<AccountVerify />} />
           <Route path= '/loginwithemail' element= {<EmailLogin/>}/>
-          <Route path= '/profilepage' element= {<ProfilePage/>}/>
+          <Route path= '/profilepage' element= {<PrivateRoute> <ProfilePage /></PrivateRoute>}/>
+          <Route path= '/dashboard' element= {<PrivateRoute> <Dashboard /></PrivateRoute>}/>
+
         </Routes>
       </div>
-      {<Footer/>}
+        {showFooter.includes(location.pathname) && <Footer />}
     </div>
   );
 }

@@ -37,7 +37,7 @@ const Navbar = () => {
                     {isLoggedIn ? (
                         <div className="flex items-center space-x-4">
                             <div className="cursor-pointer">
-                                <Link to="/profile">
+                                <Link to="/profilepage">
                                     <CgProfile size={30} color="white" />
                                 </Link>
                             </div>
