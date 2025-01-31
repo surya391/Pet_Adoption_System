@@ -1,9 +1,9 @@
 export const profileSchema = {
   bio: {
-    optional: true,
+    // optional: true,
     in: ['body'],
-    isString: {
-      errorMessage: "Bio must be a string.",
+    exists: {
+      errorMessage: "bio is required.",
     },
     isLength: {
       options: { max: 500 },
@@ -22,7 +22,6 @@ export const profileSchema = {
     trim: true,
   },
   dateOfBirth: {
-    optional: true,
     isISO8601: {
       errorMessage: "Date of Birth must be a valid date (YYYY-MM-DD).",
     },

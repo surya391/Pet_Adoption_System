@@ -60,7 +60,6 @@ export const verifyEmail = createAsyncThunk('post/verifyEmail',async(formData,{r
 export const getUser = createAsyncThunk(`get/getUser`,async(_,{rejectWithValue})=>{
     try {
         const response = await axiosInstance.get(`/auth/account`,{headers:{Authorization:localStorage.getItem('token')}})
-        console.log(response.data)
         return response.data
     } catch (error) {
         return rejectWithValue(error?.response?.data?.error)

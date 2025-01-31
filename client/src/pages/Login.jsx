@@ -281,7 +281,7 @@ const Login = () => {
             const actionResult = await dispatch(userLogin(formData));
             if (actionResult.type === userLogin.fulfilled.type) {
                 dispatch(getUser());
-                navigate('/');
+                navigate('/profilepage');
             }
         }
     };

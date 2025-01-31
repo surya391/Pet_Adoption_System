@@ -1,5 +1,5 @@
 import Profile from "../models/profile-model.js";
-import { validationResult } from "express-validator";
+import { body, validationResult } from "express-validator";
 import _ from "lodash";
 import uploadMedia from "../utils/uploadMedia.js";
 
@@ -16,13 +16,15 @@ profileCltr.create = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
   const body = req.body;
+  console.log('aaa',body)
   try {
     const file = req.file
     if (!file) {
       return res.status(400).json({ errors: [{ msg: " profilePic is required " }] })
     }
+    let fileResult
     if(file){
-      const fileResult = await uploadMedia(file)
+     fileResult = await uploadMedia(file)
     }
     const profile = new Profile({ ...body, userId: req.currentUser.userId });
     profile.profilePic = fileResult?.secure_url || " ";
@@ -41,16 +43,23 @@ profileCltr.create = async (req, res) => {
 
 // Update a profile
 profileCltr.update = async (req, res) => {
+  console.log('hello')
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const { id } = req.params;
-  const updates = req.body;
+ const userId = req.currentUser.userId;
+  const update = req.body;
+  const file = req.file;
+  let fileResult;
+  if(file){
+      fileResult = await uploadMedia(file)
+  }
+  update.profilePic = fileResult?fileResult.secure_url:update.profilePic;
   try {
-    const profile = await Profile.findByIdAndUpdate(
-      id,
-      { $set: updates },
+    const profile = await Profile.findOneAndUpdate(
+      {userId},
+      { $set: update },
       { new: true, runValidators: true }
     );
     if (!profile) {
