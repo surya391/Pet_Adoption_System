@@ -13,11 +13,13 @@ import EmailLogin from './pages/Frontpage/EmailLogin';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import Dashboard from './pages/Dashboard';
 
-import PrivateRoute from './pages/components/PrivateRoute';
+import PrivateRoute from './pages/Components/PrivateRoute';
 
 import { getProfile } from "./slices/ProfileSlice";
 import { getUser} from "./slices/AuthSlice";
 import RegisterLoading from './pages/Frontpage/RegisterLoading';
+
+import PetTypes from './pages/Admin/PetTypes';
 
 function App() {
   const dispatch = useDispatch();
@@ -53,6 +55,8 @@ if(token && !userInfo){
           <Route path= '/loginwithemail' element= {<EmailLogin/>}/>
           <Route path= '/profilepage' element= {<PrivateRoute> <ProfilePage /></PrivateRoute>}/>
           <Route path= '/dashboard' element= {<PrivateRoute> <Dashboard /></PrivateRoute>}/>
+          <Route path= '/petType' element= {<PrivateRoute permittedRoles={["admin"]}> <PetTypes /></PrivateRoute>}/>
+
 
         </Routes>
       </div>

@@ -19,7 +19,7 @@ petCltr.create = async (req, res) => {
     }
     const fileResult = await uploadMedia(file)
     const pet = new Pet({ ...body, userId: req.currentUser.userId });
-    pet.petImage = fileResult?.secure_url
+    pet.petImage = fileResult?.secure_url || ""
     await pet.save();
     res.status(201).json(pet);
   } catch (err) {
@@ -65,13 +65,19 @@ petCltr.update = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { id } = req.params;
-  const updates = req.body;
+ const userId = req.currentUser.userId;
+ const update = req.body;
+ const file = req.file;
+ let fileResult;
+ if(file){
+     fileResult = await uploadMedia(file)
+ }
+ update.petImage = fileResult?fileResult.secure_url:update.petImage;
 
   try {
     const pet = await Pet.findByIdAndUpdate(
-      id,
-      { $set: updates },
+      userId,
+      { $set: update },
       { new: true, runValidators: true }
     );
     if (!pet) {

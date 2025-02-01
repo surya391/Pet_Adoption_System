@@ -14,7 +14,13 @@ const PrivateRoute = (props) =>{
     if(isLoggedIn && props.permittedRoles && props.permittedRoles.includes( userInfo.role )){
         return props.children
     }else if( isLoggedIn && props.permittedRoles && !props.permittedRoles.includes(userInfo.role)){
-        return <p>Unauthorized Access!</p>
+        return  <div className="flex flex-grow items-center justify-center bg-gray-100">
+        <p className="text-red-600 font-bold text-2xl bg-red-100 p-4 rounded-md shadow-md">
+          Unauthorized Access!
+        </p>
+      </div>
+      
+      
     }else if ( isLoggedIn && !props.permittedRoles){
         return props.children
     }else{

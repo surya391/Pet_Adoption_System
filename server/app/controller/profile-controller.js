@@ -16,7 +16,7 @@ profileCltr.create = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
   const body = req.body;
-  console.log('aaa',body)
+  // console.log('aaa',body)
   try {
     const file = req.file
     if (!file) {

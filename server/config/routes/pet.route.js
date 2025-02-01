@@ -8,20 +8,20 @@ import upload from '../multer/multerConfig.js';
 const petRouter = express.Router();
 
 // Create a new pet
-petRouter.post('/create', authenticationUser, checkSchema(petSchema), upload.single("petImage"),petCltr.create);
+petRouter.post('/create', authenticationUser, upload.single("petImage"), checkSchema(petSchema),petCltr.create);
 
 // Get all pets by the logged-in user
 petRouter.get('/my-pets', authenticationUser, petCltr.listByUser);
 
 // Get pet details by pet ID
-petRouter.get('/:id', authenticationUser, petCltr.show);
+petRouter.get('/singlePet', authenticationUser, petCltr.show);
 
 
 // Update pet details by pet ID
-petRouter.put('/petUpdate/:id', authenticationUser, checkSchema(petSchema), petCltr.update);
+petRouter.put('/updatePet', authenticationUser, upload.single("petImage"), checkSchema(petSchema), petCltr.update);
 
 // Delete a pet by pet ID
-petRouter.delete('/petDelete/:id', authenticationUser, petCltr.destroy);
+petRouter.delete('/deletePet', authenticationUser, petCltr.destroy);
 
 
 
