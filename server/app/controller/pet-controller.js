@@ -7,11 +7,13 @@ const petCltr = {};
 // Create a new pet
 petCltr.create = async (req, res) => {
   const errors = validationResult(req);
+  console.log(errors)
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
 
   const body = req.body;
+  console.log("body",body)
   try {
     const file = req.file
     if (!file) {
@@ -29,7 +31,7 @@ petCltr.create = async (req, res) => {
 };
 
 // Get pets by user ID
-petCltr.listByUser = async (req, res) => {
+petCltr.listPet = async (req, res) => {
   const { userId } = req.currentUser;
   try {
     const pets = await Pet.find({ userId });

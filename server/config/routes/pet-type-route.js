@@ -15,7 +15,7 @@ const permittedRole = ['admin'];
 petTypeRouter.post( '/create',  authenticationUser, authorizeUser(permittedRole), checkSchema(petTypeSchema),petTypeController.create);
 
 // Get all pet types for the logged-in user
-petTypeRouter.get('/my-pet-types', authenticationUser, authorizeUser(permittedRole), petTypeController.list);
+petTypeRouter.get('/get', authenticationUser,  petTypeController.list);
 
 // Get pet type details by pet type ID
 petTypeRouter.get('/:id', authenticationUser, authorizeUser(permittedRole), petTypeController.show);

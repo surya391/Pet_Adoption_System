@@ -474,8 +474,7 @@ import { isEmail, isStrongPassword } from "validator";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import "react-toastify/dist/ReactToastify.css";
 import petImage from './image/petImage.jpg';  
-import RegisterLoading from "./Frontpage/RegisterLoading";
-
+import Spinner from "./Frontpage/Spinner";
 const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -554,7 +553,7 @@ const Register = () => {
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-blue-500 to-purple-600 text-white py-10">
-      {isLoading && <RegisterLoading />}
+      {isLoading && <Spinner />}
       <div className="container mx-auto flex flex-wrap justify-center md:justify-end px-6   bg-opacity-90 backdrop-blur-lg p-8">
       <div className="w-full md:w-1/2 p-8 bg-white text-gray-800">
         <img

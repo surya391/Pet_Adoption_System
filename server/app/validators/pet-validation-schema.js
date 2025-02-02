@@ -25,20 +25,20 @@ export const petSchema = {
     },
     trim: true,
   },
-  petImage: {
-    isString: {
-      errorMessage: "Pet image must be a valid string (e.g., a URL).",
-    },
-    custom: {
-      options: (value) => {
-        if (value && !value.endsWith(".jpg") && !value.endsWith(".jpeg") && !value.endsWith(".png")) {
-          throw new Error("Pet image must be a .jpg, .jpeg, or .png file.");
-        }
-        return true;
-      },
-    },
-    trim: true,
-  },
+  // petImage: {
+  //   isString: {
+  //     errorMessage: "Pet image must be a valid string (e.g., a URL).",
+  //   },
+  //   custom: {
+  //     options: (value) => {
+  //       if (value && !value.endsWith(".jpg") && !value.endsWith(".jpeg") && !value.endsWith(".png")) {
+  //         throw new Error("Pet image must be a .jpg, .jpeg, or .png file.");
+  //       }
+  //       return true;
+  //     },
+  //   },
+  //   trim: true,
+  // },
   petAge: {
     exists: {
       errorMessage: "Pet age is required.",
@@ -60,5 +60,5 @@ export const petSchema = {
       errorMessage: "Gender must be 'male' or 'female'.",
     },
     trim: true,
-  },
+  }
 };

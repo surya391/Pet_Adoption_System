@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Register from './pages/Register';
 import Login from './pages/Login';
 import AccountVerify from './pages/AccountVerify';
-import Home from './pages/Home'
+import Home from './pages/Home';
 import Navbar from './pages/Frontpage/Navbar';
 import Footer from './pages/Frontpage/Footer';
 import EmailLogin from './pages/Frontpage/EmailLogin';
@@ -17,9 +17,11 @@ import PrivateRoute from './pages/Components/PrivateRoute';
 
 import { getProfile } from "./slices/ProfileSlice";
 import { getUser} from "./slices/AuthSlice";
-import RegisterLoading from './pages/Frontpage/RegisterLoading';
-
+import Spinner from "./pages/Frontpage/Spinner"
 import PetTypes from './pages/Admin/PetTypes';
+import PetProfile from './pages/Owner/PetProfile';
+import { petTypes, getPet } from './slices/PetSlice';
+import YourPets from './pages/Owner/YourPets';
 
 function App() {
   const dispatch = useDispatch();
@@ -27,15 +29,19 @@ function App() {
   const { userInfo } = useSelector(state => state.auth)
   const token = localStorage.getItem("token");
   const showFooter = ["/", "/login", "/register"];
+
   useEffect(()=>{
     const token = localStorage.getItem('token')
     if(token){
       dispatch(getUser())
       dispatch(getProfile())
+      dispatch(petTypes())
+      dispatch(getPet())
     }
 },[])
+
 if(token && !userInfo){
-  return <RegisterLoading/>
+  return <Spinner/>
 }
   return (
     <div className="flex flex-col ">
@@ -56,6 +62,10 @@ if(token && !userInfo){
           <Route path= '/profilepage' element= {<PrivateRoute> <ProfilePage /></PrivateRoute>}/>
           <Route path= '/dashboard' element= {<PrivateRoute> <Dashboard /></PrivateRoute>}/>
           <Route path= '/petType' element= {<PrivateRoute permittedRoles={["admin"]}> <PetTypes /></PrivateRoute>}/>
+          <Route path= '/petProfile' element= {<PrivateRoute permittedRoles={["owner"]}> <PetProfile /></PrivateRoute>}/>
+          <Route path= '/yoursPetList' element= {<PrivateRoute permittedRoles={["owner"]}> <YourPets/></PrivateRoute>}/>
+
+
 
 
         </Routes>

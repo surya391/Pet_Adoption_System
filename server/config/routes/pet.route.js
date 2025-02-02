@@ -8,10 +8,10 @@ import upload from '../multer/multerConfig.js';
 const petRouter = express.Router();
 
 // Create a new pet
-petRouter.post('/create', authenticationUser, upload.single("petImage"), checkSchema(petSchema),petCltr.create);
+petRouter.post('/addPet', authenticationUser, upload.single("petImage"), checkSchema(petSchema),petCltr.create);
 
 // Get all pets by the logged-in user
-petRouter.get('/my-pets', authenticationUser, petCltr.listByUser);
+petRouter.get('/my-pets', authenticationUser, petCltr.listPet);
 
 // Get pet details by pet ID
 petRouter.get('/singlePet', authenticationUser, petCltr.show);

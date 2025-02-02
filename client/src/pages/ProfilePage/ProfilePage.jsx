@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getProfile, createProfile, updateProfile } from '../../slices/ProfileSlice';
 import { format } from "date-fns"
+import Spinner from '../Frontpage/Spinner';
+import SideNavbar from '../Frontpage/SideNavBar';
 function ProfilePage() {
     const dispatch = useDispatch();
     // const { serverError, userDetails, isLoading, profile } = useSelector(state => state.profile);
@@ -256,8 +258,12 @@ function ProfilePage() {
  } */
 
     return (
-        <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+        <div className="flex max-w-screen-lg">
+             <div className="w-auto p-0  pr-2">
+                <SideNavbar />
+            </div>
             <h2 className="text-3xl font-semibold text-gray-800 mb-4 text-center">Profile Page</h2>
+      {isLoading && <Spinner />}
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <div>
                     <label className="block text-gray-700 font-medium mb-1">Profile Picture:</label>
