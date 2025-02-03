@@ -12,8 +12,9 @@ const PetSchema = new Schema(
       required: true
     },
     petType: {
-      type: Schema.Types.ObjectId,
-      ref: "PetType",
+      type: String,
+      // type: Schema.Types.ObjectId,
+      // ref: "PetType",
       required: true
     },
     petImage: {

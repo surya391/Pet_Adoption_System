@@ -94,13 +94,13 @@ petCltr.update = async (req, res) => {
 
 // Delete a pet's details
 petCltr.destroy = async (req, res) => {
-  const { id } = req.params;
+  const { petId } = req.query;
   try {
-    const pet = await Pet.findByIdAndDelete(id);
+    const pet = await Pet.findByIdAndDelete(petId);
     if (!pet) {
       return res.status(404).json({ error: "Pet not found." });
     }
-    res.json({ message: "Pet deleted successfully." });
+    res.json(pet);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Something went wrong." });

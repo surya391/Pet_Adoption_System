@@ -20,9 +20,9 @@ export const petSchema = {
     notEmpty: {
       errorMessage: "Pet name cannot be empty.",
     },
-    isMongoId: {
-      errorMessage: 'id is invalid'
-    },
+    // isMongoId: {
+    //   errorMessage: 'id is invalid'
+    // },
     trim: true,
   },
   // petImage: {

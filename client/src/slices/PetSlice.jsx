@@ -59,9 +59,10 @@ export const profilePet = createAsyncThunk('post/profilePet',async(formData,{rej
     }
 })
 
-export const updatePet = createAsyncThunk("put/updatePet",async(formData,{rejectWithValue})=>{
+export const updatePet = createAsyncThunk("put/updatePet",async({formData,id},{rejectWithValue})=>{
+    console.log(formData, id)
     try {
-        const response = await axiosInstance.put(`/pet/updatePet`,formData,{
+        const response = await axiosInstance.put(`/pet/updatePet?petId=${id}`,formData,{
             headers:{
                 Authorization : localStorage.getItem("token")
             }
@@ -72,9 +73,9 @@ export const updatePet = createAsyncThunk("put/updatePet",async(formData,{reject
     }
 })
 
-export const deletePet = createAsyncThunk(async(id,{rejectWithValue})=>{
+export const deletePet = createAsyncThunk("delete/deletePet",async(id,{rejectWithValue})=>{
     try {
-        const response = await axiosInstance.delete(`/pet/deletePet`,{
+        const response = await axiosInstance.delete(`/pet/deletePet?petId=${id}`,{
             headers: {
                 Authorization : localStorage.getItem('token')
             }
@@ -93,7 +94,17 @@ const petSlice = createSlice({
         petDetails: null,
         petTypes: [],
         yoursPets:[],
+        isEditing:false,
+        petId:"",
         isLoading: false,
+    },
+    reducers:{
+        setIsEditing : (state,action)=>{
+            state.isEditing = action.payload;
+        } ,
+        setPetId: (state, action)=>{
+            state.petId = action.payload
+        }
     },
     extraReducers : (builders)=>{
         builders.addCase( petTypes.pending, (state)=>{
@@ -112,17 +123,17 @@ const petSlice = createSlice({
         })
         builders.addCase( getPet.pending, (state)=>{
             state.serverError = null;
-            state.petDetails = null;
+            state.yoursPets = null;
             state.isLoading = true;
         })
         builders.addCase( getPet.fulfilled, (state, action)=>{
             state.serverError = null;
-            state.petDetails = action.payload;
+            state.yoursPets = action.payload;
             state.isLoading = false;
         })
         builders.addCase( getPet.rejected,(state, action)=>{
             state.serverError = action.payload;
-            state.petDetails = null;
+            state.yoursPets = [];
             state.isLoading = false;
         })
         builders.addCase( singlePet.pending, (state)=>{
@@ -172,21 +183,22 @@ const petSlice = createSlice({
         })
         builders.addCase(deletePet.pending,(state)=>{
             state.serverError = null;
-            state.petDetails = null;
+            // state.petDetails = null;
             state.isLoading = true;
         })
         builders.addCase(deletePet.fulfilled,(state,action)=>{
             state.serverError = null;
-            state.petDetails = action.payload;
+            const index = state.yoursPets.findIndex(ele=>ele._id===action.payload._id)
+            state.yoursPets.splice(index, 1)
             state.isLoading = false;
         })
         builders.addCase(deletePet.rejected,(state,action)=>{
             state.serverError = action.payload;
-            state.petDetails = null;
+            // state.petDetails = null;
             state.isLoading = false;
         })
     }
 })
 
-
+export const { setIsEditing, setPetId } = petSlice.actions
 export default petSlice.reducer

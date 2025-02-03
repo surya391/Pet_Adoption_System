@@ -20,7 +20,7 @@ import { getUser} from "./slices/AuthSlice";
 import Spinner from "./pages/Frontpage/Spinner"
 import PetTypes from './pages/Admin/PetTypes';
 import PetProfile from './pages/Owner/PetProfile';
-import { petTypes, getPet } from './slices/PetSlice';
+import { petTypes } from './slices/PetSlice';
 import YourPets from './pages/Owner/YourPets';
 
 function App() {
@@ -36,7 +36,6 @@ function App() {
       dispatch(getUser())
       dispatch(getProfile())
       dispatch(petTypes())
-      dispatch(getPet())
     }
 },[])
 

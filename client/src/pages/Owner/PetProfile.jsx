@@ -7,7 +7,7 @@ import SideNavbar from "../Frontpage/SideNavBar";
 
 function PetProfile() {
     const dispatch = useDispatch();
-    const { serverError, petDetails, petTypes, isLoading } = useSelector((state) => state.pet);
+    const { serverError, petDetails, petTypes, isLoading, petId, isEditing } = useSelector((state) => state.pet);
     // console.log(petTypes)
     const [formData, setFormData] = useState({
         petImage: null,
@@ -20,17 +20,15 @@ function PetProfile() {
     const [petPicPreview, setPicPreview] = useState(null);
     const [clientErrors, setClientErrors] = useState(null);
 
-    const options = petTypes.map(ele => ({ value: ele._id, label: ele.petType }))
+    const options = petTypes.map(ele => ({ value: ele.petType, label: ele.petType }))
     // console.log(options)
     // Validation function
     const formValidate = () => {
         let errors = {};
         if (!formData.petImage) errors.petImage = "Pet Image is required";
-
         if (!formData.petName.trim()) errors.petName = "Pet Name is required";
         if (!formData.petType.trim()) errors.petType = "Pet Type is required";
         if (!formData.gender.trim()) errors.gender = "Pet gender is required";
-
         if (!formData.petAge) {
             errors.petAge = "Pet age is required";
         }
@@ -160,7 +158,7 @@ return(
     <div className="flex bg-gradient-to-r from-blue-100 to-gray-200 min-h-screen">
         <div className="w-auto p-0  pr">
                 <SideNavbar />
-            </div>
+        </div>
             
     <div className="bg-white p-6 w-full max-h-md">
         <div >
