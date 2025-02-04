@@ -70,31 +70,50 @@ export const requestSchema = {
     },
   },
   startDatetime: {
-    in: ['body'],
+    in: ["body"],
     custom: {
       options: (value) => {
+        const inputDate = new Date(value);
+        const today = new Date();
+        
+        today.setHours(0, 0, 0, 0); // Reset time to compare only the date
+  
         return (
-          !isNaN(Date.parse(value)) || // Check if ISO 8601 or parseable
-          /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(value) // Validate "yyyy-mm-dd HH:MM:SS"
+          (!isNaN(Date.parse(value)) || 
+          /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(value)) &&
+          inputDate >= today
         );
       },
       errorMessage:
-        "Start date and time must be in valid format (yyyy-mm-ddTHH:MM:SSZ or yyyy-mm-dd HH:MM:SS).",
+        "Start date and time must be in a valid format (yyyy-mm-ddTHH:MM:SSZ or yyyy-mm-dd HH:MM:SS) and cannot be in the past.",
     },
   },
+  
+  // endDatetime: {
+  //   in: ['body'],
+  //   custom: {
+  //     options: (value) => {
+  //       return (
+  //         !isNaN(Date.parse(value)) ||
+  //         /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(value) // Validate "yyyy-mm-dd HH:MM:SS" ; it can be interally same in the UTC formate.
+  //       );
+  //     },
+  //     errorMessage:
+  //       "End date and time must be in valid format (yyyy-mm-ddTHH:MM:SSZ or yyyy-mm-dd HH:MM:SS).",
+  //   }
+  // },
   endDatetime: {
-    in: ['body'],
-    custom: {
-      options: (value) => {
-        return (
-          !isNaN(Date.parse(value)) ||
-          /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(value) // Validate "yyyy-mm-dd HH:MM:SS" ; it can be interally same in the UTC formate.
-        );
-      },
-      errorMessage:
-        "End date and time must be in valid format (yyyy-mm-ddTHH:MM:SSZ or yyyy-mm-dd HH:MM:SS).",
-    }
+  in: ['body'],
+  custom: {
+    options: (value, { req }) => {
+      const start = new Date(req.body.startDatetime);
+      const end = new Date(value);
+      return end > start;
+    },
+    errorMessage: "End datetime must be after start datetime.",
   },
+},
+
   status: {
     optional: true,
     isIn: {
@@ -103,4 +122,18 @@ export const requestSchema = {
     },
     trim: true,
   },
+  amount: {
+    in: ["body"],
+    exists: {
+      errorMessage: "Amount is required.",
+    },
+    isNumeric: {
+      errorMessage: "Amount must be a number.",
+    },
+    custom: {
+      options: (value) => value >= 0,
+      errorMessage: "Amount must be a positive number.",
+    },
+  },
+  
 };

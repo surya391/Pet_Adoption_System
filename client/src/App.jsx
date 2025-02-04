@@ -22,6 +22,7 @@ import PetTypes from './pages/Admin/PetTypes';
 import PetProfile from './pages/Owner/PetProfile';
 import { petTypes } from './slices/PetSlice';
 import YourPets from './pages/Owner/YourPets';
+import RequestPets from './pages/Owner/RequestPets';
 
 function App() {
   const dispatch = useDispatch();
@@ -46,12 +47,6 @@ if(token && !userInfo){
     <div className="flex flex-col ">
       {<Navbar/>}
       <div className="flex-grow">
-        {/* <h1>PET ADOP SYSTEM</h1>
-        <ul>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/register">Register</Link></li>
-        </ul> */}
-
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/register' element={<Register />} />
@@ -63,6 +58,8 @@ if(token && !userInfo){
           <Route path= '/petType' element= {<PrivateRoute permittedRoles={["admin"]}> <PetTypes /></PrivateRoute>}/>
           <Route path= '/petProfile' element= {<PrivateRoute permittedRoles={["owner"]}> <PetProfile /></PrivateRoute>}/>
           <Route path= '/yoursPetList' element= {<PrivateRoute permittedRoles={["owner"]}> <YourPets/></PrivateRoute>}/>
+          <Route path= '/requestpets' element= {<PrivateRoute permittedRoles={["owner"]}> <RequestPets/></PrivateRoute>}/>
+
 
 
 

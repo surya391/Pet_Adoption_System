@@ -23,7 +23,6 @@ export const getPet = createAsyncThunk('get/getPet', async(_,{rejectWithValue})=
                 Authorization : localStorage.getItem('token') 
             }
         })
-        console.log(response.data)
         return response.data
     } catch (error) {
         return rejectWithValue(error?.response?.data?.error)
@@ -59,7 +58,7 @@ export const profilePet = createAsyncThunk('post/profilePet',async(formData,{rej
     }
 })
 
-export const updatePet = createAsyncThunk("put/updatePet",async({formData,id},{rejectWithValue})=>{
+export const updatePet = createAsyncThunk("put/updatePet",async({id,formData},{rejectWithValue})=>{
     console.log(formData, id)
     try {
         const response = await axiosInstance.put(`/pet/updatePet?petId=${id}`,formData,{
@@ -67,8 +66,10 @@ export const updatePet = createAsyncThunk("put/updatePet",async({formData,id},{r
                 Authorization : localStorage.getItem("token")
             }
         })
+        toast.success('Pet updated successfully')
         return response.data
     } catch (error) {
+        console.log(error)
         return rejectWithValue(error?.response?.data?.error)
     }
 })
@@ -173,7 +174,10 @@ const petSlice = createSlice({
         })
         builders.addCase(updatePet.fulfilled,(state,action)=>{
             state.serverError = null;
-            state.petDetails = action.payload;
+            // const index = state.yoursPets.findIndex(ele=>ele._id === action.payload._id)
+            // state.yoursPets.splice(index, 1, action.payload)
+            state.isEditing = false;
+            state.petId = "";
             state.isLoading = false;
         })
         builders.addCase(updatePet.rejected,(state,action)=>{

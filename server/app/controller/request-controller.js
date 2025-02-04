@@ -38,11 +38,14 @@ requestController.show = async (req, res) => {
 
 // Get all requests
 requestController.list = async (req, res) => {
+  const { userId } = req.currentUser;
+
   try {
-    const requests = await Request.find()
-    if (!requests.length) {
+    const requests = await Request.find({userId})
+    if (!requests) {
       return res.status(404).json({ error: "No requests found." });
     }
+    console.log(userId)
     res.json(requests);
   } catch (err) {
     console.error(err);
@@ -56,13 +59,11 @@ requestController.update = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-
-  const { id } = req.params;
+  const userId = req.currentUser.userId;
   const updates = req.body;
-
   try {
     const request = await Request.findByIdAndUpdate(
-      id,
+      userId,
       { $set: updates },
       { new: true, runValidators: true }
     );
@@ -78,13 +79,13 @@ requestController.update = async (req, res) => {
 
 // Delete a request
 requestController.destroy = async (req, res) => {
-  const { id } = req.params;
+  const { petId } = req.query;
   try {
-    const request = await Request.findByIdAndDelete(id);
+    const request = await Request.findByIdAndDelete(petId);
     if (!request) {
       return res.status(404).json({ error: "Request not found." });
     }
-    res.json({ message: "Request deleted successfully." });
+    res.json(request);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Something went wrong while deleting the request." });

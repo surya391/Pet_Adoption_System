@@ -68,6 +68,7 @@ petCltr.update = async (req, res) => {
   }
 
  const userId = req.currentUser.userId;
+ const { petId } = req.query;
  const update = req.body;
  const file = req.file;
  let fileResult;
@@ -77,8 +78,8 @@ petCltr.update = async (req, res) => {
  update.petImage = fileResult?fileResult.secure_url:update.petImage;
 
   try {
-    const pet = await Pet.findByIdAndUpdate(
-      userId,
+    const pet = await Pet.findOneAndUpdate(
+      {userId, _id : petId},
       { $set: update },
       { new: true, runValidators: true }
     );

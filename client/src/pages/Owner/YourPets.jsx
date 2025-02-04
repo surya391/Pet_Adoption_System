@@ -22,7 +22,10 @@ function YourPets() {
         navigate('/petProfile')
     }
     const handleRemove = (id)=>{
-        dispatch(deletePet(id))
+        const confirm = window.confirm("Are you sure?")
+        if(confirm){
+            dispatch(deletePet(id))
+        }
     }
 
     return (
