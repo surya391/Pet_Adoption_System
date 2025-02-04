@@ -39,13 +39,13 @@ requestController.show = async (req, res) => {
 // Get all requests
 requestController.list = async (req, res) => {
   const { userId } = req.currentUser;
-
+  // console.log(userId)
   try {
     const requests = await Request.find({userId})
     if (!requests) {
       return res.status(404).json({ error: "No requests found." });
     }
-    console.log(userId)
+    // console.log(requests)
     res.json(requests);
   } catch (err) {
     console.error(err);

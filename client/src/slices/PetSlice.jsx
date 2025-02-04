@@ -59,7 +59,7 @@ export const profilePet = createAsyncThunk('post/profilePet',async(formData,{rej
 })
 
 export const updatePet = createAsyncThunk("put/updatePet",async({id,formData},{rejectWithValue})=>{
-    console.log(formData, id)
+    // console.log(formData, id)
     try {
         const response = await axiosInstance.put(`/pet/updatePet?petId=${id}`,formData,{
             headers:{

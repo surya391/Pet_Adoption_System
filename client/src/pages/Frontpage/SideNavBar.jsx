@@ -71,6 +71,12 @@ const SideNavbar = () => {
             </Link>
         </p>
 
+        <p className="p-4 text-sm font-bold cursor-pointer">
+            <Link to="/requestPets" className="text-blue-500 hover:underline">
+                Create Request
+            </Link>
+        </p>
+
         {/* Logout Link */}
         <p
             className="p-4 text-sm font-bold text-rose-500 cursor-pointer"

@@ -10,6 +10,7 @@ export const createRequestPet = createAsyncThunk("post/createRequestPet", async 
             },
         });
         console.log(response.data);
+        toast.success("Request pet added successfully")
         return response.data;
     } catch (error) {
         return rejectWithValue(error?.response?.data?.error);
@@ -18,12 +19,11 @@ export const createRequestPet = createAsyncThunk("post/createRequestPet", async 
 );
 export const getRequestPets = createAsyncThunk('get/getRequestPets', async (_, { rejectWithValue }) => {
     try {
-        const response = await axiosInstance.get('/request/my-requests', {
+        const response = await axiosInstance.get(`/request/my-requests`, {
             headers: {
                 Authorization: localStorage.getItem('token')
             }
         })
-        console.log("a",response.data)
         return response.data
     } catch (error) {
         console.log(error)
@@ -84,7 +84,7 @@ const requestPet = createSlice({
         });
         builders.addCase(createRequestPet.fulfilled, (state, action) => {
             state.serverError = null;
-            state.requestDetails = action.payload;
+            // state.requestDetails = action.payload;
             state.isLoading = false;
         });
         builders.addCase(createRequestPet.rejected, (state, action) => {

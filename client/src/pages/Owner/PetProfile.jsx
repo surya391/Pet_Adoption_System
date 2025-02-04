@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 function PetProfile() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { serverError,  petTypes,yoursPets , isLoading, petId, isEditing } = useSelector((state) => state.pet);
+    const { serverError,  petTypes, yoursPets, isLoading, petId, isEditing } = useSelector((state) => state.pet);
     const pet = yoursPets.find((ele)=>ele._id === petId)
 
     const [formData, setFormData] = useState({

@@ -1,13 +1,18 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createRequestPet } from "../../slices/RequestSlice";
 import SideNavbar from "../Frontpage/SideNavBar";
+import Spinner from "../Frontpage/Spinner";
 import Select from 'react-select'
+import { useNavigate } from "react-router-dom";
 
 function RequestPets() {
     const dispatch = useDispatch();
-    const { serverError, isLoading, petId, requestDetails } = useSelector((state) => state.request);
-    console.log(petId)
+    const navigate = useNavigate();
+    const { serverError, isLoading, petId} = useSelector((state) => state.request);
+    const pet = petId.find((ele)=>ele._id === petId)
+    console.log(pet)
+
     const [formData, setFormData] = useState({
         petId: "",
         description: "",
@@ -77,8 +82,8 @@ function RequestPets() {
                         />
                         {clientErrors.petId && <p className="text-red-500">{clientErrors.petId}</p>}
                     </div> */}
-                     <label className="block text-sm font-medium text-gray-700">Pet Id:</label>
-            <Select options={options} onChange={handleSelectChange} className="mt-1 block w-full" />
+                     <label className="block text-sm font-medium text-gray-700">Pet Name:</label>
+            <Select options={options}value={options.find(option => option.value === formData.petId)} onChange={handleSelectChange} className="mt-1 block w-full" />
             {clientErrors?.petId && <p className="text-red-500 text-xs">{clientErrors.petId}</p>}
 
                     <div>
