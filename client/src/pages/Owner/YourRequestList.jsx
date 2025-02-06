@@ -2,19 +2,20 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import SideNavbar from "../Frontpage/SideNavBar";
 import Spinner from "../Frontpage/Spinner";
-import { getRequestPets, deleteRequestPet, setIsEditing, setRequestId } from "../../slices/RequestSlice";
+import { getRequestPets, myPetList, deleteRequestPet, setIsEditing, setRequestId } from "../../slices/RequestSlice";
 import { useNavigate } from "react-router-dom";
 
 function YourRequestList() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { serverError, isLoading, requestTypes, requestPets } = useSelector((state) => state.request);
-
-    // console.log( "aa",requestTypes)
-
+    // console.log('petId',petId)
+    // console.log( "requestPets",requestPets)
+    // console.log('requestTypes', requestTypes)
     useEffect(() => {
         dispatch(getRequestPets());
-    }, [dispatch]);
+        // dispatch(myPetList())
+    }, []);
 
     const handleEdit = (id) => {
         // console.log(id);
@@ -24,7 +25,6 @@ function YourRequestList() {
     };
 
     const handleRemove = (id) => {
-        console.log(id)
         const confirm = window.confirm("Are you sure you want to delete this request?");
         if (confirm) {
             dispatch(deleteRequestPet(id));
@@ -33,7 +33,7 @@ function YourRequestList() {
 
     return (
         <div className="min-h-screen bg-gray-100 flex">
-                <SideNavbar />
+            <SideNavbar />
 
             <div className="bg-white p-6 w-full max-h-md">
                 <h2 className="text-2xl font-bold text-center text-gray-700 mb-4">Service Requests</h2>
@@ -53,7 +53,6 @@ function YourRequestList() {
                                     )}
                                 </p>
                                 <p className="text-sm text-gray-600">Pet Name: {request?.petId?.petName}</p>
-
                                 <p className="text-sm text-gray-600">Type: {requestTypes.find(ele => ele._id === request?.requestType)?.type}</p>
                                 <p className="text-sm text-gray-600">Pet Age: {request?.petId?.petAge}</p>
                                 <p className="text-sm text-gray-600">Amount: {request.amount} ₹</p>

@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
-import { createRequestPet } from "../../slices/RequestSlice";
+import { createRequestPet, myPetList } from "../../slices/RequestSlice";
 import SideNavbar from "../Frontpage/SideNavBar";
 import Spinner from "../Frontpage/Spinner";
 import Select from 'react-select'
@@ -11,8 +11,8 @@ function RequestPets() {
     const navigate = useNavigate();
     const { serverError, isLoading, petId, requestTypes, requestPets, isEditing, requestId } = useSelector((state) => state.request);
 
+   
     const pet = requestPets.find((ele) => ele._id === requestId)
-// console.log(requestTypes)
     const [formData, setFormData] = useState({
         petId: "",
         description: "",
@@ -22,10 +22,14 @@ function RequestPets() {
         endDatetime: "",
         amount: "",
     });
-    const options = petId.map(ele => ({ value: ele._id, label: ele.petName }));
-    const option = requestTypes.map(ele => ({ value: ele._id, label: ele.type }));
 
+    // useEffect(()=>{
+    //     dispatch(myPetList())
+    // },[])
+
+    const options = petId.map(ele => ({ value: ele._id, label: ele.petName }));
     // console.log(options)
+    const option = requestTypes.map(ele => ({ value: ele._id, label: ele.type }));
 
     const [clientErrors, setClientErrors] = useState({});
 
@@ -34,22 +38,28 @@ function RequestPets() {
         if (!formData.petId) errors.petId = "Pet details are required";
         if (!formData.description) errors.description = "Description is required";
         if (!formData.requestType) errors.requestType = "Request type is required";
-        if (!formData.location) errors.location = "Location is required";
+        // if (!formData.location) errors.location = "Location is required";
         if (!formData.phone) errors.phone = "Phone number is required";
         if (!formData.startDatetime) errors.startDatetime = "Start date is required";
         if (!formData.endDatetime) errors.endDatetime = "End date is required";
-        if (!formData.amount) errors.amount = "Amount is required";
+        if (!formData.amount){
+             errors.amount = "Amount is required"
+            }else if(formData.amount < 1){
+             errors.amount = "Amount is greater then zero"
+            }
         return errors;
     };
     const handleSelectChange = (selectedValue) => {
+        // console.log(selectedValue)
         setFormData({ ...formData, petId: selectedValue.value })
     }
     const handleChange = (selectedValue) => {
-        // console.log(selectedValue)
         setFormData({ ...formData, requestType: selectedValue.value })
     }
+    // console.log(formData)
     const handleSubmit = (e) => {
         e.preventDefault();
+        
         const errors = formValidate();
         if (Object.keys(errors).length > 0) {
             setClientErrors(errors);
@@ -58,10 +68,10 @@ function RequestPets() {
 
             dispatch(createRequestPet(formData));
             setFormData({
-                petDetails: null,
+                petId: "",
                 description: "",
                 requestType: "",
-                location: "",
+                // location: "",
                 phone: "",
                 startDatetime: "",
                 endDatetime: "",
@@ -75,21 +85,10 @@ function RequestPets() {
             <SideNavbar />
             <div className="w-full max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-8 mt-4">
                 <h2 className="text-2xl font-bold text-gray-700 text-center">Request Pet Service</h2>
-                {/* {serverError && <p className="text-red-500 text-center mb-4">{serverError}</p>} */}
                 {isLoading && <Spinner />}
                 <form onSubmit={handleSubmit} className="space-y-1">
-                    {/* <div>
-                        <label className="block text-gray-700 font-medium">Pet ID</label>
-                        <input
-                            type="text"
-                            value={formData.petId}
-                            onChange={(e) => setFormData({ ...formData, petId: e.target.value })}
-                            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                        {clientErrors.petId && <p className="text-red-500">{clientErrors.petId}</p>}
-                    </div> */}
                     <label className="block text-sm font-medium text-gray-700">Pet Name:</label>
-                    <Select options={options} value={options.find(option => option.value === formData.petId)} onChange={handleSelectChange} className="mt-1 block w-full" />
+                    <Select options={options}  value={options.find(option => option.value === formData.petId)} onChange={handleSelectChange} className="mt-1 block w-full" />
                     {clientErrors?.petId && <p className="text-red-500 text-xs">{clientErrors.petId}</p>}
 
                     <div>
@@ -97,21 +96,10 @@ function RequestPets() {
                         <textarea
                             value={formData.description}
                             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                            className="w-full px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                         {clientErrors.description && <p className="text-red-500">{clientErrors.description}</p>}
                     </div>
-
-                    {/* <div>
-                        <label className="block text-gray-700 font-medium">Request Type</label>
-                        <input
-                            type="text"
-                            value={formData.requestType}
-                            onChange={(e) => setFormData({ ...formData, requestType: e.target.value })}
-                            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                        {clientErrors.requestType && <p className="text-red-500">{clientErrors.requestType}</p>}
-                    </div> */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Request Type:</label>
                         <Select
@@ -123,7 +111,7 @@ function RequestPets() {
                         {clientErrors?.requestType && <p className="text-red-500 text-xs">{clientErrors.requestType}</p>}
                     </div>
 
-                    <div>
+                    {/* <div>
                         <label className="block text-gray-700 font-medium">Location</label>
                         <input
                             type="text"
@@ -132,7 +120,7 @@ function RequestPets() {
                             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                         {clientErrors.location && <p className="text-red-500">{clientErrors.location}</p>}
-                    </div>
+                    </div> */}
 
                     <div>
                         <label className="block text-gray-700 font-medium">Phone</label>

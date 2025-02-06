@@ -12,6 +12,9 @@ requestRouter.post('/create', authenticationUser, checkSchema(requestSchema), re
 // Get all requests by the logged-in user
 requestRouter.get('/my-requests', authenticationUser, requestController.list);
 
+requestRouter.get('/pendingRequest', authenticationUser, requestController.listPendingRequests);
+
+
 // Get request details by request ID
 requestRouter.get('/:id', authenticationUser, requestController.show);
 

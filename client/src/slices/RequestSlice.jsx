@@ -13,6 +13,7 @@ export const createRequestPet = createAsyncThunk("post/createRequestPet", async 
         toast.success("Request pet added successfully")
         return response.data;
     } catch (error) {
+        console.log(error)
         return rejectWithValue(error?.response?.data?.error);
     }
 }
@@ -31,6 +32,22 @@ export const getRequestPets = createAsyncThunk('get/getRequestPets', async (_, {
         return rejectWithValue(error?.response?.data?.error)
     }
 })
+
+export const getPendingRequest = createAsyncThunk('get/getPendingRequest', async (_, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.get(`/request/pendingRequest`, {
+            headers: {
+                Authorization: localStorage.getItem('token')
+            }
+        })
+        console.log(response.data)
+        return response.data
+    } catch (error) {
+        console.log(error)
+        return rejectWithValue(error?.response?.data?.error)
+    }
+})
+
 export const deleteRequestPet = createAsyncThunk("delete/deleteRequestPet", async (id, { rejectWithValue }) => {
     // console.log(id)
     try {
@@ -59,7 +76,7 @@ export const updateRequestPet = createAsyncThunk("put/updateRequestPet", async (
         return rejectWithValue(error?.response?.data?.error)
     }
 })
-export const petId = createAsyncThunk('get/petId', async (_, { rejectWithValue }) => {
+export const myPetList   = createAsyncThunk('get/myPetList', async (_, { rejectWithValue }) => {
     try {
         const response = await axiosInstance.get(`/pet/my-pets`, {
             headers: {
@@ -94,6 +111,7 @@ const requestSlice = createSlice({
         petId: [],
         requestTypes:[],
         requestPets:[],
+        pendingRequestList: [],
         isEditing:false,
         requestId:"",
 
@@ -135,6 +153,23 @@ const requestSlice = createSlice({
             state.requestPets = [];
             state.isLoading = false;
         })
+
+        builders.addCase(getPendingRequest.pending, (state) => {
+            state.serverError = null;
+            state.isLoading = true;
+        })
+        builders.addCase(getPendingRequest.fulfilled, (state, action) => {
+            state.serverError = null;
+            state.pendingRequestList = action.payload;
+            state.isLoading = false;
+        })
+        builders.addCase(getPendingRequest.rejected, (state, action) => {
+            state.serverError = action.payload;
+            state.pendingRequestList = [];
+            state.isLoading = false;
+        })
+
+
         builders.addCase(deleteRequestPet.pending, (state) => {
             state.serverError = null;
             // state.petDetails = null;
@@ -166,16 +201,16 @@ const requestSlice = createSlice({
             state.requestDetails = null;
             state.isLoading = false;
         })
-        builders.addCase(petId.pending, (state) => {
+        builders.addCase(myPetList.pending, (state) => {
             state.serverError = null;
             state.isLoading = true;
         })
-        builders.addCase(petId.fulfilled, (state, action) => {
+        builders.addCase(myPetList.fulfilled, (state, action) => {
             state.serverError = null;
             state.petId = action.payload
             state.isLoading = false;
         })
-        builders.addCase(petId.rejected, (state, action) => {
+        builders.addCase(myPetList.rejected, (state, action) => {
             state.serverError = action.payload;
             state.petId = [];
             state.isLoading = false;

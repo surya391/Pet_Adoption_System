@@ -30,9 +30,7 @@ function YourPets() {
 
     return (
         <div className="flex bg-gradient-to-r from-blue-100 to-gray-200 min-h-screen">
-            <div className="w-auto p-0">
                 <SideNavbar />
-            </div>
 
             <div className="bg-white p-6 w-full max-h-md">
                 <h2 className="text-2xl font-bold text-center text-gray-700 mb-4">My Pets</h2>

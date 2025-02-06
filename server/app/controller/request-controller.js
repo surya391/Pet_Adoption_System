@@ -7,10 +7,11 @@ const requestController = {};
 // Create a new request
 requestController.create = async (req, res) => {
   const errors = validationResult(req);
+  console.log(errors)
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-
+// console.log(req.body)
   const body = req.body;
   try {
     const userId =  req.currentUser.userId 
@@ -55,6 +56,28 @@ requestController.list = async (req, res) => {
     res.status(500).json({ error: "Something went wrong while fetching requests." });
   }
 };
+
+requestController.listPendingRequests = async (req, res) => {
+  // const { serviceProviderId } = req.currentUser; 
+  try {
+    const pendingRequests = await Request.find({ 
+      status: "pending" 
+    }).populate({
+      path: "petId",
+      select: "petName petType petAge gender petImage"
+    });
+
+    if (!pendingRequests || pendingRequests.length === 0) {
+      return res.status(404).json({ error: "No pending requests found." });
+    }
+
+    res.json(pendingRequests);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Something went wrong while fetching pending requests." });
+  }
+};
+
 
 // Update a request
 requestController.update = async (req, res) => {

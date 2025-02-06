@@ -96,56 +96,83 @@ function PetProfile() {
 
 return (
     <div className="flex bg-gradient-to-r from-blue-100 to-gray-200 min-h-screen">
-      <div className="w-auto p-0">
         <SideNavbar />
-      </div>
       <div className="flex-1 flex items-center justify-center">
         <div className="bg-white p-6 w-full max-w-md">
           <h2 className="text-2xl font-bold text-center text-gray-700 mb-4">{ isEditing? "Edit " : "Add " }Pet Profile</h2>
           {isLoading && <Spinner />}
           <form onSubmit={handleSubmit} className="space-y-4">
-             <label className="block text-sm font-medium text-gray-700">Pet Image:</label>
+             {/* <label className=" text-sm font-medium text-gray-700">Pet Image:</label>
              <img src={formData.file? formData.file : formData.petImage} alt="Preview" className="mt-2 w-24 h-24 rounded-full shadow-md border-2 border-gray-300 object-cover" />
              <input
                type="file"
                accept="image/*"
-                className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:border-gray-300 file:text-gray-700 file:bg-gray-100 hover:file:bg-gray-200"
+                className=" w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:border-gray-300 file:text-gray-700 file:bg-gray-100 hover:file:bg-gray-200"
                  onChange={(e) => {
                      const file = e.target.files[0];
                      if (file) {
                          setFormData({ ...formData, petImage: file, file : URL.createObjectURL(file) });
                     }
                 }}
-            />
+            /> */}
+            <div className="flex items-center gap-4 mt-2">
+  {/* Image Preview */}
+  <img
+    src={formData.file ? formData.file : formData.petImage}
+    alt="Preview"
+    className="w-24 h-24 rounded-full shadow-md border-2 border-gray-300 object-cover"
+  />
+
+  {/* File Input */}
+  <div className="flex flex-col">
+    <label className=" text-sm font-medium text-gray-700 mb-1">Pet Image:</label>
+    <input
+      type="file"
+      accept="image/*"
+      className="text-sm text-gray-600 file:mr-4 file:py-1 file:px-4 file:rounded-lg file:border file:border-gray-300 file:text-gray-700 file:bg-gray-100 hover:file:bg-gray-200"
+      onChange={(e) => {
+        const file = e.target.files[0];
+        if (file) {
+          setFormData({
+            ...formData,
+            petImage: file,
+            file: URL.createObjectURL(file),
+          });
+        }
+      }}
+    />
+  </div>
+</div>
+
             {clientErrors?.petImage && <p className="text-red-500 text-xs">{clientErrors.petImage}</p>}
 
-            <label className="block text-sm font-medium text-gray-700">Pet Name:</label>
+            <label className=" text-sm font-medium text-gray-700">Pet Name:</label>
             <input
                 type="text"
                 value={formData.petName}
                 onChange={(e) => setFormData({ ...formData, petName: e.target.value })}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1  w-full p-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             />
             {clientErrors?.petName && <p className="text-red-500 text-xs">{clientErrors.petName}</p>}
 
-            <label className="block text-sm font-medium text-gray-700">Pet Type:</label>
-            <Select options={options} value={options.find(option => option.value === formData.petType)} onChange={handleSelectChange} className="mt-1 block w-full" />
+            <label className=" text-sm font-medium text-gray-700">Pet Type:</label>
+            <Select options={options} value={options.find(option => option.value === formData.petType)} onChange={handleSelectChange} className="mt-1  w-full" />
             {clientErrors?.petType && <p className="text-red-500 text-xs">{clientErrors.petType}</p>}
 
-            <label className="block text-sm font-medium text-gray-700">Age:</label>
+            <label className=" text-sm font-medium text-gray-700">Age:</label>
             <input
                 type="number"
                 value={formData.petAge}
                 onChange={(e) => setFormData({ ...formData, petAge: e.target.value })}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1  w-full p-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             />
             {clientErrors?.petAge && <p className="text-red-500 text-xs">{clientErrors.petAge}</p>}
 
-            <label className="block text-sm font-medium text-gray-700">Gender:</label>
+            <label className=" text-sm font-medium text-gray-700">Gender:</label>
             <select
                 value={formData.gender}
                 onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1  w-full p-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             >
                 <option value="">Select Gender</option>
                 <option value="male">Male</option>
@@ -262,11 +289,11 @@ export default PetProfile;
 //         {isLoading && <Spinner />}
         
 //         <form onSubmit={handleSubmit} className="space-y-4">
-//             <label className="block text-sm font-medium text-gray-700">Pet Image:</label>
+//             <label className=" text-sm font-medium text-gray-700">Pet Image:</label>
 //             <input
 //                 type="file"
 //                 accept="image/*"
-//                 className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:border-gray-300 file:text-gray-700 file:bg-gray-100 hover:file:bg-gray-200"
+//                 className=" w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:border-gray-300 file:text-gray-700 file:bg-gray-100 hover:file:bg-gray-200"
 //                 onChange={(e) => {
 //                     const file = e.target.files[0];
 //                     if (file) {
@@ -278,33 +305,33 @@ export default PetProfile;
 //             {petPicPreview && <img src={petPicPreview} alt="Preview" className="mt-2 w-24 h-24 rounded-full shadow-md border-2 border-gray-300 object-cover" />}
 //             {clientErrors?.petImage && <p className="text-red-500 text-xs">{clientErrors.petImage}</p>}
 
-//             <label className="block text-sm font-medium text-gray-700">Pet Name:</label>
+//             <label className=" text-sm font-medium text-gray-700">Pet Name:</label>
 //             <input
 //                 type="text"
 //                 value={formData.petName}
 //                 onChange={(e) => setFormData({ ...formData, petName: e.target.value })}
-//                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+//                 className="mt-1  w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
 //             />
 //             {clientErrors?.petName && <p className="text-red-500 text-xs">{clientErrors.petName}</p>}
 
-//             <label className="block text-sm font-medium text-gray-700">Pet Type:</label>
-//             <Select options={options} onChange={handleSelectChange} className="mt-1 block w-full" />
+//             <label className=" text-sm font-medium text-gray-700">Pet Type:</label>
+//             <Select options={options} onChange={handleSelectChange} className="mt-1  w-full" />
 //             {clientErrors?.petType && <p className="text-red-500 text-xs">{clientErrors.petType}</p>}
 
-//             <label className="block text-sm font-medium text-gray-700">Age:</label>
+//             <label className=" text-sm font-medium text-gray-700">Age:</label>
 //             <input
 //                 type="number"
 //                 value={formData.petAge}
 //                 onChange={(e) => setFormData({ ...formData, petAge: e.target.value })}
-//                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+//                 className="mt-1  w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
 //             />
 //             {clientErrors?.petAge && <p className="text-red-500 text-xs">{clientErrors.petAge}</p>}
 
-//             <label className="block text-sm font-medium text-gray-700">Gender:</label>
+//             <label className=" text-sm font-medium text-gray-700">Gender:</label>
 //             <select
 //                 value={formData.gender}
 //                 onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-//                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+//                 className="mt-1  w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
 //             >
 //                 <option value="">Select Gender</option>
 //                 <option value="male">Male</option>

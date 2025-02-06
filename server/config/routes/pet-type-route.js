@@ -15,10 +15,10 @@ const permittedRole = ['admin'];
 petTypeRouter.post( '/create',  authenticationUser, authorizeUser(permittedRole), checkSchema(petTypeSchema),petTypeController.create);
 
 // Get all pet types for the logged-in user
-petTypeRouter.get('/get', authenticationUser,  petTypeController.list);
+petTypeRouter.get('/get', authenticationUser,petTypeController.list);
 
 // Get pet type details by pet type ID
-petTypeRouter.get('/:id', authenticationUser, authorizeUser(permittedRole), petTypeController.show);
+petTypeRouter.get('/:id', authenticationUser,/*  authorizeUser(permittedRole) */ petTypeController.show);
 
 // Update a pet type by ID
 petTypeRouter.put('/update/:id',  authenticationUser, authorizeUser(permittedRole), checkSchema(petTypeSchema),  petTypeController.update);

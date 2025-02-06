@@ -4,6 +4,7 @@ import { useNavigate, useLocation, Navigate } from 'react-router-dom'
 
 const PrivateRoute = (props) =>{
     const { userInfo, isLoggedIn } = useSelector(state => state.auth)
+    console.log("userInfo",userInfo)
     const navigate = useNavigate();
     const location = useLocation();
     useEffect(()=>{
