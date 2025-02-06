@@ -1,4 +1,5 @@
 import Request from "../models/request-model.js";
+import Profile from "../models/profile-model.js";
 import { validationResult } from "express-validator";
 
 const requestController = {};
@@ -12,7 +13,9 @@ requestController.create = async (req, res) => {
 
   const body = req.body;
   try {
-    const newRequest = new Request({ ...body, userId: req.currentUser.userId });
+    const userId =  req.currentUser.userId 
+    const profileId = await Profile.findOne({ userId })
+    const newRequest = new Request({ ...body, userId, profileId : profileId._id});
     await newRequest.save();
     res.status(201).json(newRequest);
   } catch (err) {
@@ -41,7 +44,7 @@ requestController.list = async (req, res) => {
   const { userId } = req.currentUser;
   // console.log(userId)
   try {
-    const requests = await Request.find({userId})
+    const requests = await Request.find({ userId }).populate({ path : "petId" , select : "petName petType petAge gender petImage" })
     if (!requests) {
       return res.status(404).json({ error: "No requests found." });
     }
@@ -80,11 +83,13 @@ requestController.update = async (req, res) => {
 // Delete a request
 requestController.destroy = async (req, res) => {
   const { petId } = req.query;
+  // console.log(petId)
   try {
     const request = await Request.findByIdAndDelete(petId);
     if (!request) {
       return res.status(404).json({ error: "Request not found." });
     }
+    // console.log(request)
     res.json(request);
   } catch (err) {
     console.error(err);

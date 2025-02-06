@@ -113,7 +113,7 @@ const profileSlice = createSlice({
         builders.addCase(updateProfile.fulfilled,(state, action)=>{
             state.serverError = null;
             // state.editId = null;
-            // state.userDetails = action.payload;
+            state.userDetails = action.payload;
             state.isLoading = false;
         })
         builders.addCase(updateProfile.rejected, (state,action)=>{

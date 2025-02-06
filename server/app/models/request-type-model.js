@@ -6,7 +6,7 @@ const RequestTypeSchema = new Schema(
           ref: 'User',
           required: true,
         },
-        requestType:{
+         type:{
           type: String,
           required: true
         }

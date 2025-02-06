@@ -13,7 +13,7 @@ const permittedRole = ['admin'];
 requestTypeRouter.post('/create', authenticationUser, authorizeUser(permittedRole), checkSchema(requestTypeSchema), requestTypeController. create);
 
 // Get all request types for the logged-in user
-requestTypeRouter.get('/my-request-types', authenticationUser, authorizeUser(permittedRole), requestTypeController.list);
+requestTypeRouter.get('/myRequestTypes', authenticationUser, authorizeUser(['admin','owner']), requestTypeController.list);
 
 // Get request type details by request type ID
 requestTypeRouter.get('/:id', authenticationUser, authorizeUser(permittedRole), requestTypeController.show);

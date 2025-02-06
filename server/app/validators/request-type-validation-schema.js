@@ -1,6 +1,6 @@
 import RequestType from "../models/request-type-model.js";
 export const requestTypeSchema = {
-    requestType: {
+    type: {
       isString: {
         errorMessage: 'Pet requst type must be a string.',
       },
@@ -10,7 +10,7 @@ export const requestTypeSchema = {
       trim: true,
       custom: {
         options: async function (value) {
-            const petrequestType = await RequestType.findOne({ requestType: value })
+            const petrequestType = await RequestType.findOne({ type: value })
             if (petrequestType) {
                 throw new Error('name is already taken')
             } else {

@@ -50,18 +50,18 @@ export const requestSchema = {
     },
     trim : true
   },
-  location: {
-    exists: {
-      errorMessage: "Location is required.",
-    },
-    notEmpty: {
-      errorMessage: "Location cannot be empty.",
-    },
-    isString: {
-      errorMessage: "Location must be a string.",
-    },
-    trim: true,
-  },
+  // location: {
+  //   exists: {
+  //     errorMessage: "Location is required.",
+  //   },
+  //   notEmpty: {
+  //     errorMessage: "Location cannot be empty.",
+  //   },
+  //   isString: {
+  //     errorMessage: "Location must be a string.",
+  //   },
+  //   trim: true,
+  // },
   description: {
     in: ['body'],
     optional: true, 

@@ -16,9 +16,9 @@ requestRouter.get('/my-requests', authenticationUser, requestController.list);
 requestRouter.get('/:id', authenticationUser, requestController.show);
 
 // Update request details by request ID
-requestRouter.put('/update/:id', authenticationUser, checkSchema(requestSchema), requestController.update);
+requestRouter.put('/updateRequestPet', authenticationUser, checkSchema(requestSchema), requestController.update);
 
 // Delete a request by request ID
-requestRouter.delete('/delete/:id', authenticationUser, requestController.destroy);
+requestRouter.delete('/deleteRequestPet', authenticationUser, requestController.destroy);
 
 export default requestRouter;

@@ -11,7 +11,8 @@ const RequestSchema = new Schema(
       ref:"RequestType",
       required: true
     },
-    location: { type: String, required: true },
+    // location: { type: String, required: true },
+    profileId: { type: Schema.Types.ObjectId, ref: "Profile", required: true },
     description: { type: String, required: true },
     startDatetime: { type: Date, required: true },
     endDatetime: { type: Date, required: true },

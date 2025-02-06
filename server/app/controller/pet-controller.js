@@ -38,6 +38,7 @@ petCltr.listPet = async (req, res) => {
     if (!pets.length) {
       return res.status(404).json({ error: "No pets found for this user." });
     }
+    // console.log(pets)
     res.json(pets);
   } catch (err) {
     console.error(err);

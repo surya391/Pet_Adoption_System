@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { profilePet, updatePet } from "../../slices/PetSlice";
 import Select from 'react-select'
 import Spinner from "../Frontpage/Spinner";
-import SideNavbar from "../Frontpage/SideNavBar";
+import SideNavbar from "../Frontpage/SideNavBar"; 
 import { useNavigate } from "react-router-dom";
 
 function PetProfile() {
@@ -11,7 +11,6 @@ function PetProfile() {
     const navigate = useNavigate();
     const { serverError,  petTypes, yoursPets, isLoading, petId, isEditing } = useSelector((state) => state.pet);
     const pet = yoursPets.find((ele)=>ele._id === petId)
-
     const [formData, setFormData] = useState({
         petImage: pet?.petImage || null,
         petName: pet?.petName || "",

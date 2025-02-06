@@ -23,6 +23,8 @@ import PetProfile from './pages/Owner/PetProfile';
 import { petTypes } from './slices/PetSlice';
 import YourPets from './pages/Owner/YourPets';
 import RequestPets from './pages/Owner/RequestPets';
+import { petId,getRequestTypes } from './slices/RequestSlice';
+import YourRequestList from './pages/Owner/YourRequestList';
 
 function App() {
   const dispatch = useDispatch();
@@ -37,6 +39,9 @@ function App() {
       dispatch(getUser())
       dispatch(getProfile())
       dispatch(petTypes())
+      dispatch(petId())
+      dispatch(getRequestTypes())
+      // dispatch(requestId())
     }
 },[])
 
@@ -59,6 +64,8 @@ if(token && !userInfo){
           <Route path= '/petProfile' element= {<PrivateRoute permittedRoles={["owner"]}> <PetProfile /></PrivateRoute>}/>
           <Route path= '/yoursPetList' element= {<PrivateRoute permittedRoles={["owner"]}> <YourPets/></PrivateRoute>}/>
           <Route path= '/requestpets' element= {<PrivateRoute permittedRoles={["owner"]}> <RequestPets/></PrivateRoute>}/>
+          <Route path= '/requestList' element= {<PrivateRoute permittedRoles={["admin","owner","serviceprovider"]}> <YourRequestList/></PrivateRoute>}/>
+
 
 
 
