@@ -38,11 +38,10 @@ const Login = () => {
             setClientErrors(errors);
         } else {
             setClientErrors({});
-
             const actionResult = await dispatch(userLogin(formData));
             if (actionResult.type === userLogin.fulfilled.type) {
                 dispatch(getUser());
-                navigate('/dashboard');
+                navigate('/');
             }
         }
     };

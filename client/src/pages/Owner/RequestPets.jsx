@@ -11,8 +11,7 @@ function RequestPets() {
     const navigate = useNavigate();
     const { serverError, isLoading, petId, requestTypes, requestPets, isEditing, requestId } = useSelector((state) => state.request);
 
-   
-    const pet = requestPets.find((ele) => ele._id === requestId)
+
     const [formData, setFormData] = useState({
         petId: "",
         description: "",
@@ -23,9 +22,21 @@ function RequestPets() {
         amount: "",
     });
 
-    // useEffect(()=>{
-    //     dispatch(myPetList())
-    // },[])
+    useEffect(() => {
+        if (isEditing) {
+            const requestInfo = requestPets.find((ele) => ele._id === requestId)
+            console.log("requestInfo", requestInfo)
+            setFormData({
+                petId: requestInfo?.petId?._id,
+                description: requestInfo?.description,
+                requestType:requestInfo?.requestType,
+                phone:requestInfo?.phone,
+                startDatetime: requestInfo?.startDatetime,
+                endDatetime: requestInfo?.endDatetime,
+                amount: requestInfo?.amount,
+            })
+        }
+    }, [])
 
     const options = petId.map(ele => ({ value: ele._id, label: ele.petName }));
     // console.log(options)
@@ -42,11 +53,11 @@ function RequestPets() {
         if (!formData.phone) errors.phone = "Phone number is required";
         if (!formData.startDatetime) errors.startDatetime = "Start date is required";
         if (!formData.endDatetime) errors.endDatetime = "End date is required";
-        if (!formData.amount){
-             errors.amount = "Amount is required"
-            }else if(formData.amount < 1){
-             errors.amount = "Amount is greater then zero"
-            }
+        if (!formData.amount) {
+            errors.amount = "Amount is required"
+        } else if (formData.amount < 1) {
+            errors.amount = "Amount is greater then zero"
+        }
         return errors;
     };
     const handleSelectChange = (selectedValue) => {
@@ -59,19 +70,23 @@ function RequestPets() {
     // console.log(formData)
     const handleSubmit = (e) => {
         e.preventDefault();
-        
+
         const errors = formValidate();
         if (Object.keys(errors).length > 0) {
             setClientErrors(errors);
         } else {
             setClientErrors({});
 
-            dispatch(createRequestPet(formData));
+            if(isEditing){
+                
+            }else{
+                dispatch(createRequestPet(formData));
+            }
+         
             setFormData({
                 petId: "",
                 description: "",
                 requestType: "",
-                // location: "",
                 phone: "",
                 startDatetime: "",
                 endDatetime: "",
@@ -80,7 +95,7 @@ function RequestPets() {
         }
     };
 
-    return(
+    return (
         <div className="flex bg-gradient-to-r from-blue-100 to-gray-200 min-h-screen">
             <SideNavbar />
             <div className="w-full max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-8 mt-4">
@@ -88,7 +103,7 @@ function RequestPets() {
                 {isLoading && <Spinner />}
                 <form onSubmit={handleSubmit} className="space-y-1">
                     <label className="block text-sm font-medium text-gray-700">Pet Name:</label>
-                    <Select options={options}  value={options.find(option => option.value === formData.petId)} onChange={handleSelectChange} className="mt-1 block w-full" />
+                    <Select options={options} value={options.find(option => option.value === formData.petId)} onChange={handleSelectChange} className="mt-1 block w-full" isDisabled = {isEditing}/>
                     {clientErrors?.petId && <p className="text-red-500 text-xs">{clientErrors.petId}</p>}
 
                     <div>
@@ -173,18 +188,18 @@ function RequestPets() {
                         }
                     </div>
                     <div>
-                <input
-                    type="submit"
-                    // value = { isEditing? "Edit" : "Create" }
-                    value="submit"
-                    className="w-full bg-indigo-500 text-white font-bold py-2 px-4 rounded-md hover:bg-indigo-600 transition mt-4 cursor-pointer"
-                />
-            </div>
+                        <input
+                            type="submit"
+                            // value = { isEditing? "Edit" : "Create" }
+                            value="submit"
+                            className="w-full bg-indigo-500 text-white font-bold py-2 px-4 rounded-md hover:bg-indigo-600 transition mt-4 cursor-pointer"
+                        />
+                    </div>
                 </form>
             </div>
         </div>
     );
-    
+
 }
 
 export default RequestPets;

@@ -554,6 +554,7 @@ const Register = () => {
   return (
     <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-blue-500 to-purple-600 text-white py-10">
       {isLoading && <Spinner />}
+      
       <div className="container mx-auto flex flex-wrap justify-center md:justify-end px-6   bg-opacity-90 backdrop-blur-lg p-8">
       <div className="w-full md:w-1/2 p-8 bg-white text-gray-800">
         <img
