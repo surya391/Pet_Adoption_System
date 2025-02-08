@@ -27,6 +27,7 @@ import RequestPets from './pages/Owner/RequestPets';
 import { getRequestTypes, myPetList } from './slices/RequestSlice';
 import YourRequestList from './pages/Owner/YourRequestList';
 import PetServicePage from './pages/ServiceProvider/PetServicePage';
+import SinglePetVeiwDetail from './pages/ServiceProvider/SinglePetVeiwDetail';
 
 function App() {
   const dispatch = useDispatch();
@@ -55,7 +56,10 @@ function App() {
   // }, [userInfo, dispatch]);
 
   useEffect(()=>{
-    if(userInfo?.role === 'owner' || userInfo?.role === 'serviceProvider' || userInfo?.role === 'admin' ){
+    // if(userInfo?.role === 'owner' || userInfo?.role === 'serviceProvider' || userInfo?.role === 'admin' ){
+      // dispatch(getProfile())
+    // }
+     if(userInfo){
       dispatch(getProfile())
     }
     if (userInfo?.role === "owner") {
@@ -89,6 +93,7 @@ function App() {
           <Route path='/requestList' element={<PrivateRoute permittedRoles={["admin", "owner", "serviceProvider"]}> <YourRequestList /></PrivateRoute>} />
           <Route path='/petServicePage' element={<PrivateRoute permittedRoles={["admin", "serviceProvider"]}> <PetServicePage /></PrivateRoute>} />
 
+          <Route path='/singlePetVeiwDetail/:id' element={<PrivateRoute permittedRoles={["admin", "serviceProvider"]}> <SinglePetVeiwDetail /></PrivateRoute>} />
 
 
 

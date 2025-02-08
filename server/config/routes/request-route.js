@@ -16,7 +16,7 @@ requestRouter.get('/pendingRequest', authenticationUser, requestController.listP
 
 
 // Get request details by request ID
-requestRouter.get('/:id', authenticationUser, requestController.show);
+requestRouter.get('/singleRequestView/:id', authenticationUser, requestController.show);
 
 // Update request details by request ID
 requestRouter.put('/updateRequestPet', authenticationUser, checkSchema(requestSchema), requestController.update);

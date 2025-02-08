@@ -62,6 +62,7 @@ export const getUser = createAsyncThunk(`get/getUser`,async(_,{rejectWithValue})
         const response = await axiosInstance.get(`/auth/account`,{headers:{Authorization:localStorage.getItem('token')}})
         return response.data
     } catch (error) {
+        // console.log(error)
         return rejectWithValue(error?.response?.data?.error)
     }
 })

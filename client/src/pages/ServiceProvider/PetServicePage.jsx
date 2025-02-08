@@ -31,7 +31,7 @@ export default PetServicePage;
 
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import serviceProviderNavbar from "../Frontpage/SeviceProviderNavbar"
+// import ServiceProviderNavbar from "../Frontpage/SeviceProviderNavbar"
 import Spinner from "../Frontpage/Spinner";
 import { getPendingRequest } from "../../slices/RequestSlice";
 import { useNavigate } from "react-router-dom";
@@ -46,19 +46,19 @@ function PetServicePage() {
     if (userInfo?.role === "serviceProvider") {
       dispatch(getPendingRequest());
     }
-  }, []);
+  }, [userInfo, dispatch]);
 
   return (
     <div className="flex">
-      <serviceProviderNavbar />
+      {/* <ServiceProviderNavbar /> */}
       <div className="w-full bg-gray-100 p-8">
         <h1 className="text-2xl font-semibold text-gray-800 mb-4">Pending Requests</h1>
         {isLoading ? (
           <Spinner />
         ) : pendingRequestList && pendingRequestList.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {pendingRequestList.map((request) => (
-              <div key={request.id} className="bg-white shadow-md rounded-lg p-4">
+            {pendingRequestList.map((request, index) => (
+              <div key={request.id || index} className="bg-white shadow-md rounded-lg p-4">
 
                 <p className="text-sm text-gray-600">
                   {request?.petId?.petImage ? (
@@ -75,7 +75,7 @@ function PetServicePage() {
                 <p className="text-sm text-gray-600">End: {new Date(request.endDatetime).toLocaleString()}</p>
                 <button
                   className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                  onClick={() => navigate(`/request/${request.id}`)}
+                  onClick={() => navigate(`/singlePetVeiwDetail/${request._id}`)}
                 >
                   View Details
                 </button>

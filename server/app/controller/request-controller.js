@@ -7,7 +7,7 @@ const requestController = {};
 // Create a new request
 requestController.create = async (req, res) => {
   const errors = validationResult(req);
-  console.log(errors)
+  // console.log(errors)
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
@@ -29,7 +29,7 @@ requestController.create = async (req, res) => {
 requestController.show = async (req, res) => {
   const { id } = req.params;
   try {
-    const request = await Request.findById(id)
+    const request = await Request.findById(id).populate({ path : "petId" , select : "petName petType petAge gender petImage" })
     if (!request) {
       return res.status(404).json({ error: "Request not found." });
     }
@@ -77,7 +77,6 @@ requestController.listPendingRequests = async (req, res) => {
     res.status(500).json({ error: "Something went wrong while fetching pending requests." });
   }
 };
-
 
 // Update a request
 requestController.update = async (req, res) => {

@@ -43,7 +43,6 @@ profileCltr.create = async (req, res) => {
 
 // Update a profile
 profileCltr.update = async (req, res) => {
-  console.log('hello')
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });

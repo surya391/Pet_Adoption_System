@@ -258,6 +258,7 @@ function ProfilePage() {
       </form>
     </div>
   </div>
+  
 </div> 
 
     )
