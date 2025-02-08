@@ -63,16 +63,18 @@ export const deleteRequestPet = createAsyncThunk("delete/deleteRequestPet", asyn
     }
 })
 export const updateRequestPet = createAsyncThunk("put/updateRequestPet", async ({  id ,formData }, { rejectWithValue }) => {
-    console.log(formData, id)
+    // console.log(formData, id)
     try {
         const response = await axiosInstance.put(`/request/updateRequestPet?petId=${id}`, formData, {
             headers: {
                 Authorization: localStorage.getItem("token")
             }
         })
+        // console.log("update Request slice", response.data)
         toast.success('Request updated successfully')
         return response.data
     } catch (error) {
+        console.log(error)
         return rejectWithValue(error?.response?.data?.error)
     }
 })

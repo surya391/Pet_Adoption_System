@@ -86,10 +86,11 @@ requestController.update = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
   const userId = req.currentUser.userId;
+  const { petId } = req.query;
   const updates = req.body;
   try {
-    const request = await Request.findByIdAndUpdate(
-      userId,
+    const request = await Request.findOneAndUpdate(
+      { userId, _id: petId },
       { $set: updates },
       { new: true, runValidators: true }
     );

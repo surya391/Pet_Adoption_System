@@ -60,6 +60,7 @@ function App() {
     }
     if (userInfo?.role === "owner") {
       dispatch(myPetList());
+      dispatch(petTypes())
     }
   },[userInfo, dispatch])
 

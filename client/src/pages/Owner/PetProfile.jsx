@@ -76,7 +76,6 @@ function PetProfile() {
             if(!isEditing){
             dispatch(profilePet(updateData));
             }else{
-               
                 const actionResult = await  dispatch(updatePet({id:petId, formData}))
                             if (actionResult.type === updatePet.fulfilled.type) {
                                 navigate('/yoursPetList');
