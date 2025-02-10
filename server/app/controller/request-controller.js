@@ -1,6 +1,8 @@
 import Request from "../models/request-model.js";
 import Profile from "../models/profile-model.js";
 import { validationResult } from "express-validator";
+import aggrigatorForCustomer from "../utils/aggrigator.js";
+import _ from 'lodash'
 
 const requestController = {};
 
@@ -11,12 +13,12 @@ requestController.create = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-// console.log(req.body)
+  // console.log(req.body)
   const body = req.body;
   try {
-    const userId =  req.currentUser.userId 
+    const userId = req.currentUser.userId
     const profileId = await Profile.findOne({ userId })
-    const newRequest = new Request({ ...body, userId, profileId : profileId._id});
+    const newRequest = new Request({ ...body, userId, profileId: profileId._id });
     await newRequest.save();
     res.status(201).json(newRequest);
   } catch (err) {
@@ -29,7 +31,7 @@ requestController.create = async (req, res) => {
 requestController.show = async (req, res) => {
   const { id } = req.params;
   try {
-    const request = await Request.findById(id).populate({ path : "petId" , select : "petName petType petAge gender petImage" })
+    const request = await Request.findById(id).populate({ path: "petId", select: "petName petType petAge gender petImage" })
     if (!request) {
       return res.status(404).json({ error: "Request not found." });
     }
@@ -45,7 +47,7 @@ requestController.list = async (req, res) => {
   const { userId } = req.currentUser;
   // console.log(userId)
   try {
-    const requests = await Request.find({ userId }).populate({ path : "petId" , select : "petName petType petAge gender petImage" })
+    const requests = await Request.find({ userId }).populate({ path: "petId", select: "petName petType petAge gender petImage" })
     if (!requests) {
       return res.status(404).json({ error: "No requests found." });
     }
@@ -60,8 +62,8 @@ requestController.list = async (req, res) => {
 requestController.listPendingRequests = async (req, res) => {
   // const { serviceProviderId } = req.currentUser; 
   try {
-    const pendingRequests = await Request.find({ 
-      status: "pending" 
+    const pendingRequests = await Request.find({
+      status: "pending"
     }).populate({
       path: "petId",
       select: "petName petType petAge gender petImage"
@@ -119,5 +121,22 @@ requestController.destroy = async (req, res) => {
     res.status(500).json({ error: "Something went wrong while deleting the request." });
   }
 };
+
+
+requestController.search = async (req, res) => {
+  try {
+    const { petType, location } = _.pick(req.query, ["petType", "location"]);
+    const pipeLine = aggrigatorForCustomer({ location, petType });
+    const response = await Request.aggregate(pipeLine);
+    res.json({
+      data: response,
+      total: response.length
+    });
+
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ error: "Something went wrong while searching." });
+  }
+}
 
 export default requestController;

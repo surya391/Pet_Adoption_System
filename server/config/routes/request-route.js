@@ -2,6 +2,8 @@ import express from 'express';
 import { checkSchema } from 'express-validator';
 import requestController from "../../app/controller/request-controller.js";
 import authenticationUser from '../../app/middlewares/authentication.js';
+import authorizeUser from '../../app/middlewares/authorize.js';
+
 import { requestSchema } from '../../app/validators/request-validation-schema.js';
 
 const requestRouter = express.Router();
@@ -23,5 +25,8 @@ requestRouter.put('/updateRequestPet', authenticationUser, checkSchema(requestSc
 
 // Delete a request by request ID
 requestRouter.delete('/deleteRequestPet', authenticationUser, requestController.destroy);
+
+requestRouter.get('/search', authenticationUser,authorizeUser(['serviceProvider']) ,requestController.search);
+
 
 export default requestRouter;

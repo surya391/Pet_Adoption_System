@@ -49,11 +49,6 @@ function App() {
     }
   }, [dispatch])
 
-  // useEffect(() => {
-  //   if (userInfo?.role === "owner") {
-  //     dispatch(myPetList());
-  //   }
-  // }, [userInfo, dispatch]);
 
   useEffect(()=>{
     // if(userInfo?.role === 'owner' || userInfo?.role === 'serviceProvider' || userInfo?.role === 'admin' ){
@@ -92,7 +87,6 @@ function App() {
           <Route path='/requestpets' element={<PrivateRoute permittedRoles={["owner"]}> <RequestPets /></PrivateRoute>} />
           <Route path='/requestList' element={<PrivateRoute permittedRoles={["admin", "owner", "serviceProvider"]}> <YourRequestList /></PrivateRoute>} />
           <Route path='/petServicePage' element={<PrivateRoute permittedRoles={["admin", "serviceProvider"]}> <PetServicePage /></PrivateRoute>} />
-
           <Route path='/singlePetVeiwDetail/:id' element={<PrivateRoute permittedRoles={["admin", "serviceProvider"]}> <SinglePetVeiwDetail /></PrivateRoute>} />
 
 
