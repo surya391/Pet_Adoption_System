@@ -1,26 +1,3 @@
-// import React, { useEffect } from 'react'
-// import { useDispatch } from 'react-redux';
-// import { singleRequestView } from '../../slices/RequestSlice';
-
-// const SinglePetVeiwDetail = () => {
-//     const { id } = useParams();
-//     const dispatch = useDispatch();
-
-//     console.log("Pet ID:", id);
-//     const { pendingRequestList, requestView, isLoading } = useSelector((state) => state.request);
-
-//     useEffect(()=>{
-//         dispatch(singleRequestView())
-//     },[])
-
-//     return (
-//         <div>SinglePetVeiwDetail</div>
-//     )
-// }
-
-// export default SinglePetVeiwDetail
-
-
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';

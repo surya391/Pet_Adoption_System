@@ -67,11 +67,30 @@ function App() {
     return <Spinner />
   }
 
+  // const hideNavbarRoutes = ["/login", "/register"];
+  // const currentPath = window.location.pathname;
+
+  // if (hideNavbarRoutes.includes(currentPath)) {
+  //   return <Navbar />
+  // }
+
+  const showNavbar = [ "/login", "/register"];
+
   return (
     <div className="flex flex-col ">
       {/* {<Navbar/>} */}
-      {(userInfo?.role === "owner" || userInfo?.role === "admin") && <Navbar />}
+
+
+      {showNavbar.includes(location.pathname) ? (
+        <Navbar />
+      ) : (
+        (userInfo?.role === "owner" || userInfo?.role === "admin") && <Navbar />
+      )}
       {userInfo?.role === "serviceProvider" && <ServiceProviderNavbar />}
+
+
+      {/* {(userInfo?.role === "owner" || userInfo?.role === "admin") && <Navbar />} */}
+      {/* {userInfo?.role === "serviceProvider" && <ServiceProviderNavbar />} */}
       <div className="flex-grow">
         <Routes>
           <Route path='/' element={<Home />} />

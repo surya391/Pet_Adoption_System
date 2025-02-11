@@ -46,6 +46,22 @@ export const getPendingRequest = createAsyncThunk('get/getPendingRequest', async
         return rejectWithValue(error?.response?.data?.error)
     }
 })
+// search operation in the serviceProvider page
+export const searchRequests = createAsyncThunk('get/searchRequests', async (formData, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.get(`/request/search`, {
+            headers: {
+                Authorization: localStorage.getItem('token')
+            }
+        })
+        console.log(response.data)
+        return response.data
+    } catch (error) {
+        console.log(error)
+        return rejectWithValue(error?.response?.data?.error)
+    }
+})
+
 export const deleteRequestPet = createAsyncThunk("delete/deleteRequestPet", async (id, { rejectWithValue }) => {
     // console.log(id)
     try {
@@ -147,7 +163,8 @@ const requestSlice = createSlice({
         pendingRequestList: [],
         isEditing:false,
         requestId:"",
-        requestView: []
+        requestView: [],
+        search:[]
 
     },
     reducers:{
@@ -203,7 +220,21 @@ const requestSlice = createSlice({
             state.isLoading = false;
         })
 
-
+// search operation in the serviceProvider page
+builders.addCase(searchRequests.pending, (state) => {
+    state.serverError = null;
+    state.isLoading = true;
+})
+builders.addCase(searchRequests.fulfilled, (state, action) => {
+    state.serverError = null;
+    state.search = action.payload;
+    state.isLoading = false;
+})
+builders.addCase(searchRequests.rejected, (state, action) => {
+    state.serverError = action.payload;
+    state.search = [];
+    state.isLoading = false;
+})
         builders.addCase(deleteRequestPet.pending, (state) => {
             state.serverError = null;
             // state.petDetails = null;
