@@ -9,9 +9,9 @@ import { useNavigate } from "react-router-dom";
 function PetServicePage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { pendingRequestList, isLoading } = useSelector((state) => state.request);
+  const { pendingRequestList, isLoading,search } = useSelector((state) => state.request);
+  // console.log("search",search)
   const { petTypes } = useSelector((state) => state.pet);
-
   const { userInfo } = useSelector((state) => state.auth);
 
   // State for modal and long press
@@ -44,12 +44,10 @@ function PetServicePage() {
 
   // Example: Transform the petTypes if needed
   const formattedPetTypes = petTypes?.map((type) => ({
-    value: type._id, 
+    value: type.petType, 
     label: type.petType, 
   }));
   
-
-
 
   const [formData, setFormData] = useState({
     location: "",
@@ -97,9 +95,9 @@ function PetServicePage() {
         <h1 className="text-2xl font-semibold text-gray-800 mb-4">Pending Requests</h1>
         {isLoading ? (
           <Spinner />
-        ) : pendingRequestList && pendingRequestList.length > 0 ? (
+        ) : search.data && search.data.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {pendingRequestList.map((request, index) => (
+            {search.data.map((request, index) => (
               <div
                 key={request.id || index}
                 className="bg-white shadow-md rounded-lg p-4 "
@@ -108,17 +106,17 @@ function PetServicePage() {
                 onTouchStart={() => handleLongPressStart(request)}
                 onTouchEnd={handleLongPressEnd}
               >
-                {request?.petId?.petImage ? (
+                {request?.pet?.petImage ? (
                   <img
-                    src={request.petId.petImage}
+                    src={request.pet.petImage}
                     alt="Pet"
                     className="w-16 h-16 rounded-full object-cover mb-2"
                   />
                 ) : (
                   <p className="text-sm text-gray-600">No image available</p>
                 )}
-                <p className="text-sm text-gray-600">Pet Name: {request?.petId?.petName}</p>
-                <p className="text-sm text-gray-600">Pet Age: {request?.petId?.petAge}</p>
+                <p className="text-sm text-gray-600">Pet Name: {request?.pet?.petName}</p>
+                <p className="text-sm text-gray-600">Pet Age: {request?.pet?.petAge}</p>
                 <p className="text-sm text-gray-600">Amount: {request.amount} ₹</p>
                 <p className="text-sm text-gray-600">Start: {new Date(request.startDatetime).toLocaleString()}</p>
                 <p className="text-sm text-gray-600"> End: {new Date(request.endDatetime).toLocaleString()}</p>
@@ -148,16 +146,16 @@ function PetServicePage() {
             <h2 className="text-xl font-semibold text-gray-800 mb-4 text-center">Pet Details</h2>
             {selectedRequest?.petId?.petImage && (
               <img
-                src={selectedRequest.petId.petImage}
+                src={selectedRequest.pet.petImage}
                 alt="Pet"
                 className="w-48 h-48 mx-auto object-cover rounded-md mb-4"
               />
             )}
             <p className="text-lg text-gray-700">
-              <span className="font-semibold">Pet Name:</span> {selectedRequest?.petId?.petName || "N/A"}
+              <span className="font-semibold">Pet Name:</span> {selectedRequest?.pet?.petName || "N/A"}
             </p>
             <p className="text-lg text-gray-700">
-              <span className="font-semibold">Pet Age:</span> {selectedRequest?.petId?.petAge || "N/A"}
+              <span className="font-semibold">Pet Age:</span> {selectedRequest?.pet?.petAge || "N/A"}
             </p>
             <p className="text-lg text-gray-700">
               <span className="font-semibold">Amount:</span> {selectedRequest?.amount || 0} ₹

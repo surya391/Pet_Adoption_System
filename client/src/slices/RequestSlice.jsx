@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../utils/axiosInstance";
 import { toast } from "react-toastify";
-
+//create the request of pet
 export const createRequestPet = createAsyncThunk("post/createRequestPet", async (formData, { rejectWithValue }) => {
     try {
         const response = await axiosInstance.post(`/request/create`, formData, {
@@ -18,6 +18,7 @@ export const createRequestPet = createAsyncThunk("post/createRequestPet", async 
     }
 }
 );
+//owners pet request list 
 export const getRequestPets = createAsyncThunk('get/getRequestPets', async (_, { rejectWithValue }) => {
     try {
         const response = await axiosInstance.get(`/request/my-requests`, {
@@ -32,6 +33,7 @@ export const getRequestPets = createAsyncThunk('get/getRequestPets', async (_, {
         return rejectWithValue(error?.response?.data?.error)
     }
 })
+//overall pending request list
 export const getPendingRequest = createAsyncThunk('get/getPendingRequest', async (_, { rejectWithValue }) => {
     try {
         const response = await axiosInstance.get(`/request/pendingRequest`, {
@@ -47,9 +49,9 @@ export const getPendingRequest = createAsyncThunk('get/getPendingRequest', async
     }
 })
 // search operation in the serviceProvider page
-export const searchRequests = createAsyncThunk('get/searchRequests', async (formData, { rejectWithValue }) => {
+export const searchRequests = createAsyncThunk('get/searchRequests', async ({ location, petType }, { rejectWithValue }) => {
     try {
-        const response = await axiosInstance.get(`/request/search`, {
+        const response = await axiosInstance.get(`/request/search?location=${location}&petType=${petType}`, {
             headers: {
                 Authorization: localStorage.getItem('token')
             }
@@ -61,7 +63,7 @@ export const searchRequests = createAsyncThunk('get/searchRequests', async (form
         return rejectWithValue(error?.response?.data?.error)
     }
 })
-
+// delete the request of pet
 export const deleteRequestPet = createAsyncThunk("delete/deleteRequestPet", async (id, { rejectWithValue }) => {
     // console.log(id)
     try {
@@ -76,6 +78,7 @@ export const deleteRequestPet = createAsyncThunk("delete/deleteRequestPet", asyn
         return rejectWithValue(error?.response?.data?.error)
     }
 })
+//update the request pet
 export const updateRequestPet = createAsyncThunk("put/updateRequestPet", async ({  id ,formData }, { rejectWithValue }) => {
     // console.log(formData, id)
     try {
@@ -92,6 +95,7 @@ export const updateRequestPet = createAsyncThunk("put/updateRequestPet", async (
         return rejectWithValue(error?.response?.data?.error)
     }
 })
+// owners pet profile list
 export const myPetList   = createAsyncThunk('get/myPetList', async (_, { rejectWithValue }) => {
     try {
         const response = await axiosInstance.get(`/pet/my-pets`, {
@@ -105,6 +109,7 @@ export const myPetList   = createAsyncThunk('get/myPetList', async (_, { rejectW
         return rejectWithValue(error?.response?.data?.error)
     }
 })
+// Type of request like {walking, temp_Adoption}
 export const getRequestTypes = createAsyncThunk('get/getRequestTypes', async (_, { rejectWithValue }) => {
     try {
         const response = await axiosInstance.get(`/request-types/myRequestTypes`, {
@@ -165,7 +170,6 @@ const requestSlice = createSlice({
         requestId:"",
         requestView: [],
         search:[]
-
     },
     reducers:{
         setIsEditing : (state, action)=>{
@@ -190,6 +194,7 @@ const requestSlice = createSlice({
             state.requestDetails = null;
             state.isLoading = false;
         });
+
         builders.addCase(getRequestPets.pending, (state) => {
             state.serverError = null;
             state.isLoading = true;
@@ -221,20 +226,21 @@ const requestSlice = createSlice({
         })
 
 // search operation in the serviceProvider page
-builders.addCase(searchRequests.pending, (state) => {
-    state.serverError = null;
-    state.isLoading = true;
-})
-builders.addCase(searchRequests.fulfilled, (state, action) => {
-    state.serverError = null;
-    state.search = action.payload;
-    state.isLoading = false;
-})
-builders.addCase(searchRequests.rejected, (state, action) => {
-    state.serverError = action.payload;
-    state.search = [];
-    state.isLoading = false;
-})
+        builders.addCase(searchRequests.pending, (state) => {
+            state.serverError = null;
+            state.isLoading = true;
+        })
+        builders.addCase(searchRequests.fulfilled, (state, action) => {
+            state.serverError = null;
+            state.search = action.payload;
+            state.isLoading = false;
+        })
+        builders.addCase(searchRequests.rejected, (state, action) => {
+            state.serverError = action.payload;
+            state.search = [];
+            state.isLoading = false;
+        })
+
         builders.addCase(deleteRequestPet.pending, (state) => {
             state.serverError = null;
             // state.petDetails = null;
@@ -250,6 +256,7 @@ builders.addCase(searchRequests.rejected, (state, action) => {
             state.serverError = action.payload;
             state.isLoading = false;
         })
+
         builders.addCase(updateRequestPet.pending, (state) => {
             state.serverError = null;
             state.requestDetails = null;
@@ -266,6 +273,7 @@ builders.addCase(searchRequests.rejected, (state, action) => {
             state.requestDetails = null;
             state.isLoading = false;
         })
+        
         builders.addCase(myPetList.pending, (state) => {
             state.serverError = null;
             state.isLoading = true;
@@ -280,6 +288,7 @@ builders.addCase(searchRequests.rejected, (state, action) => {
             state.petId = [];
             state.isLoading = false;
         })
+
         builders.addCase(getRequestTypes.pending, (state) => {
             state.serverError = null;
             state.isLoading = true;
@@ -294,7 +303,6 @@ builders.addCase(searchRequests.rejected, (state, action) => {
             state.requestTypes = [];
             state.isLoading = false;
         })
-
 
         builders.addCase(singleRequestView.pending, (state) => {
             state.serverError = null;
