@@ -7,17 +7,16 @@ const petTypeController = {};
 petTypeController.create = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({ error: errors.array() });
   }
 
   const body = req.body;
   try {
-    const newPetType = new PetType({ ...body, userId : req.currentUser.userId});
+    const newPetType = new PetType({ ...body, userId: req.currentUser.userId });
     await newPetType.save();
     res.status(201).json(newPetType);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong while creating the pet type." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong while creating the pet type." }] })
   }
 };
 
@@ -28,12 +27,11 @@ petTypeController.show = async (req, res) => {
   try {
     const petType = await PetType.findById(id)
     if (!petType) {
-      return res.status(404).json({ error: "Pet type not found." });
+      return res.status(404).json({ error: [{ msg: "Pet type not found." }] })
     }
     res.json(petType);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong while fetching the pet type." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong while fetching the pet type." }] })
   }
 };
 
@@ -42,12 +40,11 @@ petTypeController.list = async (req, res) => {
   try {
     const petTypes = await PetType.find()
     if (!petTypes.length) {
-      return res.status(404).json({ error: "No pet types found." });
+      return res.status(404).json({ error: [{ msg: "No pet types found." }] })
     }
     res.json(petTypes);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong while fetching pet types." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong while fetching pet types." }] })
   }
 };
 
@@ -55,7 +52,7 @@ petTypeController.list = async (req, res) => {
 petTypeController.update = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({ error: errors.array() });
   }
 
   const { id } = req.params;
@@ -68,12 +65,11 @@ petTypeController.update = async (req, res) => {
       { new: true, runValidators: true }
     );
     if (!petType) {
-      return res.status(404).json({ error: "Pet type not found." });
+      return res.status(404).json({ error: [{ msg: "Pet type not found." }] })
     }
     res.json(petType);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong while updating the pet type." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong while updating the pet type." }] })
   }
 };
 
@@ -83,12 +79,11 @@ petTypeController.destroy = async (req, res) => {
   try {
     const petType = await PetType.findByIdAndDelete(id);
     if (!petType) {
-      return res.status(404).json({ error: "Pet type not found." });
+      return res.status(404).json({ error: [{ msg: "Pet type not found." }] })
     }
     res.json({ message: "Pet type deleted successfully." });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong while deleting the pet type." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong while deleting the pet type." }] })
   }
 };
 

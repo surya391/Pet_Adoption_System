@@ -40,26 +40,19 @@ function App() {
     const token = localStorage.getItem('token')
     if (token) {
       dispatch(getUser())
-      // dispatch(getProfile())
       dispatch(petTypes())
-      // dispatch(petId())
       dispatch(getRequestTypes())
-      // dispatch(getPendingRequest())
-      // dispatch(requestId())
     }
   }, [dispatch])
 
 
   useEffect(()=>{
-    // if(userInfo?.role === 'owner' || userInfo?.role === 'serviceProvider' || userInfo?.role === 'admin' ){
-      // dispatch(getProfile())
-    // }
      if(userInfo){
       dispatch(getProfile())
     }
     if (userInfo?.role === "owner") {
       dispatch(myPetList());
-      dispatch(petTypes())
+      dispatch(petTypes());
     }
   },[userInfo, dispatch])
 
@@ -79,8 +72,6 @@ function App() {
   return (
     <div className="flex flex-col ">
       {/* {<Navbar/>} */}
-
-
       {showNavbar.includes(location.pathname) ? (
         <Navbar />
       ) : (
@@ -88,9 +79,9 @@ function App() {
       )}
       {userInfo?.role === "serviceProvider" && <ServiceProviderNavbar />}
 
-
-      {/* {(userInfo?.role === "owner" || userInfo?.role === "admin") && <Navbar />} */}
-      {/* {userInfo?.role === "serviceProvider" && <ServiceProviderNavbar />} */}
+{/* 
+      {(userInfo?.role === "owner" || userInfo?.role === "admin") && <Navbar />}
+      {userInfo?.role === "serviceProvider" && <ServiceProviderNavbar />} */}
       <div className="flex-grow">
         <Routes>
           <Route path='/' element={<Home />} />
@@ -107,8 +98,6 @@ function App() {
           <Route path='/requestList' element={<PrivateRoute permittedRoles={["admin", "owner", "serviceProvider"]}> <YourRequestList /></PrivateRoute>} />
           <Route path='/petServicePage' element={<PrivateRoute permittedRoles={["admin", "serviceProvider"]}> <PetServicePage /></PrivateRoute>} />
           <Route path='/singlePetVeiwDetail/:id' element={<PrivateRoute permittedRoles={["admin", "serviceProvider"]}> <SinglePetVeiwDetail /></PrivateRoute>} />
-
-
 
 
 

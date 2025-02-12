@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 export default function authenticationUser(req, res, next) {
     let token = req.headers['authorization'];
     if (!token) {
-        return res.status(401).json({ error: "Token is required." });
+        return res.status(401).json({error:[{msg: "Token is required."  }]})
     }
     try {
         token = token.split(' ')[1]

@@ -11,7 +11,7 @@ const otpCltr = {}
 otpCltr.sendEmailOtp = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ error: errors.array() })
+        return res.status(400).json({ error : errors.array() })
     }
     try {
         const { email } = _.pick(req.body, ["email"])
@@ -43,7 +43,7 @@ otpCltr.sendEmailOtp = async (req, res) => {
         res.status(201).json({ msg: "OTP sent Successfully" })
 
     } catch (error) {
-        return res.status(500).json([{ msg: "Something went wrong, while sending Email OTP!" }])
+    return res.status(500).json({ error: [{ msg: "Something went wrong, while sending Email OTP!" }] })
     }
 
 }
@@ -91,10 +91,10 @@ otpCltr.verifyOtp = async (req, res) => {
                 retryCount: otpRecord.retryCount - 1
             }
             const updateOTP = await OTP.findOneAndUpdate({ userId: user._id }, newCount, { new: true, runValidators: true })
-            return res.status(409).json({error:[{msg: `Wrong OTP, you have still they are ${updateOTP.retryCount} chance`}]})
+            return res.status(409).json({error : [{msg: `Wrong OTP, you have still they are ${updateOTP.retryCount} chance`}]})
         }
     } catch (error) {
-        return res.status(500).json([{ msg: "Something went wrong, while verifying Otp!" }])
+        return res.status(500).json({error : [{msg: "Something went wrong, while verifying Otp!"}]})
     }
 }
 

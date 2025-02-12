@@ -9,24 +9,23 @@ petCltr.create = async (req, res) => {
   const errors = validationResult(req);
   console.log(errors)
   if (!errors.isEmpty()) {
-    return res.status(404).json({ errors: errors.array() });
+    return res.status(404).json({ error: errors.array() });
   }
 
   const body = req.body;
-  console.log("body",body)
+  // console.log("body",body)
   try {
     const file = req.file
     if (!file) {
-      return res.status(400).json({ errors: [{ msg: " pet image required " }] })
+      return res.status(400).json({ error: [{ msg: " pet image required " }] })
     }
     const fileResult = await uploadMedia(file)
     const pet = new Pet({ ...body, userId: req.currentUser.userId });
     pet.petImage = fileResult?.secure_url || ""
     await pet.save();
     res.status(201).json(pet);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong."}] })
   }
 };
 
@@ -36,13 +35,11 @@ petCltr.listPet = async (req, res) => {
   try {
     const pets = await Pet.find({ userId });
     if (!pets.length) {
-      return res.status(404).json({ error: "No pets found for this user." });
+      return res.status(400).json({ error: [{ msg: "No pets found for this user." }] })
     }
-    // console.log(pets)
     res.json(pets);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong." }] })
   }
 };
 
@@ -52,12 +49,11 @@ petCltr.show = async (req, res) => {
   try {
     const pet = await Pet.findById(id);
     if (!pet) {
-      return res.status(404).json({ error: "Pet not found." });
+    return res.status(404).json({ error: [{ msg:  "Pet not found."  }] })
     }
     res.json(pet);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong."  }] })
   }
 };
 
@@ -65,7 +61,7 @@ petCltr.show = async (req, res) => {
 petCltr.update = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({ error: errors.array() });
   }
 
  const userId = req.currentUser.userId;
@@ -85,12 +81,11 @@ petCltr.update = async (req, res) => {
       { new: true, runValidators: true }
     );
     if (!pet) {
-      return res.status(404).json({ error: "Pet not found." });
+      return res.status(400).json({ error: [{ msg: "Pet not found." }] })
     }
     res.json(pet);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong."  }] })
   }
 };
 
@@ -100,12 +95,11 @@ petCltr.destroy = async (req, res) => {
   try {
     const pet = await Pet.findByIdAndDelete(petId);
     if (!pet) {
-      return res.status(404).json({ error: "Pet not found." });
+    return res.status(404).json({ error: [{ msg: "Pet not found." }] })
     }
     res.json(pet);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong."  }] })
   }
 };
 

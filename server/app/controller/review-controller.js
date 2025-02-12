@@ -7,14 +7,14 @@ const reviewCltr = {};
 reviewCltr.create = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ error : errors.array() });
     }
   
     const { userId } = req.currentUser; // Get userId from authenticated user
     const { serviceProviderId, rating, description } = req.body;
   
     if (!userId) {
-      return res.status(400).json({ error: "User is not authenticated." });
+      return res.status(400).json({ error: [{ msg: "User is not authenticated." }] })
     }
   
     try {
@@ -27,9 +27,8 @@ reviewCltr.create = async (req, res) => {
       });
       await review.save();
       res.status(201).json(review);
-    } catch (err) {
-      console.error("Error while creating review:", err);  // Log the actual error
-      res.status(500).json({ error: "Something went wrong." });
+    } catch (error) {
+      return res.status(500).json({ error: [{ msg:"Something went wrong." }] })
     }
   };
 
@@ -39,12 +38,11 @@ reviewCltr.listByUser = async (req, res) => {
   try {
     const reviews = await Review.find({ reviewerId: userId });
     if (!reviews.length) {
-      return res.status(404).json({ error: "No reviews found for this user." });
+      return res.status(500).json({ error: [{ msg:"No reviews found for this user."  }] })
     }
     res.json(reviews);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong."}] })
   }
 };
 
@@ -74,12 +72,12 @@ reviewCltr.show = async (req, res) => {
   try {
     const review = await Review.findById(id);
     if (!review) {
-      return res.status(404).json({ error: "Review not found." });
+    return res.status(404).json({ error: [{ msg: "Review not found."}] })
     }
     res.json(review);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong."}] })
+
   }
 };
 
@@ -87,7 +85,7 @@ reviewCltr.show = async (req, res) => {
 reviewCltr.update = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({ error : errors.array() });
   }
 
   const { id } = req.params;
@@ -96,12 +94,12 @@ reviewCltr.update = async (req, res) => {
   try {
     const review = await Review.findByIdAndUpdate(id, { $set: updates }, { new: true, runValidators: true });
     if (!review) {
-      return res.status(404).json({ error: "Review not found." });
+    return res.status(404).json({ error: [{ msg:  "Review not found."}] })
     }
     res.json(review);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong."}] })
+
   }
 };
 
@@ -111,12 +109,11 @@ reviewCltr.destroy = async (req, res) => {
   try {
     const review = await Review.findByIdAndDelete(id);
     if (!review) {
-      return res.status(404).json({ error: "Review not found." });
+    return res.status(404).json({ error: [{ msg:  "Review not found." }] })
     }
     res.json({ message: "Review deleted successfully." });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong."}] })
   }
 };
 

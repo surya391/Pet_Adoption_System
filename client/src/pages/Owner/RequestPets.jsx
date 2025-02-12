@@ -26,26 +26,19 @@ function RequestPets() {
     useEffect(() => {
         if (isEditing) {
             const requestInfo = requestPets.find((ele) => ele._id === requestId)
-            // console.log("requestInfo", requestInfo)
             setFormData({
                 petId: requestInfo?.petId?._id,
                 description: requestInfo?.description,
                 requestType: requestInfo?.requestType,
                 phone: requestInfo?.phone,
-                // startDatetime: requestInfo?.startDatetime,
-                // endDatetime: requestInfo?.endDatetime,
                 startDatetime: format(new Date(requestInfo?.startDatetime), "yyyy-MM-dd HH:mm:ss"),
                 endDatetime: format(new Date(requestInfo?.endDatetime), "yyyy-MM-dd HH:mm:ss"),
-                // startDatetime: format(requestInfo?.startDatetime, 'yyyy-MM-ddThh:mm'),
-                // endDatetime: format(requestInfo?.endDatetime, 'yyyy-MM-ddThh:mm'),
-                
                 amount: requestInfo?.amount,
             })
         }
     }, [])
 
     const options = petId.map(ele => ({ value: ele._id, label: ele.petName }));
-    // console.log(options)
     const option = requestTypes.map(ele => ({ value: ele._id, label: ele.type }));
 
     const [clientErrors, setClientErrors] = useState({});
@@ -55,7 +48,6 @@ function RequestPets() {
         if (!formData.petId) errors.petId = "Pet details are required";
         if (!formData.description) errors.description = "Description is required";
         if (!formData.requestType) errors.requestType = "Request type is required";
-        // if (!formData.location) errors.location = "Location is required";
         if (!formData.phone) errors.phone = "Phone number is required";
         if (!formData.startDatetime) errors.startDatetime = "Start date is required";
         if (!formData.endDatetime) errors.endDatetime = "End date is required";
@@ -67,13 +59,11 @@ function RequestPets() {
         return errors;
     };
     const handleSelectChange = (selectedValue) => {
-        // console.log(selectedValue)
         setFormData({ ...formData, petId: selectedValue.value })
     }
     const handleChange = (selectedValue) => {
         setFormData({ ...formData, requestType: selectedValue.value })
     }
-    // console.log(formData)
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -95,7 +85,6 @@ function RequestPets() {
                 dispatch(createRequestPet(formData));
             } else {
                 const actionResult = await dispatch(updateRequestPet({ id: requestId, formData }))
-                // console.log(actionResult)
                 if (actionResult.type === updateRequestPet.fulfilled.type) {
                     navigate('/requestList');
                 }
@@ -143,18 +132,6 @@ function RequestPets() {
                         />
                         {clientErrors?.requestType && <p className="text-red-500 text-xs">{clientErrors.requestType}</p>}
                     </div>
-
-                    {/* <div>
-                        <label className="block text-gray-700 font-medium">Location</label>
-                        <input
-                            type="text"
-                            value={formData.location}
-                            onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                        {clientErrors.location && <p className="text-red-500">{clientErrors.location}</p>}
-                    </div> */}
-
                     <div>
                         <label className="block text-gray-700 font-medium">Phone</label>
                         <input
@@ -208,8 +185,6 @@ function RequestPets() {
                     <div>
                         <input
                             type="submit"
-                            // value = { isEditing? "Edit" : "Create" }
-                            // value="submit"
                             value={isEditing ? "Update" : "Create"}
                             className="w-full bg-indigo-500 text-white font-bold py-2 px-4 rounded-md hover:bg-indigo-600 transition mt-4 cursor-pointer"
                         />

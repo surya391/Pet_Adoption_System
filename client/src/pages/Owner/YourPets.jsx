@@ -10,13 +10,11 @@ function YourPets() {
     const navigate = useNavigate();
     const { serverError, yoursPets, isLoading } = useSelector((state) => state.pet);
 
-    // console.log("Pets from state:", yoursPets); 
     useEffect(()=>{
         dispatch(getPet())
     },[])
 
     const handleEdit = (id) =>{
-        console.log(id)
         dispatch(setIsEditing(true))
         dispatch(setPetId(id))
         navigate('/petProfile')

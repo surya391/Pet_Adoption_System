@@ -7,7 +7,7 @@ const interestCltr = {};
 interestCltr.create = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({ error : errors.array() });
   }
 
   const body = req.body;
@@ -15,9 +15,8 @@ interestCltr.create = async (req, res) => {
     const interest = new Interest({ ...body, providerId: req.currentUser.userId });
     await interest.save();
     res.status(201).json(interest);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong." }] })
   }
 };
 
@@ -27,7 +26,7 @@ interestCltr.show = async (req, res) => {
   try {
     const interests = await Interest.find({ requestId }) 
     if (!interests) {
-      return res.status(404).json({ error: "Interest not found." });
+    return res.status(404).json({ error: [{ msg: "Interest not found." }] })
     }
     res.json(interests);
   } catch (err) {

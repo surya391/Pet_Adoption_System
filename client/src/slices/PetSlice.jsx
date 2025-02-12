@@ -122,6 +122,7 @@ const petSlice = createSlice({
             state.petTypes = [];
             state.isLoading = false;
         })
+        
         builders.addCase( getPet.pending, (state)=>{
             state.serverError = null;
             state.yoursPets = null;
@@ -137,6 +138,7 @@ const petSlice = createSlice({
             state.yoursPets = [];
             state.isLoading = false;
         })
+
         builders.addCase( singlePet.pending, (state)=>{
             state.serverError = null;
             state.petDetails = null;
@@ -152,6 +154,7 @@ const petSlice = createSlice({
             state.petDetails = null;
             state.isLoading = false;
         })
+
         builders.addCase(profilePet.pending,(state)=>{
             state.serverError = null;
             state.petDetails = null;
@@ -167,6 +170,7 @@ const petSlice = createSlice({
             state.petDetails = null;
             state.isLoading = false;
         })
+
         builders.addCase(updatePet.pending,(state)=>{
             state.serverError = null;
             state.petDetails = null;
@@ -185,6 +189,7 @@ const petSlice = createSlice({
             state.petDetails = null;
             state.isLoading = false;
         })
+
         builders.addCase(deletePet.pending,(state)=>{
             state.serverError = null;
             // state.petDetails = null;

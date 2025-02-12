@@ -6,12 +6,13 @@ export const userRegister = createAsyncThunk('post/userRegister',async(formData,
     try {
         const response = await axiosInstance.post(`/auth/signUp`,formData)
         toast.success("User registered successfully. Verification email sent.")
-        console.log(response.data)
+        // console.log(response.data)
         return response.data
     } catch (error) {
         return rejectWithValue(error?.response?.data?.error)
     }
 })
+
 export const verifyAccount = createAsyncThunk('put/verifyAccount', async({  userId, token, isVerified }, { rejectWithValue })=>{
     try {
         const response = await axiosInstance.put(`/auth/verify?userId=${userId}&token=${token}`,{ isVerified })

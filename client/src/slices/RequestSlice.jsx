@@ -106,6 +106,7 @@ export const myPetList   = createAsyncThunk('get/myPetList', async (_, { rejectW
         // console.log(response.data)
         return response.data
     } catch (error) {
+        // console.log(error)
         return rejectWithValue(error?.response?.data?.error)
     }
 })

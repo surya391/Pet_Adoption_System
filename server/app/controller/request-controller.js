@@ -11,7 +11,7 @@ requestController.create = async (req, res) => {
   const errors = validationResult(req);
   // console.log(errors)
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({ error: errors.array() });
   }
   // console.log(req.body)
   const body = req.body;
@@ -21,9 +21,8 @@ requestController.create = async (req, res) => {
     const newRequest = new Request({ ...body, userId, profileId: profileId._id });
     await newRequest.save();
     res.status(201).json(newRequest);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong while creating the request." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong while creating the request." }] })
   }
 };
 
@@ -33,12 +32,11 @@ requestController.show = async (req, res) => {
   try {
     const request = await Request.findById(id).populate({ path: "petId", select: "petName petType petAge gender petImage" })
     if (!request) {
-      return res.status(404).json({ error: "Request not found." });
+      return res.status(404).json({ error: [{ msg: "Request not found." }] })
     }
     res.json(request);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong while fetching the request." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong while fetching the request." }] })
   }
 };
 
@@ -49,13 +47,12 @@ requestController.list = async (req, res) => {
   try {
     const requests = await Request.find({ userId }).populate({ path: "petId", select: "petName petType petAge gender petImage" })
     if (!requests) {
-      return res.status(404).json({ error: "No requests found." });
+      return res.status(404).json({ error: [{ msg: "No requests found." }] })
     }
     // console.log(requests)
     res.json(requests);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong while fetching requests." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong while fetching requests." }] })
   }
 };
 
@@ -70,13 +67,12 @@ requestController.listPendingRequests = async (req, res) => {
     });
 
     if (!pendingRequests || pendingRequests.length === 0) {
-      return res.status(404).json({ error: "No pending requests found." });
+      return res.status(404).json({ error: [{ msg: "No pending requests found." }] })
     }
 
     res.json(pendingRequests);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong while fetching pending requests." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong while fetching pending requests." }] })
   }
 };
 
@@ -84,7 +80,7 @@ requestController.listPendingRequests = async (req, res) => {
 requestController.update = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({ error: errors.array() });
   }
   const userId = req.currentUser.userId;
   const { petId } = req.query;
@@ -96,29 +92,25 @@ requestController.update = async (req, res) => {
       { new: true, runValidators: true }
     );
     if (!request) {
-      return res.status(404).json({ error: "Request not found." });
+      return res.status(404).json({ error: [{ msg: "Request not found." }] })
     }
     res.json(request);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong while updating the request." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong while updating the request." }] })
   }
 };
 
 // Delete a request
 requestController.destroy = async (req, res) => {
   const { petId } = req.query;
-  // console.log(petId)
   try {
     const request = await Request.findByIdAndDelete(petId);
     if (!request) {
-      return res.status(404).json({ error: "Request not found." });
+      return res.status(404).json({ error: [{ msg: "Request not found." }] })
     }
-    // console.log(request)
     res.json(request);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong while deleting the request." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong while deleting the request." }] })
   }
 };
 
@@ -132,10 +124,8 @@ requestController.search = async (req, res) => {
       data: response,
       total: response.length
     });
-
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ error: "Something went wrong while searching." });
+    return res.status(500).json({ error: [{ msg: "Something went wrong while searching." }] })
   }
 }
 

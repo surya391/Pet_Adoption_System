@@ -70,8 +70,6 @@ const SinglePetVeiwDetail = () => {
                 </div>
             </div>
         </div>
-
-
     );
 };
 

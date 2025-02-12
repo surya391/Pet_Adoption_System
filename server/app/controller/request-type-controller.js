@@ -7,7 +7,7 @@ const requestTypeController = {};
 requestTypeController.create = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({ error: errors.array() });
   }
 
   const body = req.body;
@@ -15,9 +15,8 @@ requestTypeController.create = async (req, res) => {
     const newRequestType = new RequestType({ ...body, userId: req.currentUser.userId });
     await newRequestType.save();
     res.status(201).json(newRequestType);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong while creating the request type." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong while creating the request type." }] })
   }
 };
 
@@ -27,12 +26,11 @@ requestTypeController.show = async (req, res) => {
   try {
     const requestType = await RequestType.findById(id);
     if (!requestType) {
-      return res.status(404).json({ error: "Request type not found." });
+      return res.status(404).json({ error: [{ msg: "Request type not found." }] })
     }
     res.json(requestType);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong while fetching the request type." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong while fetching the request type." }] })
   }
 };
 
@@ -41,12 +39,11 @@ requestTypeController.list = async (req, res) => {
   try {
     const requestTypes = await RequestType.find();
     if (!requestTypes.length) {
-      return res.status(404).json({ error: "No request types found." });
+      return res.status(404).json({ error: [{ msg: "No request types found." }] })
     }
     res.json(requestTypes);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong while fetching request types." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong while fetching request types." }] })
   }
 };
 
@@ -54,7 +51,7 @@ requestTypeController.list = async (req, res) => {
 requestTypeController.update = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({ error: errors.array() });
   }
 
   const { id } = req.params;
@@ -67,12 +64,11 @@ requestTypeController.update = async (req, res) => {
       { new: true, runValidators: true }
     );
     if (!requestType) {
-      return res.status(404).json({ error: "Request type not found." });
+      return res.status(404).json({ error: [{ msg: "Request type not found." }] })
     }
     res.json(requestType);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong while updating the request type." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong while updating the request type." }] })
   }
 };
 
@@ -82,12 +78,11 @@ requestTypeController.destroy = async (req, res) => {
   try {
     const requestType = await RequestType.findByIdAndDelete(id);
     if (!requestType) {
-      return res.status(404).json({ error: "Request type not found." });
+      return res.status(404).json({ error: [{ msg: "Request type not found." }] })
     }
     res.json({ message: "Request type deleted successfully." });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Something went wrong while deleting the request type." });
+  } catch (error) {
+    return res.status(500).json({ error: [{ msg: "Something went wrong while deleting the request type." }] })
   }
 };
 
