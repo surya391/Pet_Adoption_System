@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
-import { createRequestPet, myPetList, updateRequestPet } from "../../slices/RequestSlice";
+import { createRequestPet,  myPetList,  updateRequestPet } from "../../slices/RequestSlice";
 import SideNavbar from "../Frontpage/SideNavBar";
 import Spinner from "../Frontpage/Spinner";
 import Select from 'react-select'
@@ -36,6 +36,7 @@ function RequestPets() {
                 amount: requestInfo?.amount,
             })
         }
+        dispatch(myPetList())
     }, [])
 
     const options = petId.map(ele => ({ value: ele._id, label: ele.petName }));
@@ -83,6 +84,7 @@ function RequestPets() {
 
             if (!isEditing) {
                 dispatch(createRequestPet(formData));
+                navigate('/requestList');
             } else {
                 const actionResult = await dispatch(updateRequestPet({ id: requestId, formData }))
                 if (actionResult.type === updateRequestPet.fulfilled.type) {

@@ -10,13 +10,27 @@ const interestRouter = express.Router();
 // Define the role(s) allowed to perform actions
 const permittedRole = ['admin', 'serviceProvider'];
 
-// Create a new interest
+// Create a new interest   
 interestRouter.post(
   '/create', 
   authenticationUser, 
   authorizeUser(permittedRole), 
-  checkSchema(interestValidationSchema),
-  interestCltr.create
+  interestCltr.createInterest
+);
+
+interestRouter.post(                
+  '/remove', 
+  authenticationUser, 
+  authorizeUser(permittedRole), 
+  interestCltr.removeInterest
+);
+
+
+interestRouter.get(                
+  '/allInterset', 
+  authenticationUser, 
+  authorizeUser(['owner']), 
+  interestCltr.allInterest
 );
 
 // Get all interests for a specific provider
