@@ -3,7 +3,7 @@ import { checkSchema } from 'express-validator';
 import interestCltr from '../../app/controller/interest-controller.js'; 
 import authenticationUser from '../../app/middlewares/authentication.js';
 import authorizeUser from '../../app/middlewares/authorize.js';
-import { interestValidationSchema } from '../../app/validators/interest-validation-schema.js'; 
+// import { interestValidationSchema } from '../../app/validators/interest-validation-schema.js'; 
 
 const interestRouter = express.Router();
 

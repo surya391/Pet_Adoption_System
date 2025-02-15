@@ -46,6 +46,8 @@ interestCltr.createInterest = async (req, res) => {
 };
 
 
+
+// Remove the added interset
 interestCltr.removeInterest = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -88,7 +90,7 @@ interestCltr.removeInterest = async (req, res) => {
 };
 
 
-
+// list all the interest
 interestCltr.allInterest = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
