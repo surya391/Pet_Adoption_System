@@ -11,36 +11,15 @@ const interestRouter = express.Router();
 const permittedRole = ['admin', 'serviceProvider'];
 
 // Create a new interest   
-interestRouter.post(
-  '/create', 
-  authenticationUser, 
-  authorizeUser(permittedRole), 
-  interestCltr.createInterest
-);
+interestRouter.post('/create', authenticationUser, authorizeUser(permittedRole), interestCltr.createInterest);
 
-interestRouter.put(                
-  '/remove', 
-  authenticationUser, 
-  authorizeUser(permittedRole), 
-  interestCltr.removeInterest
-);
+interestRouter.put('/remove', authenticationUser, authorizeUser(permittedRole), interestCltr.removeInterest);
 
+interestRouter.get('/allInterset', authenticationUser, authorizeUser(['owner']), interestCltr.allInterest);
 
-interestRouter.get(                
-  '/allInterset', 
-  authenticationUser, 
-  authorizeUser(['owner']), 
-  interestCltr.allInterest
-);
+interestRouter.get('/getServiceProviderInterests', authenticationUser, authorizeUser(['serviceProvider']), interestCltr.getServiceProviderInterests);
 
-
-interestRouter.get(                
-  '/getServiceProviderInterests', 
-  authenticationUser, 
-  authorizeUser(['serviceProvider']), 
-  interestCltr.getServiceProviderInterests
-);
-
+interestRouter.get('/getOwnerInterests', authenticationUser, authorizeUser(['owner']), interestCltr.getOwnerInterests);
 
 
 
@@ -64,22 +43,7 @@ interestRouter.get(
   interestCltr.show
 );
 
-// Update an interest by ID
-// interestRouter.put(
-//   '/update/:id', 
-//   authenticationUser, 
-//   authorizeUser(permittedRole), 
-//   checkSchema(interestValidationSchema),
-//   interestCltr.update
-// );
 
-// Delete an interest by ID
-// interestRouter.delete(
-//   '/delete/:id', 
-//   authenticationUser, 
-//   authorizeUser(permittedRole), 
-//   interestCltr.destroy
-// );
 
 export default interestRouter;
 

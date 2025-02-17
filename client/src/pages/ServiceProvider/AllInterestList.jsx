@@ -6,7 +6,7 @@ function AllInterestList() {
     const dispatch = useDispatch();
     const { getYourInterests, interestLoading, serverError } = useSelector((state) => state.interest);
     const { userInfo } = useSelector((state) => state.auth);
-    
+
     useEffect(() => {
         if (userInfo?.role === "serviceProvider") {
             dispatch(getServiceProviderInterests());
@@ -51,19 +51,29 @@ function AllInterestList() {
                             <p className="text-gray-700"><strong>Start Date:</strong> {new Date(interest.requestId?.startDatetime).toLocaleDateString()}</p>
                             <p className="text-gray-700"><strong>End Date:</strong> {new Date(interest.requestId?.endDatetime).toLocaleDateString()}</p>
 
+                            {/* {interest.interestedServiceProviders.length > 0 && (
+    <div className="mt-3 bg-gray-50 p-3 rounded-lg">
+        <h4 className="font-semibold text-gray-700">Interested Service Providers</h4>
+        <p className="text-sm text-gray-600">
+            Status - <span className="font-semibold">{interest.interestedServiceProviders[0].status}</span>
+        </p>
+    </div>
+)} */}
+
                             {interest.interestedServiceProviders.length > 0 && (
                                 <div className="mt-3 bg-gray-50 p-3 rounded-lg">
                                     <h4 className="font-semibold text-gray-700">Interested Service Providers</h4>
-                                    {interest.interestedServiceProviders.map((provider) => (
-                                        <p key={provider._id} className="text-sm text-gray-600">
-                                            {/* {provider.pID?.name} */} Status {/* ({provider.pID?.email}) */} - <span className="font-semibold">{provider.status}</span>
+                                    {[...new Set(interest.interestedServiceProviders.map((provider) => provider.status))].map((status, index) => (
+                                        <p key={index} className="text-sm text-gray-600">
+                                            Status - <span className="font-semibold">{status}</span>
                                         </p>
                                     ))}
                                 </div>
                             )}
 
+
                             <button
-                                onClick={() => handleUninterest(interest?.requestId?._id) }
+                                onClick={() => handleUninterest(interest?.requestId?._id)}
                                 className="mt-4 w-full py-2 text-white bg-red-500 rounded-lg hover:bg-red-600 transition duration-300 font-semibold"
                             >
                                 Uninterest
