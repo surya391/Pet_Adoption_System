@@ -18,7 +18,7 @@ interestRouter.post(
   interestCltr.createInterest
 );
 
-interestRouter.post(                
+interestRouter.put(                
   '/remove', 
   authenticationUser, 
   authorizeUser(permittedRole), 
@@ -32,6 +32,21 @@ interestRouter.get(
   authorizeUser(['owner']), 
   interestCltr.allInterest
 );
+
+
+interestRouter.get(                
+  '/getServiceProviderInterests', 
+  authenticationUser, 
+  authorizeUser(['serviceProvider']), 
+  interestCltr.getServiceProviderInterests
+);
+
+
+
+
+
+
+
 
 // Get all interests for a specific provider
 interestRouter.get(

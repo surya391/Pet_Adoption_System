@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { CgProfile } from "react-icons/cg";
 
 import { logOut } from "./../../slices/AuthSlice";
 import { ToastContainer } from "react-toastify";
@@ -37,9 +36,14 @@ const ServiceProviderNavbar = () => {
                                     <CgProfile size={30} color="white" />
                                 </Link>
                             </div> */}
-                            <p className="p-4 text-sm font-bold cursor-pointer">
+                               <p className="p-4 text-sm font-bold cursor-pointer">
                                 <Link to="/petServicePage" className="text-blue-500 hover:underline">
                                     Service
+                                </Link>
+                            </p>
+                            <p className="p-4 text-sm font-bold cursor-pointer">
+                                <Link to="/getServiceProviderInterests" className="text-blue-500 hover:underline">
+                                getAllInterests
                                 </Link>
                             </p>
                             <p className="p-4 text-sm font-bold cursor-pointer">

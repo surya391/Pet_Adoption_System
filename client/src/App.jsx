@@ -28,6 +28,8 @@ import { getRequestTypes, myPetList } from './slices/RequestSlice';
 import YourRequestList from './pages/Owner/YourRequestList';
 import PetServicePage from './pages/ServiceProvider/PetServicePage';
 import SinglePetVeiwDetail from './pages/ServiceProvider/SinglePetVeiwDetail';
+import AddedInterest from './pages/ServiceProvider/AddedInterest';
+import AllInterestList from './pages/ServiceProvider/AllInterestList';
 
 function App() {
   const dispatch = useDispatch();
@@ -98,6 +100,8 @@ function App() {
           <Route path='/requestList' element={<PrivateRoute permittedRoles={["admin", "owner", "serviceProvider"]}> <YourRequestList /></PrivateRoute>} />
           <Route path='/petServicePage' element={<PrivateRoute permittedRoles={["admin", "serviceProvider"]}> <PetServicePage /></PrivateRoute>} />
           <Route path='/singlePetVeiwDetail/:id' element={<PrivateRoute permittedRoles={["admin", "serviceProvider"]}> <SinglePetVeiwDetail /></PrivateRoute>} />
+          {/* <Route path='/addInterest' element={<PrivateRoute permittedRoles={["admin", "serviceProvider"]}> <AddedInterest /></PrivateRoute>} /> */}
+          <Route path='/getServiceProviderInterests' element={<PrivateRoute permittedRoles={["admin", "serviceProvider"]}> <AllInterestList /></PrivateRoute>} />
 
 
 

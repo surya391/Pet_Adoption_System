@@ -13,41 +13,106 @@ interestCltr.createInterest = async (req, res) => {
 
   const body = req.body;
   try {
+
     const { requestId, ownerId } = _.pick(req.body, ["requestId", "ownerId"]);
     const { userId } = _.pick(req.currentUser, ["userId"]);
-
+    console.log("AA",ownerId)
     const interestExists = await Interest.findOne({
       requestId: requestId,
-      "interestedServiceProviders.pID": userId, // Check for userId in the array
+      "interestedServiceProviders.pID": userId, // Check if the user has already shown interest
     });
-
+    
     if (interestExists) {
       return res.status(400).json({ message: "Service provider has already expressed interest." });
     }
-
-    // If not exists, add the service provider
+    
+    // If not exists, add the service provider and ensure ownerId is set only on creation
     const updatedInterest = await Interest.findOneAndUpdate(
       { requestId: requestId }, // Find the request
       {
         $push: {
           interestedServiceProviders: { pID: userId, status: "pending" }, // Add the service provider
         },
+        $setOnInsert: { ownerId: ownerId }, // Set ownerId only if the document is newly created
       },
-      { new: true, upsert: true } // Upsert to create a document if it doesn't exist
+      { new: true, upsert: true } // Upsert ensures a document is created if not found
     );
-
-
-
+    
     return res.status(200).json(updatedInterest);
+    
+
+    // const { requestId, ownerId } = _.pick(req.body, [ "requestId" , "ownerId"]);
+    // const { userId } = _.pick(req.currentUser, ["userId"]);
+
+    // const interestExists = await Interest.findOne({
+    //   requestId: requestId,
+    //   "interestedServiceProviders.pID": userId, // Check for userId in the array
+    // });
+
+    // if (interestExists) {
+    //   return res.status(400).json({ message: "Service provider has already expressed interest." });
+    // }
+
+    // // If not exists, add the service provider
+    // const updatedInterest = await Interest.findOneAndUpdate(
+    //   { requestId: requestId }, // Find the request
+    //   {
+    //     $push: {
+    //       interestedServiceProviders: { pID: userId, status: "pending" }, // Add the service provider
+    //     },
+    //   },
+    //   { new: true, upsert: true } // Upsert to create a document if it doesn't exist
+    // );
+
+    // return res.status(200).json(updatedInterest);
   } catch (error) {
     console.log(error)
     return res.status(500).json({ error: [{ msg: "Something went wrong." }] })
   }
 };
 
-
-
 // Remove the added interset
+// interestCltr.removeInterest = async (req, res) => {
+//   const errors = validationResult(req);
+//   if (!errors.isEmpty()) {
+//     return res.status(400).json({ error: errors.array() });
+//   }
+
+//   const { requestId } = _.pick(req.body, ["requestId"]);
+//   const { userId } = _.pick(req.currentUser, ["userId"]);
+
+//   try {
+//     // Check if the interest exists for the given user and request
+//     const interestExists = await Interest.findOne({
+//       requestId: requestId,
+//       "interestedServiceProviders.pID": userId, // Check if the user has shown interest
+//     });
+
+//     if (!interestExists) {
+//       return res.status(404).json({ message: "Interest not found for the service provider." });
+//     }
+
+//     // Remove the service provider from the interestedServiceProviders array
+//     const updatedInterest = await Interest.findOneAndUpdate(
+//       { requestId: requestId },
+//       {
+//         $pull: {
+//           interestedServiceProviders: { pID: userId }, // Remove the object with matching pID
+//         },
+//       },
+//       { new: true } // Return the updated document
+//     );
+// console.log('bbb', updatedInterest)
+//     // return res.status(200).json({
+//     //   message: "Interest removed successfully.",
+//     //   data: updatedInterest,
+//     // });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ error: [{ msg: "Something went wrong." }] });
+//   }
+// };
+
 interestCltr.removeInterest = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -55,13 +120,17 @@ interestCltr.removeInterest = async (req, res) => {
   }
 
   const { requestId } = _.pick(req.body, ["requestId"]);
-  const { userId } = _.pick(req.currentUser, ["userId"]);
+  const { userId } = req.currentUser; // Directly access userId
+
+  if (!requestId) {
+    return res.status(400).json({ message: "Request ID is required." });
+  }
 
   try {
-    // Check if the interest exists for the given user and request
+    // Check if interest exists for the given user and request
     const interestExists = await Interest.findOne({
-      requestId: requestId,
-      "interestedServiceProviders.pID": userId, // Check if the user has shown interest
+      requestId,
+      "interestedServiceProviders.pID": userId,
     });
 
     if (!interestExists) {
@@ -70,24 +139,21 @@ interestCltr.removeInterest = async (req, res) => {
 
     // Remove the service provider from the interestedServiceProviders array
     const updatedInterest = await Interest.findOneAndUpdate(
-      { requestId: requestId },
+      { requestId },
       {
-        $pull: {
-          interestedServiceProviders: { pID: userId }, // Remove the object with matching pID
-        },
+        $pull: { interestedServiceProviders: { pID: userId } }, // Remove the matching pID
       },
-      { new: true } // Return the updated document
+      { new: true }
     );
 
-    return res.status(200).json({
-      message: "Interest removed successfully.",
-      data: updatedInterest,
-    });
+    return res.status(200).json(updatedInterest);
+
   } catch (error) {
-    console.error(error);
+    console.error("Error in removeInterest:", error);
     return res.status(500).json({ error: [{ msg: "Something went wrong." }] });
   }
 };
+
 
 
 // list all the interest
@@ -129,6 +195,33 @@ interestCltr.show = async (req, res) => {
     res.status(500).json({ error: "Something went wrong." });
   }
 };
+
+
+
+interestCltr.getServiceProviderInterests = async (req, res) => {
+  try {
+    const { userId } = req.currentUser; // Get the logged-in service provider's ID
+
+    // Find all requests where this service provider has shown interest
+    const interests = await Interest.find({
+      interestedServiceProviders: { $elemMatch: { pID: userId } } // Match interests where user is present
+    }).populate({
+      path: "requestId",
+      populate: { path: "petId" } // Populate pet details inside requestId
+    }).populate("interestedServiceProviders.pID", "name email");
+
+    if (!interests.length) {
+      return res.status(404).json({ message: "No interests found for this service provider." });
+    }
+
+    return res.status(200).json(interests);
+  } catch (error) {
+    console.error("Error fetching interests:", error);
+    return res.status(500).json({ message: "Internal server error." });
+  }
+};
+
+
 
 // // Update an interest
 // interestCltr.update = async (req, res) => {

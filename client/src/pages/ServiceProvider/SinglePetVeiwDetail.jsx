@@ -11,6 +11,7 @@ const SinglePetVeiwDetail = () => {
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
     const { requestView, isLoading } = useSelector((state) => state.request);
+    // console.log("requestView",requestView)
     const { interestLoading, serverError } = useSelector((state) => state.interest);
     
     useEffect(() => {
@@ -26,7 +27,7 @@ const SinglePetVeiwDetail = () => {
 
         const data = {
             requestId: id,
-            ownerId: requestView.ownerId, // Assuming requestView contains ownerId
+            ownerId: requestView.userId, // Assuming requestView contains ownerId
         };
 
         dispatch(serviceProCreateInterest(data))
@@ -35,8 +36,8 @@ const SinglePetVeiwDetail = () => {
                 alert("Interest successfully added!");
             })
             .catch((error) => {
-                console.log(error?.response?.data?.message)
-                alert("Failed to add interest", );
+                // console.log(error?.response?.data?.message)
+                alert("⚠ Failed to add interest or already added.", );
                 setIsButtonDisabled(false); // Re-enable button if there's an error
             });
     };
@@ -94,11 +95,11 @@ const SinglePetVeiwDetail = () => {
                     </div>
                     {/* {serverError && <p className="text-red-500 text-center mt-4">{serverError}</p>} */}
                     <div>
-                    {Array.isArray(serverError) && serverError.map((ele, i) => (
-    <li key={i} className="text-sm font-semibold text-red-500 opacity-80">
-      {ele.message || ele}
-    </li>
-))}
+                        {Array.isArray(serverError) && serverError.map((ele, i) => (
+                        <li key={i} className="text-sm font-semibold text-red-500 opacity-80">
+                        {ele.message || ele}
+                        </li>
+                    ))}
                     </div>
                 </div>
             </div>

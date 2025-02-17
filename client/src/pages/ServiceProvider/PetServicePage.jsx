@@ -22,7 +22,8 @@ function PetServicePage() {
   // Fetch pending requests on load if user is a service provider
   useEffect(() => {
     if (userInfo?.role === "serviceProvider") {
-      dispatch(getPendingRequest());
+      // dispatch(getPendingRequest());
+      dispatch(searchRequests(formData));
       // dispatch(petTypes())
     }
   }, [userInfo, dispatch]);
@@ -57,6 +58,7 @@ function PetServicePage() {
  // Search handler
  const handleSearch = (e) => {
   e.preventDefault();
+  // dispatch(getPendingRequest());
   dispatch(searchRequests(formData));
 };
 
