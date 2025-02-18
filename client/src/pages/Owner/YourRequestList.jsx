@@ -59,19 +59,25 @@ function YourRequestList() {
                                 <p className="text-sm text-gray-600">Start: {new Date(request.startDatetime).toLocaleString()}</p>
                                 <p className="text-sm text-gray-600">End: {new Date(request.endDatetime).toLocaleString()}</p>
 
-                                <div className="flex justify-end items-end">
-                                    <button
-                                        className="mr-2 px-3 py-1 font-semibold text-sm text-white bg-green-400 hover:scale-110 hover:bg-green-600 shadow-sm rounded-sm cursor-pointer"
-                                        onClick={() => handleEdit(request._id)}
-                                    >
-                                        Edit
-                                    </button>
-                                    <button
-                                        className="px-3 py-1 font-semibold text-sm text-white bg-red-400 hover:scale-110 hover:bg-red-600 shadow-sm rounded-sm cursor-pointer"
-                                        onClick={() => handleRemove(request._id)}
-                                    >
-                                        Remove
-                                    </button>
+                                <div className="flex justify-between mt-5">
+                                    <div>
+                                        <p className="mr-5 text-sm font-semibold hover:text-blue-500 hover:underline cursor-pointer" onClick={()=>navigate(`/allRequestInterest?requestId=${request._id}`)}> Interest people</p>
+                                    </div>
+                                    <div>
+                                        <button
+                                            className="mr-2 px-3 py-1 font-semibold text-sm text-white bg-green-400 hover:scale-110 hover:bg-green-600 shadow-sm rounded-sm cursor-pointer"
+                                            onClick={() => handleEdit(request._id)}
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            className="px-3 py-1 font-semibold text-sm text-white bg-red-400 hover:scale-110 hover:bg-red-600 shadow-sm rounded-sm cursor-pointer"
+                                            onClick={() => handleRemove(request._id)}
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+
                                 </div>
                             </div>
                         ))}

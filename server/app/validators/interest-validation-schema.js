@@ -1,13 +1,4 @@
 export const interestValidationSchema = {
-    // providerId: {
-    //   in: ["body"],
-    //   exists: {
-    //     errorMessage: "Provider ID is required.",
-    //   },
-    //   isMongoId: {
-    //     errorMessage: "Invalid Provider ID format. Must be a valid MongoDB ObjectID.",
-    //   },
-    // },
     requestId: {
       in: ["body"],
       exists: {
@@ -26,4 +17,14 @@ export const interestValidationSchema = {
       },
     },
   };
+
+  export const requestId = {
+    in: ["query"],
+    exists: {
+      errorMessage: "Request ID is required.",
+    },
+    isMongoId: {
+      errorMessage: "Invalid Request ID format. Must be a valid MongoDB ObjectID.",
+    },
+  }
   

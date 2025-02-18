@@ -28,8 +28,9 @@ import { getRequestTypes, myPetList } from './slices/RequestSlice';
 import YourRequestList from './pages/Owner/YourRequestList';
 import PetServicePage from './pages/ServiceProvider/PetServicePage';
 import SinglePetVeiwDetail from './pages/ServiceProvider/SinglePetVeiwDetail';
-import AddedInterest from './pages/ServiceProvider/AddedInterest';
+// import AddedInterest from './pages/ServiceProvider/AddedInterest';
 import AllInterestList from './pages/ServiceProvider/AllInterestList';
+import AllRequestInterest from './pages/Owner/AllRequestInterest';
 
 function App() {
   const dispatch = useDispatch();
@@ -48,15 +49,15 @@ function App() {
   }, [dispatch])
 
 
-  useEffect(()=>{
-     if(userInfo){
+  useEffect(() => {
+    if (userInfo) {
       dispatch(getProfile())
     }
     if (userInfo?.role === "owner") {
       dispatch(myPetList());
       dispatch(petTypes());
     }
-  },[userInfo, dispatch])
+  }, [userInfo, dispatch])
 
   if (token && !userInfo) {
     return <Spinner />
@@ -69,7 +70,7 @@ function App() {
   //   return <Navbar />
   // }
 
-  const showNavbar = [ "/login", "/register"];
+  const showNavbar = ["/login", "/register"];
 
   return (
     <div className="flex flex-col ">
@@ -81,7 +82,7 @@ function App() {
       )}
       {userInfo?.role === "serviceProvider" && <ServiceProviderNavbar />}
 
-{/* 
+      {/* 
       {(userInfo?.role === "owner" || userInfo?.role === "admin") && <Navbar />}
       {userInfo?.role === "serviceProvider" && <ServiceProviderNavbar />} */}
       <div className="flex-grow">
@@ -102,6 +103,7 @@ function App() {
           <Route path='/singlePetVeiwDetail/:id' element={<PrivateRoute permittedRoles={["admin", "serviceProvider"]}> <SinglePetVeiwDetail /></PrivateRoute>} />
           {/* <Route path='/addInterest' element={<PrivateRoute permittedRoles={["admin", "serviceProvider"]}> <AddedInterest /></PrivateRoute>} /> */}
           <Route path='/getServiceProviderInterests' element={<PrivateRoute permittedRoles={["admin", "serviceProvider"]}> <AllInterestList /></PrivateRoute>} />
+          <Route path='/allRequestInterest' element={<PrivateRoute permittedRoles={["owner"]}> <AllRequestInterest /></PrivateRoute>} />
 
 
 

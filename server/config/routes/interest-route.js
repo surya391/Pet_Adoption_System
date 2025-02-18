@@ -3,6 +3,7 @@ import { checkSchema } from 'express-validator';
 import interestCltr from '../../app/controller/interest-controller.js'; 
 import authenticationUser from '../../app/middlewares/authentication.js';
 import authorizeUser from '../../app/middlewares/authorize.js';
+import { requestId } from '../../app/validators/interest-validation-schema.js';
 // import { interestValidationSchema } from '../../app/validators/interest-validation-schema.js'; 
 
 const interestRouter = express.Router();
@@ -19,9 +20,10 @@ interestRouter.get('/allInterset', authenticationUser, authorizeUser(['owner']),
 
 interestRouter.get('/getServiceProviderInterests', authenticationUser, authorizeUser(['serviceProvider']), interestCltr.getServiceProviderInterests);
 
-interestRouter.get('/getOwnerInterests', authenticationUser, authorizeUser(['owner']), interestCltr.getOwnerInterests);
+interestRouter.get('/getOwnerInterests', authenticationUser, authorizeUser(['owner']), checkSchema({ requestId }),interestCltr.getOwnerInterests);
 
 
+interestRouter.put('/updateInterestStatus', authenticationUser, authorizeUser(['owner']), interestCltr.updateInterestStatus);
 
 
 

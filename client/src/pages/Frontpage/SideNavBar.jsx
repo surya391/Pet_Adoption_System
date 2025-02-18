@@ -83,6 +83,12 @@ const SideNavbar = () => {
             </Link>
         </p>
 
+        {/* <p className="p-4 text-sm font-bold cursor-pointer">
+            <Link to="/allRequestInterest" className="text-blue-500 hover:underline">
+                All Interest
+            </Link>
+        </p> */}
+
         {/* Logout Link */}
         <p
             className="p-4 text-sm font-bold text-rose-500 cursor-pointer"

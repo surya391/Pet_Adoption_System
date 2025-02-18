@@ -20,7 +20,6 @@ export const serviceProCreateInterest = createAsyncThunk(
 );
 
 // serviceProvider all interest request
-
 export const getServiceProviderInterests = createAsyncThunk(
     "get/getServiceProviderInterests",
     async (_, { rejectWithValue }) => {
@@ -39,6 +38,7 @@ export const getServiceProviderInterests = createAsyncThunk(
     }
 );
 
+//remove the interest by the service Provider
 export const removeSPInterest = createAsyncThunk(
     "delete/removeSPInterest",
     async ( requestId , { rejectWithValue }) => {
@@ -57,12 +57,58 @@ export const removeSPInterest = createAsyncThunk(
     }
 );
 
+export const allRequestInterest = createAsyncThunk(
+    "get/allRequestInterest",
+    async ( requestId , { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.get(`/interest/getOwnerInterests?requestId=${requestId}`,{
+                headers: {
+                    Authorization: localStorage.getItem('token')
+                }
+            });
+            // console.log(response.data)
+            return response.data;
+        } catch (error) {
+            console.log(error)
+            return rejectWithValue(error?.response?.data?.error);
+        }
+    }
+);
 
+// export const allRequestInterest = createAsyncThunk(
+//     "get/allRequestInterest",
+//     async (_, { rejectWithValue }) => {
+//       try {
+//         const token = localStorage.getItem("token");
+  
+//         if (!token) {
+//           return rejectWithValue("No authentication token found.");
+//         }
+  
+//         const response = await axiosInstance.get(`/interest/getOwnerInterests`, {
+//           headers: {
+//             Authorization: `Bearer ${token}`, 
+//           },
+//         });
+  
+//         console.log("Response Data:", response.data);
+//         return response.data;
+//       } catch (error) {
+//         console.error("API Error:", error);
+  
+//         return rejectWithValue(
+//           error?.response?.data?.error || "Failed to fetch interests"
+//         );
+//       }
+//     }
+//   );
+  
 const interestSlice = createSlice({
     name: "interest",
     initialState: {
         interest: null,
         getYourInterests: [],
+        getOwnerInterests:[],
         serverError: null,
         interestLoading: false,
     },
@@ -99,7 +145,6 @@ const interestSlice = createSlice({
 
         builders.addCase(removeSPInterest.pending, (state) => {
             state.serverError = null;
-            // state.getYourInterests = null;
             state.interestLoading = true;
         })
         builders.addCase(removeSPInterest.fulfilled, (state, action) => {
@@ -112,6 +157,23 @@ const interestSlice = createSlice({
             state.serverError = action.payload;
             state.interestLoading = false;
         })
+
+        builders.addCase(allRequestInterest.pending, (state) => {
+            state.serverError = null;
+            state.getOwnerInterests = null;
+            state.interestLoading = true;
+        })
+        builders.addCase(allRequestInterest.fulfilled, (state, action) => {
+            state.serverError = null;
+            state.getOwnerInterests = action.payload;
+            state.interestLoading = false;
+        })
+        builders.addCase(allRequestInterest.rejected, (state, action) => {
+            state.serverError = action.payload;
+            state.getOwnerInterests = [];
+            state.interestLoading = false;
+        })
+
     },
 });
 
