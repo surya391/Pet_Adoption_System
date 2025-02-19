@@ -17,7 +17,7 @@ const RequestSchema = new Schema(
     startDatetime: { type: Date, required: true },
     endDatetime: { type: Date, required: true },
     amount:{type: Number, required: true},
-    status: { type: String, enum: ["pending", "approved", "rejected"], default: "pending" },
+    status: { type: String, enum: ["available", "closed"], default: "available" }
   },
   { timestamps: true }
 );

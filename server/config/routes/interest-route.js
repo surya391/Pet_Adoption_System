@@ -30,20 +30,20 @@ interestRouter.put('/updateInterestStatus', authenticationUser, authorizeUser(['
 
 
 // Get all interests for a specific provider
-interestRouter.get(
-  '/show', 
-  authenticationUser, 
-  authorizeUser((['owner','serviceProvider'])), 
-  interestCltr.show
-);
+// interestRouter.get(
+//   '/show', 
+//   authenticationUser, 
+//   authorizeUser((['owner','serviceProvider'])), 
+//   interestCltr.show
+// );
 
-// Get interest details by interest ID
-interestRouter.get(
-  '/:id', 
-  authenticationUser, 
-  authorizeUser(permittedRole), 
-  interestCltr.show
-);
+// // Get interest details by interest ID
+// interestRouter.get(
+//   '/:id', 
+//   authenticationUser, 
+//   authorizeUser(permittedRole), 
+//   interestCltr.show
+// );
 
 
 

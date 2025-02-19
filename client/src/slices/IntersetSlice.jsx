@@ -57,6 +57,7 @@ export const removeSPInterest = createAsyncThunk(
     }
 );
 
+// get owner Interest
 export const allRequestInterest = createAsyncThunk(
     "get/allRequestInterest",
     async ( requestId , { rejectWithValue }) => {
@@ -75,34 +76,32 @@ export const allRequestInterest = createAsyncThunk(
     }
 );
 
-// export const allRequestInterest = createAsyncThunk(
-//     "get/allRequestInterest",
-//     async (_, { rejectWithValue }) => {
-//       try {
-//         const token = localStorage.getItem("token");
-  
-//         if (!token) {
-//           return rejectWithValue("No authentication token found.");
-//         }
-  
-//         const response = await axiosInstance.get(`/interest/getOwnerInterests`, {
-//           headers: {
-//             Authorization: `Bearer ${token}`, 
-//           },
-//         });
-  
-//         console.log("Response Data:", response.data);
-//         return response.data;
-//       } catch (error) {
-//         console.error("API Error:", error);
-  
-//         return rejectWithValue(
-//           error?.response?.data?.error || "Failed to fetch interests"
-//         );
-//       }
-//     }
-//   );
-  
+export const handleEditStatus = createAsyncThunk(
+    "put/handleEditStatus",
+    async ({ requestId, providerId, status }, { rejectWithValue }) => {
+        try {
+            console.log("requestId:", requestId);
+            console.log("providerId:", providerId);
+            console.log("status:", status);
+
+            const response = await axiosInstance.put(
+                `/interest/updateInterestStatus`,
+                {requestId, providerId, status},
+                {
+                    headers: {
+                        Authorization: localStorage.getItem('token')
+                    }
+                }
+            );
+console.log(response.data)
+            return response.data;
+        } catch (error) {
+            console.error("Error updating status:", error);
+            return rejectWithValue(error?.response?.data?.error || "Something went wrong");
+        }
+    }
+);
+
 const interestSlice = createSlice({
     name: "interest",
     initialState: {
@@ -174,6 +173,20 @@ const interestSlice = createSlice({
             state.interestLoading = false;
         })
 
+        builders.addCase(handleEditStatus.pending, (state) => {
+            state.serverError = null;
+            state.interestLoading = true;
+        })
+        builders.addCase(handleEditStatus.fulfilled, (state, action) => {
+            state.serverError = null;
+            state.getOwnerInterests = action.payload;
+            state.interestLoading = false;
+        })
+        builders.addCase(handleEditStatus.rejected, (state, action) => {
+            state.serverError = action.payload;
+            state.getOwnerInterests = [];
+            state.interestLoading = false;
+        })
     },
 });
 

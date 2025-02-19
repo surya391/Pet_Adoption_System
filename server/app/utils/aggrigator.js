@@ -44,6 +44,10 @@ const aggrigatorForCustomer = ({ location, petType }) => {
     pipeLine.push({
         $unwind: "$pet"
     });
+
+    pipeLine.push({
+        $match: {status:"available"}
+    });
     
     // Filter by request type if provided
     if (petType) {

@@ -1,8 +1,11 @@
 import Interest from "../models/interest-model.js";
 import { validationResult } from "express-validator";
 import _ from 'lodash'
-import {aggrigatorForInterestedProviders} from "../utils/interestAggrigator.js";
-
+import { aggrigatorForInterestedProviders } from "../utils/interestAggrigator.js";
+import { sendAcceptanceEmail } from '../utils/mailTemplate.js'
+import mailSender from "../utils/mailSender.js";
+import User from '../models/user-model.js'
+import Request from '../models/request-model.js'
 const interestCltr = {};
 
 // Create a new interest
@@ -17,16 +20,16 @@ interestCltr.createInterest = async (req, res) => {
 
     const { requestId, ownerId } = _.pick(req.body, ["requestId", "ownerId"]);
     const { userId } = _.pick(req.currentUser, ["userId"]);
-    console.log("AA",ownerId)
+    console.log("AA", ownerId)
     const interestExists = await Interest.findOne({
       requestId: requestId,
       "interestedServiceProviders.pID": userId, // Check if the user has already shown interest
     });
-    
+
     if (interestExists) {
-      return res.status(400).json({ message: "Service provider has already expressed interest." });
+      return res.status(400).json({ error: [{ msg: "Service provider has already expressed interest." }] })
     }
-    
+
     // If not exists, add the service provider and ensure ownerId is set only on creation
     const updatedInterest = await Interest.findOneAndUpdate(
       { requestId: requestId }, // Find the request
@@ -38,9 +41,9 @@ interestCltr.createInterest = async (req, res) => {
       },
       { new: true, upsert: true } // Upsert ensures a document is created if not found
     );
-    
+
     return res.status(200).json(updatedInterest);
-    
+
 
     // const { requestId, ownerId } = _.pick(req.body, [ "requestId" , "ownerId"]);
     // const { userId } = _.pick(req.currentUser, ["userId"]);
@@ -83,7 +86,7 @@ interestCltr.removeInterest = async (req, res) => {
   const { userId } = req.currentUser; // Directly access userId
 
   if (!requestId) {
-    return res.status(400).json({ message: "Request ID is required." });
+    return res.status(400).json({ error: [{ msg: "Request ID is required." }] })
   }
 
   try {
@@ -94,7 +97,7 @@ interestCltr.removeInterest = async (req, res) => {
     });
 
     if (!interestExists) {
-      return res.status(404).json({ message: "Interest not found for the service provider." });
+      return res.status(404).json({ error: [{ msg: "Interest not found for the service provider." }] })
     }
 
     // Remove the service provider from the interestedServiceProviders array
@@ -109,7 +112,7 @@ interestCltr.removeInterest = async (req, res) => {
     return res.status(200).json(updatedInterest);
 
   } catch (error) {
-    console.error("Error in removeInterest:", error);
+    // console.error("Error in removeInterest:", error);
     return res.status(500).json({ error: [{ msg: "Something went wrong." }] });
   }
 };
@@ -145,9 +148,9 @@ interestCltr.show = async (req, res) => {
       return res.status(404).json({ error: [{ msg: "Interest not found." }] })
     }
     res.json(interests);
-  } catch (err) {
+  } catch (error) {
     console.error(err);
-    res.status(500).json({ error: "Something went wrong." });
+    return res.status(500).json({ error: [{ msg: "Something went wrong." }] })
   }
 };
 
@@ -165,13 +168,13 @@ interestCltr.getServiceProviderInterests = async (req, res) => {
     }).populate("interestedServiceProviders.pID", "name email");
 
     if (!interests.length) {
-      return res.status(404).json({ message: "No interests found for this service provider." });
+      return res.status(404).json({ error: [{ msg: "No interests found for this service provider." }] })
     }
 
     return res.status(200).json(interests);
   } catch (error) {
     console.error("Error fetching interests:", error);
-    return res.status(500).json({ message: "Internal server error." });
+    return res.status(500).json({ error: [{ msg: "Internal server error." }] })
   }
 };
 
@@ -180,26 +183,27 @@ interestCltr.getOwnerInterests = async (req, res) => {
   try {
 
     const { userId } = req.currentUser; // Get the logged-in owner's ID
-        const { requestId } = _.pick(req.query, ["requestId"]); // Get requestId from request parameters
-// console.log(requestId)
-console.log(requestId)
-        if (!requestId) {
-            return res.status(400).json({ message: "Request ID is required." });
-        }
+    const { requestId } = _.pick(req.query, ["requestId"]); // Get requestId from request parameters
+    // console.log(requestId)
+    console.log(requestId)
+    if (!requestId) {
+      return res.status(400).json({ error: [{ msg: "Request ID is required." }] })
+    }
 
-        const interests = await Interest.aggregate(aggrigatorForInterestedProviders(userId, requestId));
-console.log(interests)
-        if (!interests.length) {
-            return res.status(404).json({ message: "No interests found for this owner and request." });
-        }
+    const interests = await Interest.aggregate(aggrigatorForInterestedProviders(userId, requestId));
+    console.log(interests)
+    if (!interests.length) {
+      return res.status(404).json({ error: [{ msg: "No interests found for this owner and request." }] })
+    }
 
-        return res.status(200).json(interests);
+    return res.status(200).json(interests);
 
   } catch (error) {
     console.error("Error fetching owner interests:", error);
-    return res.status(500).json({ message: "Internal server error." });
+    return res.status(500).json({ error: [{ msg: "Internal server error." }] })
   }
 };
+
 
 
 // interestCltr.updateInterestStatus = async (req, res) => {
@@ -207,40 +211,39 @@ console.log(interests)
 //   if (!errors.isEmpty()) {
 //     return res.status(400).json({ error: errors.array() });
 //   }
-
-//   const { requestId, providerId } = req.body; // Provider ID to update
-//   console.log("aaa",requestId, providerId)
-//   const { userId } = req.currentUser; // Owner ID
-
-//   if (!requestId || !providerId) {
-//     return res.status(400).json({ message: "Request ID and Provider ID are required." });
-//   }
+//   const { requestId, providerId, status } = req.body; // Get request ID, provider ID, and new status
+//   const { userId, name } = req.currentUser; // Logged-in owner's ID
 
 //   try {
-//     // Check if the owner has the right to update this request
-//     const interest = await Interest.findOne({ requestId, ownerId: userId });
-
-//     if (!interest) {
-//       return res.status(403).json({ message: "Unauthorized: You do not own this request." });
-//     }
-
-//     // Update the specific provider's status
+//     //   // Update the status of the specific provider
 //     const updatedInterest = await Interest.findOneAndUpdate(
-//       { requestId, "interestedServiceProviders.pID": providerId, "interestedServiceProviders.status": "pending" },
-//       { $set: { "interestedServiceProviders.$.status": "accepted" } },
-//       { new: true }
-//     );
-
+//       { ownerId: userId, requestId, "interestedServiceProviders.pID": providerId },
+//       { $set: { "interestedServiceProviders.$.status": status } },
+//       { new: true, runValidators: true }
+//     ).populate({
+//       path: "requestId",
+//       populate: {
+//         path: "petId",
+//       },
+//     });
 //     if (!updatedInterest) {
-//       return res.status(400).json({ message: "Interest status is not pending or update failed." });
+//       return res.status(404).json({ message: "Service provider interest not found." });
 //     }
-
-//     return res.status(200).json({ message: "Interest status updated to accepted.", updatedInterest });
-//   } catch (error) {
+//     //status == accetpted 
+//     if (status === "accepted") {
+//       await Request.findByIdAndUpdate(requestId, { $set: { status : "closed" } })
+//       const user = await User.findById(providerId)
+//       const templete =  sendAcceptanceEmail.replace('{providerName}',user.name).replace('{ownerName}',name).replace('{petName}',updatedInterest?.requestId?.petId?.petName)
+//       await mailSender(user.email, "User Accepted your Interest", templete)
+//     }
+//     res.json(updatedInterest)
+//   }
+//   catch (error) {
 //     console.error("Error in updateInterestStatus:", error);
 //     return res.status(500).json({ error: [{ msg: "Something went wrong." }] });
 //   }
 // };
+
 
 interestCltr.updateInterestStatus = async (req, res) => {
   const errors = validationResult(req);
@@ -249,47 +252,52 @@ interestCltr.updateInterestStatus = async (req, res) => {
   }
 
   const { requestId, providerId, status } = req.body; // Get request ID, provider ID, and new status
-  const { userId } = req.currentUser; // Logged-in owner's ID
-
-  if (!requestId || !providerId || !status) {
-    return res.status(400).json({ message: "Request ID, Provider ID, and Status are required." });
-  }
-
-  if (!["accepted", "rejected", "pending"].includes(status)) {
-    return res.status(400).json({ message: "Invalid status. Allowed values: accepted, rejected, pending." });
-  }
+  const { userId, name } = req.currentUser; // Logged-in owner's ID
 
   try {
-    // Find the interest request owned by the logged-in user
-    const interest = await Interest.findOne({ requestId, ownerId: userId });
-
-    if (!interest) {
-      return res.status(403).json({ message: "Unauthorized: You do not own this request." });
-    }
-
-    // Update the status of the specific provider
+    // Find and update the selected provider's status
     const updatedInterest = await Interest.findOneAndUpdate(
-      { requestId, "interestedServiceProviders.pID": providerId },
+      { ownerId: userId, requestId, "interestedServiceProviders.pID": providerId },
       { $set: { "interestedServiceProviders.$.status": status } },
-      { new: true }
-    );
-
-    if (!updatedInterest) {
-      return res.status(404).json({ message: "Service provider interest not found." });
-    }
-
-    return res.status(200).json({
-      message: `Interest status updated to ${status}.`,
-      updatedInterest,
+      { new: true, runValidators: true }
+    ).populate({
+      path: "requestId",
+      populate: {
+        path: "petId",
+      },
     });
 
+    if (!updatedInterest) {
+    return res.status(404).json({ error: [{ msg: "Service provider interest not found." }] })
+    }
+
+    // If a provider is accepted, reject all other providers and close the request
+    if (status === "accepted") {
+      await Interest.updateOne(
+        { ownerId: userId, requestId },
+        { $set: { "interestedServiceProviders.$[other].status": "rejected" } },
+        { arrayFilters: [{ "other.pID": { $ne: providerId } }], new: true }
+      );
+
+      // Mark the request as closed
+      await Request.findByIdAndUpdate(requestId, { $set: { status: "closed" } });
+
+      // Send email to the accepted provider
+      const user = await User.findById(providerId);
+      const template = sendAcceptanceEmail
+        .replace('{providerName}', user.name)
+        .replace('{ownerName}', name)
+        .replace('{petName}', updatedInterest?.requestId?.petId?.petName);
+
+      await mailSender(user.email, "User Accepted your Interest", template);
+    }
+
+    res.json(updatedInterest);
   } catch (error) {
     console.error("Error in updateInterestStatus:", error);
     return res.status(500).json({ error: [{ msg: "Something went wrong." }] });
   }
 };
-
-
 
 
 export default interestCltr;
