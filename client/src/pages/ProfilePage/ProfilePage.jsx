@@ -135,7 +135,8 @@ function ProfilePage() {
     return (
 <div className="flex bg-gradient-to-r from-blue-100 to-gray-200 min-h-screen">
   {/* {<SideNavbar /> }  */}
-  {(userInfo?.role === "owner" || userInfo?.role === "admin") && <SideNavbar />}
+  {/* {(userInfo?.role === "owner" || userInfo?.role === "admin") && <SideNavbar />} */}
+  {(userInfo?.role === "owner" && <SideNavbar />)}
 
   <div className="w-full bg-white shadow-lg p-8">
     <div>

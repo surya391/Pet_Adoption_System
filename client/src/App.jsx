@@ -9,6 +9,7 @@ import AccountVerify from './pages/AccountVerify';
 import Home from './pages/Home';
 import Navbar from './pages/Frontpage/Navbar';
 import ServiceProviderNavbar from './pages/Frontpage/SeviceProviderNavbar';
+import AdminNavbar from './pages/Frontpage/AdminNavbar';
 import Footer from './pages/Frontpage/Footer';
 import EmailLogin from './pages/Frontpage/EmailLogin';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
@@ -21,7 +22,7 @@ import { getUser } from "./slices/AuthSlice";
 import Spinner from "./pages/Frontpage/Spinner"
 import PetTypes from './pages/Admin/PetTypes';
 import PetProfile from './pages/Owner/PetProfile';
-import { petTypes } from './slices/PetSlice';
+import { fetchpetTypes } from './slices/PetSlice';
 import YourPets from './pages/Owner/YourPets';
 import RequestPets from './pages/Owner/RequestPets';
 import { getRequestTypes, myPetList } from './slices/RequestSlice';
@@ -38,12 +39,12 @@ function App() {
   const { userInfo } = useSelector(state => state.auth)
   const token = localStorage.getItem("token");
   const showFooter = ["/", "/login", "/register"];
-
+// console.log('appPage')
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (token) {
       dispatch(getUser())
-      dispatch(petTypes())
+      dispatch(fetchpetTypes())
       dispatch(getRequestTypes())
     }
   }, [dispatch])
@@ -55,7 +56,7 @@ function App() {
     }
     if (userInfo?.role === "owner") {
       dispatch(myPetList());
-      dispatch(petTypes());
+      dispatch(fetchpetTypes());
     }
   }, [userInfo, dispatch])
 
@@ -75,12 +76,23 @@ function App() {
   return (
     <div className="flex flex-col ">
       {/* {<Navbar/>} */}
-      {showNavbar.includes(location.pathname) ? (
+
+      {/* {showNavbar.includes(location.pathname) ? (
         <Navbar />
       ) : (
         (userInfo?.role === "owner" || userInfo?.role === "admin") && <Navbar />
       )}
-      {userInfo?.role === "serviceProvider" && <ServiceProviderNavbar />}
+      {userInfo?.role === "serviceProvider" && <ServiceProviderNavbar />} */}
+
+
+{showNavbar.includes(location.pathname) ? (
+  <Navbar />
+) : (
+  (userInfo?.role === "owner" && <Navbar />)
+)}
+{userInfo?.role === "serviceProvider" && <ServiceProviderNavbar />}
+{userInfo?.role === "admin" && <AdminNavbar />}
+
 
       {/* 
       {(userInfo?.role === "owner" || userInfo?.role === "admin") && <Navbar />}
@@ -104,9 +116,6 @@ function App() {
           {/* <Route path='/addInterest' element={<PrivateRoute permittedRoles={["admin", "serviceProvider"]}> <AddedInterest /></PrivateRoute>} /> */}
           <Route path='/getServiceProviderInterests' element={<PrivateRoute permittedRoles={["admin", "serviceProvider"]}> <AllInterestList /></PrivateRoute>} />
           <Route path='/allRequestInterest' element={<PrivateRoute permittedRoles={["owner"]}> <AllRequestInterest /></PrivateRoute>} />
-
-
-
         </Routes>
       </div>
       {showFooter.includes(location.pathname) && <Footer />}

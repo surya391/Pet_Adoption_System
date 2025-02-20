@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import axiosInstance from '../utils/axiosInstance'
 import { toast } from "react-toastify"
 
-export const petTypes = createAsyncThunk('get/petTypes',async(_,{rejectWithValue})=>{
+export const fetchpetTypes = createAsyncThunk('get/fetchpetTypes',async(_,{rejectWithValue})=>{
     try {
         const response = await axiosInstance.get(`/pet-types/get`,{
             headers: {
@@ -87,6 +87,50 @@ export const deletePet = createAsyncThunk("delete/deletePet",async(id,{rejectWit
     }
 })
 
+export const createpetTypes = createAsyncThunk('post/createpetTypes',async(formData,{rejectWithValue})=>{
+    try {
+        const response = await axiosInstance.post(`/pet-types/create`,formData,{
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        })
+        // console.log(response.data)
+        return response.data
+    } catch (error) {
+        return rejectWithValue(error?.response?.data?.error)
+    }
+})
+
+export const updatePetType = createAsyncThunk('put/updatePetType',async({  id ,petType },{rejectWithValue})=>{
+    try {
+        console.log(petType)
+        const response = await axiosInstance.put(`/pet-types/update?id=${id}`,{petType},{
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        })
+        console.log(response.data)
+        return response.data
+    } catch (error) {
+        console.log(error)
+        return rejectWithValue(error?.response?.data?.error)
+    }
+})
+
+export const deletePetType = createAsyncThunk('delete/deletePetType',async( id ,{rejectWithValue})=>{
+    try {
+        const response = await axiosInstance.delete(`/pet-types/delete/${id}`,{
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        })
+        // console.log(response.data)
+        return response.data
+    } catch (error) {
+        // console.log(error)
+        return rejectWithValue(error?.response?.data?.error)
+    }
+})
 
 const petSlice = createSlice({
     name:"pet",
@@ -97,6 +141,7 @@ const petSlice = createSlice({
         yoursPets:[],
         isEditing:false,
         petId:"",
+        requestId:"",
         isLoading: false,
     },
     reducers:{
@@ -108,16 +153,16 @@ const petSlice = createSlice({
         }
     },
     extraReducers : (builders)=>{
-        builders.addCase( petTypes.pending, (state)=>{
+        builders.addCase( fetchpetTypes.pending, (state)=>{
             state.serverError = null;
             state.isLoading = true;
         })
-        builders.addCase( petTypes.fulfilled, (state, action)=>{
+        builders.addCase( fetchpetTypes.fulfilled, (state, action)=>{
             state.serverError = null;
             state.petTypes = action.payload
             state.isLoading = false;
         })
-        builders.addCase( petTypes.rejected,(state, action)=>{
+        builders.addCase( fetchpetTypes.rejected,(state, action)=>{
             state.serverError = action.payload;
             state.petTypes = [];
             state.isLoading = false;
@@ -204,6 +249,53 @@ const petSlice = createSlice({
         builders.addCase(deletePet.rejected,(state,action)=>{
             state.serverError = action.payload;
             // state.petDetails = null;
+            state.isLoading = false;
+        })
+
+        builders.addCase( createpetTypes.pending, (state)=>{
+            state.serverError = null;
+            state.isLoading = true;
+        })
+        builders.addCase( createpetTypes.fulfilled, (state, action)=>{
+            state.serverError = null;
+            state.petTypes.push(action.payload)
+            state.isLoading = false;
+        })
+        builders.addCase( createpetTypes.rejected,(state, action)=>{
+            state.serverError = action.payload;
+            state.petTypes = [];
+            state.isLoading = false;
+        })
+
+        builders.addCase( updatePetType.pending, (state)=>{
+            state.serverError = null;
+            state.isLoading = true;
+        })
+        builders.addCase( updatePetType.fulfilled, (state, action)=>{
+            state.serverError = null;
+            state.isEditing = false;
+            state.requestId = "";
+            const index = state.petTypes.findIndex(ele=>ele._id === action.payload._id)
+            state.petTypes.splice(index, 1, action.payload)
+            state.isLoading = false;
+        })
+        builders.addCase( updatePetType.rejected,(state, action)=>{
+            state.serverError = action.payload;
+            state.isLoading = false;
+        })
+
+        builders.addCase( deletePetType.pending, (state)=>{
+            state.serverError = null;
+            state.isLoading = true;
+        })
+        builders.addCase( deletePetType.fulfilled, (state, action)=>{
+            state.serverError = null;
+            const index = state.petTypes.findIndex(ele => ele._id === action.payload._id)
+            state.petTypes.splice(index, 1)
+            state.isLoading = false;
+        })
+        builders.addCase( deletePetType.rejected,(state, action)=>{
+            state.serverError = action.payload;
             state.isLoading = false;
         })
     }

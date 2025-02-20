@@ -41,22 +41,6 @@ function PetProfile() {
     const handleSelectChange = (selectedValue) => {
         setFormData({ ...formData, petType: selectedValue.value })
     }
-    // console.log(formData)
-    // useEffect(() => {
-    //     if (petDetails) {
-    //         setFormData({
-    //             petImage: petDetails.petImage,
-    //             petName: petDetails.petName,
-    //             petType: petDetails.petType,
-    //             petAge: petDetails.petAge,
-    //             gender: petDetails.gender
-    //         });
-
-    //         if (petDetails.petImage) {
-    //             setPicPreview(petDetails.petImage);
-    //         }
-    //     }
-    // }, [petDetails]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -66,7 +50,6 @@ function PetProfile() {
             setClientErrors(errors);
         } else {
             setClientErrors(null);
-
             const updateData = new FormData();
             if (formData.petImage) updateData.append("petImage", formData.petImage);
             updateData.append("petName", formData.petName);

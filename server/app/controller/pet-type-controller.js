@@ -55,9 +55,9 @@ petTypeController.update = async (req, res) => {
     return res.status(400).json({ error: errors.array() });
   }
 
-  const { id } = req.params;
+  const { id } = req.query;
   const updates = req.body;
-
+// console.log(updates)
   try {
     const petType = await PetType.findByIdAndUpdate(
       id,

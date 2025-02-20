@@ -21,7 +21,8 @@ petTypeRouter.get('/get', authenticationUser,petTypeController.list);
 petTypeRouter.get('/:id', authenticationUser,/*  authorizeUser(permittedRole) */ petTypeController.show);
 
 // Update a pet type by ID
-petTypeRouter.put('/update/:id',  authenticationUser, authorizeUser(permittedRole), checkSchema(petTypeSchema),  petTypeController.update);
+// petTypeRouter.put('/update/:id',  authenticationUser, authorizeUser(permittedRole), checkSchema(petTypeSchema),  petTypeController.update);
+petTypeRouter.put('/update',  authenticationUser, authorizeUser(permittedRole), checkSchema(petTypeSchema),  petTypeController.update);
 
 // Delete a pet type by ID
 petTypeRouter.delete('/delete/:id', authenticationUser, authorizeUser(permittedRole), petTypeController.destroy);

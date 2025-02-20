@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import SideNavbar from "../Frontpage/SideNavBar";
 import Spinner from "../Frontpage/Spinner";
-import { getRequestPets, myPetList, deleteRequestPet, setIsEditing, setRequestId } from "../../slices/RequestSlice";
+import { getRequestPets, deleteRequestPet, setIsEditing, setRequestId } from "../../slices/RequestSlice";
 import { useNavigate } from "react-router-dom";
 
 function YourRequestList() {
