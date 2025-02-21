@@ -11,11 +11,13 @@ requestTypeController.create = async (req, res) => {
   }
 
   const body = req.body;
+  console.log(body)
   try {
     const newRequestType = new RequestType({ ...body, userId: req.currentUser.userId });
     await newRequestType.save();
     res.status(201).json(newRequestType);
   } catch (error) {
+    console.log(error)
     return res.status(500).json({ error: [{ msg: "Something went wrong while creating the request type." }] })
   }
 };
@@ -54,7 +56,7 @@ requestTypeController.update = async (req, res) => {
     return res.status(400).json({ error: errors.array() });
   }
 
-  const { id } = req.params;
+  const { id } = req.query;
   const updates = req.body;
 
   try {

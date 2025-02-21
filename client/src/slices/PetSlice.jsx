@@ -103,7 +103,7 @@ export const createpetTypes = createAsyncThunk('post/createpetTypes',async(formD
 
 export const updatePetType = createAsyncThunk('put/updatePetType',async({  id ,petType },{rejectWithValue})=>{
     try {
-        console.log(petType)
+        // console.log(petType)
         const response = await axiosInstance.put(`/pet-types/update?id=${id}`,{petType},{
             headers: {
                 Authorization: localStorage.getItem("token")

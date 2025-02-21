@@ -21,6 +21,7 @@ import { getProfile } from "./slices/ProfileSlice";
 import { getUser } from "./slices/AuthSlice";
 import Spinner from "./pages/Frontpage/Spinner"
 import PetTypes from './pages/Admin/PetTypes';
+import RequestTypes from './pages/Admin/RequestTypes';
 import PetProfile from './pages/Owner/PetProfile';
 import { fetchpetTypes } from './slices/PetSlice';
 import YourPets from './pages/Owner/YourPets';
@@ -106,7 +107,10 @@ function App() {
           <Route path='/loginwithemail' element={<EmailLogin />} />
           <Route path='/profilepage' element={<PrivateRoute> <ProfilePage /></PrivateRoute>} />
           <Route path='/dashboard' element={<PrivateRoute> <Dashboard /></PrivateRoute>} />
+
           <Route path='/petType' element={<PrivateRoute permittedRoles={["admin"]}> <PetTypes /></PrivateRoute>} />
+          <Route path='/requestTypes' element={<PrivateRoute permittedRoles={["admin"]}> <RequestTypes /></PrivateRoute>} />
+          
           <Route path='/petProfile' element={<PrivateRoute permittedRoles={["owner"]}> <PetProfile /></PrivateRoute>} />
           <Route path='/yoursPetList' element={<PrivateRoute permittedRoles={["owner"]}> <YourPets /></PrivateRoute>} />
           <Route path='/requestpets' element={<PrivateRoute permittedRoles={["owner"]}> <RequestPets /></PrivateRoute>} />

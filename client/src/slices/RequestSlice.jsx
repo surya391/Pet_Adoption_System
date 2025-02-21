@@ -79,7 +79,7 @@ export const deleteRequestPet = createAsyncThunk("delete/deleteRequestPet", asyn
     }
 })
 //update the request pet
-export const updateRequestPet = createAsyncThunk("put/updateRequestPet", async ({  id ,formData }, { rejectWithValue }) => {
+export const updateRequestPet = createAsyncThunk("put/updateRequestPet", async ({ id, formData }, { rejectWithValue }) => {
     // console.log(formData, id)
     try {
         const response = await axiosInstance.put(`/request/updateRequestPet?petId=${id}`, formData, {
@@ -96,7 +96,7 @@ export const updateRequestPet = createAsyncThunk("put/updateRequestPet", async (
     }
 })
 // owners pet profile list
-export const myPetList   = createAsyncThunk('get/myPetList', async (_, { rejectWithValue }) => {
+export const myPetList = createAsyncThunk('get/myPetList', async (_, { rejectWithValue }) => {
     try {
         const response = await axiosInstance.get(`/pet/my-pets`, {
             headers: {
@@ -157,6 +157,52 @@ export const singleRequestView = createAsyncThunk(
 );
 
 
+
+export const createRequestTypes = createAsyncThunk('post/createRequestTypes', async (formData, { rejectWithValue }) => {
+    console.log(formData)
+    try {
+        const response = await axiosInstance.post(`/request-types/create`, formData, {
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        })
+        // console.log(response.data)
+        return response.data
+    } catch (error) {
+        return rejectWithValue(error?.response?.data?.error)
+    }
+})
+
+export const updateRequestTypes = createAsyncThunk('put/updateRequestTypes', async ({ id, type }, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.put(`/request-types/update?id=${id}`, { type }, {
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        })
+        console.log(response.data)
+        return response.data
+    } catch (error) {
+        console.log(error)
+        return rejectWithValue(error?.response?.data?.error)
+    }
+})
+
+export const deleteRequestTypes = createAsyncThunk('delete/deleteRequestTypes', async (id, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.delete(`/request-types/delete/${id}`, {
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        })
+        // console.log(response.data)
+        return response.data
+    } catch (error) {
+        // console.log(error)
+        return rejectWithValue(error?.response?.data?.error)
+    }
+})
+
 const requestSlice = createSlice({
     name: "request",
     initialState: {
@@ -164,21 +210,24 @@ const requestSlice = createSlice({
         isLoading: false,
         requestDetails: null,
         petId: [],
-        requestTypes:[],
-        requestPets:[],
+        requestTypes: [],
+        requestPets: [],
         pendingRequestList: [],
-        isEditing:false,
-        requestId:"",
+        isEditing: false,
+        requestId: "",
         requestView: [],
-        search:[]
+        search: []
     },
-    reducers:{
-        setIsEditing : (state, action)=>{
-            state.isEditing = action.payload;
-        } ,
-        setRequestId: (state, action)=>{
-            state.requestId = action.payload
-        }
+    reducers: {
+        setIsEditing: (state, action) => {
+            state.isEditing = true;
+            state.requestId = action.payload;
+        },
+
+        // setRequestId: (state, action) => {
+        //     state.requestId = action.payload
+        // }
+
     },
     extraReducers: (builders) => {
         builders.addCase(createRequestPet.pending, (state) => {
@@ -226,7 +275,7 @@ const requestSlice = createSlice({
             state.isLoading = false;
         })
 
-// search operation in the serviceProvider page
+        // search operation in the serviceProvider page
         builders.addCase(searchRequests.pending, (state) => {
             state.serverError = null;
             state.isLoading = true;
@@ -274,7 +323,7 @@ const requestSlice = createSlice({
             state.requestDetails = null;
             state.isLoading = false;
         })
-        
+
         builders.addCase(myPetList.pending, (state) => {
             state.serverError = null;
             state.isLoading = true;
@@ -320,6 +369,53 @@ const requestSlice = createSlice({
             state.isLoading = false;
         })
 
+        builders.addCase(createRequestTypes.pending, (state) => {
+            state.serverError = null;
+            state.isLoading = true;
+        })
+        builders.addCase(createRequestTypes.fulfilled, (state, action) => {
+            state.serverError = null;
+            state.requestTypes.push(action.payload);
+            state.isLoading = false;
+        })
+        builders.addCase(createRequestTypes.rejected, (state, action) => {
+            state.serverError = action.payload;
+            state.isLoading = false;
+        })
+
+        builders.addCase(updateRequestTypes.pending, (state) => {
+            state.serverError = null;
+            state.isLoading = true;
+        })
+        builders.addCase(updateRequestTypes.fulfilled, (state, action) => {
+            state.serverError = null;
+            state.isEditing = false;
+            state.requestId = "";
+            const index = state.requestTypes.findIndex(ele => ele._id === action.payload._id)
+            state.requestTypes.splice(index, 1, action.payload)
+            state.isLoading = false;
+        })
+        builders.addCase(updateRequestTypes.rejected, (state, action) => {
+            state.serverError = action.payload;
+            state.isLoading = false;
+            state.isEditing = false;
+            state.requestId = '';
+        })
+
+        builders.addCase(deleteRequestTypes.pending, (state) => {
+            state.serverError = null;
+            state.isLoading = true;
+        })
+        builders.addCase(deleteRequestTypes.fulfilled, (state, action) => {
+            state.serverError = null;
+            const index = state.requestTypes.findIndex(ele => ele._id === action.payload._id)
+            state.requestTypes.splice(index, 1)
+            state.isLoading = false;
+        })
+        builders.addCase(deleteRequestTypes.rejected, (state, action) => {
+            state.serverError = action.payload;
+            state.isLoading = false;
+        })
 
     },
 });

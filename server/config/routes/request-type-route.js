@@ -10,7 +10,13 @@ const requestTypeRouter = express.Router();
 const permittedRole = ['admin'];
 
 // Create a new request type
-requestTypeRouter.post('/create', authenticationUser, authorizeUser(permittedRole), checkSchema(requestTypeSchema), requestTypeController. create);
+requestTypeRouter.post('/create', authenticationUser, authorizeUser(permittedRole), checkSchema(requestTypeSchema), requestTypeController.create);
+
+// Update a request type by ID
+requestTypeRouter.put('/update', authenticationUser, authorizeUser(permittedRole), checkSchema(requestTypeSchema), requestTypeController.update);
+
+// Delete a request type by ID
+requestTypeRouter.delete('/delete/:id', authenticationUser, authorizeUser(permittedRole), requestTypeController.destroy);
 
 // Get all request types for the logged-in user
 requestTypeRouter.get('/myRequestTypes', authenticationUser, authorizeUser(['admin','owner', 'serviceProvider']), requestTypeController.list);
@@ -18,10 +24,6 @@ requestTypeRouter.get('/myRequestTypes', authenticationUser, authorizeUser(['adm
 // Get request type details by request type ID
 requestTypeRouter.get('/:id', authenticationUser, authorizeUser(permittedRole), requestTypeController.show);
 
-// Update a request type by ID
-requestTypeRouter.put('/update/:id', authenticationUser, authorizeUser(permittedRole), checkSchema(requestTypeSchema), requestTypeController.update);
 
-// Delete a request type by ID
-requestTypeRouter.delete('/delete/:id', authenticationUser, authorizeUser(permittedRole), requestTypeController.destroy);
 
 export default requestTypeRouter;

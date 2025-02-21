@@ -13,7 +13,7 @@ function AdminNavbar() {
     const handleLogout = () => {
         dispatch(logOut());
         localStorage.removeItem("token");
-        navigate("/login"); // Redirect to login page after logout
+        navigate("/login"); 
     };
 
     return (
@@ -28,9 +28,12 @@ function AdminNavbar() {
                 <div className="flex items-center space-x-6 text-white">
                     {isLoggedIn ? (
                         <>
-
                             <div>
-                                <Link to="/petType" className="hover:text-gray-300 transition duration-300">Add petType
+                                <Link to="/requestTypes" className="hover:text-gray-300 transition duration-300">Add RequestTyped
+                                </Link>
+                            </div>
+                            <div>
+                                <Link to="/petType" className="hover:text-gray-300 transition duration-300">Add petTypes
                                 </Link>
                             </div>
                             <div>
