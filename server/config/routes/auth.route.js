@@ -15,4 +15,9 @@ userRouter.put('/verify', checkSchema(tokenValidatorSchema),userCltr.verify)
 userRouter.post('/sendEmail/otp', checkSchema(emailValidationSchema),otpCltr.sendEmailOtp)
 userRouter.post('/EmailVerify', checkSchema(otpValidationSchema),otpCltr.verifyOtp)
 
+userRouter.post("/forgot-password", /* checkSchema(  { email } ), */ userCltr.forgotPassword );
+userRouter.post("/reset-password", /* checkSchema(  { token, userId, newPassword: password } ), */ userCltr.resetPassword );
+userRouter.put("/update-password",  authenticationUser, /* checkSchema({updatedPassword : userRegisterSchema.password }), */ userCltr.updatePassword )
+
+
 export default userRouter

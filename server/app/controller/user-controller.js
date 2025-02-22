@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken'
 import randToken from 'rand-token'
 import Token from '../models/token-model.js'
 import mailSender from "../utils/mailSender.js";
-import { TOKEN_EMAIL_TEMPLATE } from '../utils/mailTemplate.js'
+import { TOKEN_EMAIL_TEMPLATE, FORGOT_PASSWORD_EMAIL_TEMPLATE} from '../utils/mailTemplate.js'
 
 
 
@@ -111,4 +111,81 @@ userCltr.account = async (req, res) => {
     }
 }
 
+
+userCltr.forgotPassword = async (req, res) => {
+    const errors = validationResult( req );
+    if( !errors.isEmpty() ){
+        return res.status( 400 ).json( { error : errors.array() })
+    } 
+    try {
+        const { email } = _.pick(req.body, ["email"]);
+        const user = await User.findOne({ email: email });
+        if (!user) {
+            return res.status(401).json({ error: [{ msg: "Email is Not Registered " }] })
+        }
+        const token = randToken.generate(32);
+        const existingToken = await Token.findOne({ userId: user._id });
+        if (existingToken) {
+            existingToken.token = token;
+            await existingToken.save();
+        } else {
+            await new Token({ userId: user._id, token }).save();
+        }
+        const baseUrl = process.env.BASE_URL;
+        const url = `${baseUrl}/reset-password?userId=${user._id}&token=${token}`;
+        const templet = FORGOT_PASSWORD_EMAIL_TEMPLATE.replace("{token}", url);
+        await mailSender(user.email, " Password Reset Request ", templet);
+        res.json("mail sent successfully")
+    } catch (error) {
+        return res.status(500).json({ error: [{ msg: error.message }] })
+    }
+}
+
+userCltr.resetPassword = async (req, res) => {
+    const errors = validationResult( req );
+    if( !errors.isEmpty() ){
+        return res.status( 400 ).json( { error : errors.array() })
+    } 
+    try {
+        const { userId, token } = _.pick(req.query, ["userId", "token"]);
+        const { newPassword } = _.pick(req.body, ["newPassword"]);
+        const existingToken = await Token.findOne({ userId, token });
+        if (!existingToken) {
+            return res.status(404).json({ error: [{ msg: "Invalid token" }] })
+        }
+        const salt = await bcryptjs.genSalt();
+        const hash = await bcryptjs.hash(newPassword, salt);
+        await User.findByIdAndUpdate(userId, { $set: { password: hash } }, { runValidators: true })
+        await existingToken.deleteOne();
+        res.json({ message: "Password has been reset successfully" });
+    } catch (error) {
+        return res.status(500).json({ error: [{ msg: error.message }] })
+    }
+}
+
+userCltr.updatePassword = async (req, res) => {
+    const errors = validationResult( req );
+    if( !errors.isEmpty() ){
+        return res.status( 400 ).json( { error : errors.array() })
+    } 
+    try {
+        const { userId } = _.pick(req.currentUser, ["userId"]);
+        const { updatedPassword } = _.pick(req.body, ["updatedPassword"]);
+        const user = await User.findById(userId);
+        if (!user) {
+            throw new Error("User Not found");
+        }
+        const isMatch = await bcryptjs.compare(updatedPassword, user.password);
+        if (isMatch) {
+            throw new Error("Old password and new Password con't be same");
+        }
+        const salt = await bcryptjs.genSalt();
+        const hash = await bcryptjs.hash(updatedPassword, salt);
+        user.password = hash;
+        await user.save();
+        res.json("password updated successfully");
+    } catch (error) {
+        return res.status(500).json({ error: [{ msg: error.message }] })
+    }
+}
 export default userCltr

@@ -98,4 +98,5 @@ otpCltr.verifyOtp = async (req, res) => {
     }
 }
 
+
 export default otpCltr

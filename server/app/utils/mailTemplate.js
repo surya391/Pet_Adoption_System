@@ -86,3 +86,39 @@ export const sendAcceptanceEmail = `
 </body>
 </html>
 `;
+
+export const FORGOT_PASSWORD_EMAIL_TEMPLATE = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forgot Password</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f4f4f4; margin: 0; padding: 0;">
+  <div style="max-width: 600px; margin: 30px auto; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">
+    <div style="background: linear-gradient(135deg, #007BFF, #0056b3); padding: 20px; text-align: center;">
+      <h1 style="color: white; margin: 0; font-size: 24px;">Forgot Your Password?</h1>
+    </div>
+    <div style="padding: 25px;">
+      <p style="font-size: 16px; margin-bottom: 15px;">Hello,</p>
+      <p style="font-size: 14px; color: #555;">
+        We received a request to reset the password for your account. If you did not request this, please ignore this email.
+      </p>
+      <p style="font-size: 14px; color: #555;">
+        Click the button below to reset your password:
+      </p>
+      <div style="text-align: center; margin-top: 25px;">
+        <a href="{token}" style="background: linear-gradient(135deg, #007BFF, #0056b3); color: white; padding: 12px 24px; font-size: 16px; text-decoration: none; font-weight: bold; border-radius: 8px; display: inline-block; box-shadow: 2px 4px 6px rgba(0,0,0,0.15);">
+          Click Here
+        </a>
+      </div>
+      <p style="margin-top: 30px; font-size: 14px; font-weight: bold;">Best regards,<br>Pet Adoption System</p>
+    </div>
+    <div style="text-align: center; padding: 15px; background-color: #f1f1f1; font-size: 12px; color: #777;">
+      <p>This is an automated message, please do not reply.</p>
+    </div>
+  </div>
+</body>
+</html>
+`;
