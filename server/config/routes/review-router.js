@@ -10,53 +10,18 @@ const reviewRouter = express.Router();
 const ownerRole = ['owner'];  // Only owners can create, list, and delete reviews
 
 // Create a new review (Owner only)
-reviewRouter.post(
-  '/create',
-  authenticationUser,
-  authorizeUser(ownerRole),  // Ensure only owners can create reviews
-  checkSchema(reviewSchema), // Validate the request body
-  reviewController.create
-);
+reviewRouter.post('/create', authenticationUser, authorizeUser(ownerRole),  checkSchema(reviewSchema), reviewController.create);
 
 // Get all reviews (Owner only)
-reviewRouter.get(
-  '/my-reviews',
-  authenticationUser,
-  authorizeUser(ownerRole),  // Ensure only owners can list their reviews
-  reviewController.listByUser
-);
+// reviewRouter.get('/my-reviews', authenticationUser, authorizeUser(ownerRole), reviewController.listByUser);
 
-// Get all reviews for a specific service provider 
-// reviewRouter.get(
-//   '/service-provider/:serviceProviderId',
-//   authenticationUser,
-//   authorizeUser(ownerRole),  // Ensure only admins can view reviews for a service provider
-//   reviewController.listByServiceProvider
-// );
-
-// // Get review details by review ID 
-// reviewRouter.get(
-//   '/:id',
-//   authenticationUser,
-//   authorizeUser(adminRole),  // Ensure only admins can access review details
-//   reviewController.show
-// );
 
 // Update review details by review ID 
-reviewRouter.put(
-  '/update/:id',
-  authenticationUser,
-  authorizeUser(ownerRole),  // Ensure only admins can update reviews
-  checkSchema(reviewSchema), // Validate the request body
-  reviewController.update
-);
+reviewRouter.put('/update', authenticationUser, authorizeUser(ownerRole), checkSchema(reviewSchema), reviewController.update);
 
 // Delete a review by review ID (Owner only)
-reviewRouter.delete(
-  '/delete/:id',
-  authenticationUser,
-  authorizeUser(['owner','admin']),  // Ensure only owners can delete their reviews
-  reviewController.destroy
-);
+reviewRouter.delete('/delete', authenticationUser, authorizeUser(['owner','admin']), reviewController.destroy);
+
+reviewRouter.get("/my-reviews", authenticationUser, authorizeUser(["serviceProvider"]), reviewController.listServiceProviderReviews );
 
 export default reviewRouter;

@@ -29,10 +29,10 @@ export const getServiceProviderInterests = createAsyncThunk(
                     Authorization: localStorage.getItem('token')
                 }
             });
-            console.log(response.data)
+            // console.log(response.data)
             return response.data;
         } catch (error) {
-            console.log(error)
+            // console.log(error)
             return rejectWithValue(error?.response?.data?.error);
         }
     }
@@ -41,7 +41,7 @@ export const getServiceProviderInterests = createAsyncThunk(
 //remove the interest by the service Provider
 export const removeSPInterest = createAsyncThunk(
     "delete/removeSPInterest",
-    async ( requestId , { rejectWithValue }) => {
+    async (requestId, { rejectWithValue }) => {
         try {
             const response = await axiosInstance.put(`/interest/remove`, { requestId }, {
                 headers: {
@@ -60,9 +60,9 @@ export const removeSPInterest = createAsyncThunk(
 // get owner Interest
 export const allRequestInterest = createAsyncThunk(
     "get/allRequestInterest",
-    async ( requestId , { rejectWithValue }) => {
+    async (requestId, { rejectWithValue }) => {
         try {
-            const response = await axiosInstance.get(`/interest/getOwnerInterests?requestId=${requestId}`,{
+            const response = await axiosInstance.get(`/interest/getOwnerInterests?requestId=${requestId}`, {
                 headers: {
                     Authorization: localStorage.getItem('token')
                 }
@@ -86,14 +86,14 @@ export const handleEditStatus = createAsyncThunk(
 
             const response = await axiosInstance.put(
                 `/interest/updateInterestStatus`,
-                {requestId, providerId, status},
+                { requestId, providerId, status },
                 {
                     headers: {
                         Authorization: localStorage.getItem('token')
                     }
                 }
             );
-console.log(response.data)
+            console.log(response.data)
             return response.data;
         } catch (error) {
             console.error("Error updating status:", error);
@@ -107,7 +107,7 @@ const interestSlice = createSlice({
     initialState: {
         interest: null,
         getYourInterests: [],
-        getOwnerInterests:[],
+        getOwnerInterests: [],
         serverError: null,
         interestLoading: false,
     },
@@ -151,7 +151,7 @@ const interestSlice = createSlice({
             state.getYourInterests.splice(index, 1)
             state.serverError = null;
             state.interestLoading = false;
-        });        
+        });
         builders.addCase(removeSPInterest.rejected, (state, action) => {
             state.serverError = action.payload;
             state.interestLoading = false;

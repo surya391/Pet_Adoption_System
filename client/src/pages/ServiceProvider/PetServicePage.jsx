@@ -5,6 +5,7 @@ import Select from "react-select";
 import { getPendingRequest, searchRequests } from "../../slices/RequestSlice";
 // import { petTypes } from "../../slices/PetSlice";
 import { useNavigate } from "react-router-dom";
+// console.log(getPendingRequest)
 
 function PetServicePage() {
   const dispatch = useDispatch();
@@ -121,7 +122,7 @@ function PetServicePage() {
                 <p className="text-sm text-gray-600">Pet Age: {request?.pet?.petAge}</p>
                 <p className="text-sm text-gray-600">Amount: {request.amount} ₹</p>
 
-                <p className="text-sm text-gray-600">Service Type: {request.requestType}</p>
+                <p className="text-sm text-gray-600">Service Type: {request?.requestType?.type}</p>
                 
                 <p className="text-sm text-gray-600">Start: {new Date(request.startDatetime).toLocaleString()}</p>
                 <p className="text-sm text-gray-600"> End: {new Date(request.endDatetime).toLocaleString()}</p>

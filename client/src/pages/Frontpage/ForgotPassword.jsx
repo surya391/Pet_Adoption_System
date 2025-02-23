@@ -5,6 +5,8 @@ import { isEmail } from "validator";
 import { forgotPassword } from "../../slices/AuthSlice";
 import Spinner from "./Spinner";
 import petImage from "../image/petImage8.jpg";
+import { ToastContainer } from "react-toastify";
+
 
 const ForgotPassword = () => {
     const location = useLocation();
@@ -99,6 +101,18 @@ const ForgotPassword = () => {
                 </form>
             </div>
             </div>
+            <ToastContainer
+                position="top-right"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
         </div>
     );
 };

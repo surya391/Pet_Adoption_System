@@ -219,12 +219,12 @@ const requestSlice = createSlice({
     reducers: {
         setIsEditing: (state, action) => {
             state.isEditing = true;
-            state.requestId = action.payload;
+            // state.requestId = action.payload;
         },
 
-        // setRequestId: (state, action) => {
-        //     state.requestId = action.payload
-        // }
+        setRequestId: (state, action) => {
+            state.requestId = action.payload
+        }
 
     },
     extraReducers: (builders) => {

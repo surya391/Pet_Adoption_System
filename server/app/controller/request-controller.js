@@ -45,7 +45,9 @@ requestController.list = async (req, res) => {
   const { userId } = req.currentUser;
   // console.log(userId)
   try {
-    const requests = await Request.find({ userId }).populate({ path: "petId", select: "petName petType petAge gender petImage" })
+    const requests = await Request.find({ userId })
+    .populate({ path: "petId", select: "petName petType petAge gender petImage" })
+    // .populate({path:"requestType", select: 'type'})
     if (!requests) {
       return res.status(404).json({ error: [{ msg: "No requests found." }] })
     }

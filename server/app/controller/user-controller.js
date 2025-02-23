@@ -173,11 +173,11 @@ userCltr.updatePassword = async (req, res) => {
         const { updatedPassword } = _.pick(req.body, ["updatedPassword"]);
         const user = await User.findById(userId);
         if (!user) {
-            throw new Error("User Not found");
+            throw new Error("User Not Found");
         }
         const isMatch = await bcryptjs.compare(updatedPassword, user.password);
         if (isMatch) {
-            throw new Error("Old password and new Password con't be same");
+            throw new Error("Old password and new Password can't be same");
         }
         const salt = await bcryptjs.genSalt();
         const hash = await bcryptjs.hash(updatedPassword, salt);

@@ -180,7 +180,6 @@ const ChangePassword = () => {
         } else {
             setClientErrors({});
             const actionResult = await dispatch(updatePassword({ updatedPassword: formData.password }));
-            console.log(actionResult)
             if (actionResult.type === updatePassword.fulfilled.type) {
                 navigate("/profilepage");
             }

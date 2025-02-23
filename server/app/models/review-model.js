@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose"
 
 const reviewSchema = new Schema({
-  reviewerId: {
+  reviewerId: {         // reviewer id is a owner ID
     type: Schema.Types.ObjectId,
     required: true,
     ref: 'User', // Assuming 'User' is your model for the user leaving the review
@@ -9,16 +9,10 @@ const reviewSchema = new Schema({
   serviceProviderId: {
      type: Schema.Types.ObjectId, 
     ref: 'User', 
-    required: true },
-    rating: {
-    type: Number,
-    required: true,
-    
+    required: true 
   },
-  description: {
-    type: String,
-    required: true,
-  },
+  rating:  Number,
+  description: String
 }, { timestamps: true });
 
 const Review = model('Review', reviewSchema);

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axiosInstance from "../utils/axiosInstance"
+import { toast } from 'react-toastify'
 
 
 export const getProfile = createAsyncThunk('get/getProfile', async(_,{rejectWithValue})=>{
@@ -32,7 +33,7 @@ export const createProfile = createAsyncThunk("post/createProfile",async(formDat
     }
 })
 
-export const updateProfile = createAsyncThunk("put/updateProfile",async(formData,{rejectWithValue})=>{
+export const updateProfile = createAsyncThunk("put/updateProfile",async(formData, {rejectWithValue})=>{
 try {
     // console.log(formData)
     const response = await axiosInstance.put(`/profile/user`,formData,{
@@ -50,13 +51,15 @@ try {
 export const updatePassword = createAsyncThunk ( "put/updatePassword",  async (formdata, { rejectWithValue } ) => {
     console.log(formdata)
     try {
-        await axiosInstance.put("/auth/update-password", formdata,{
+        const response = await axiosInstance.put(`/auth/update-password`, formdata, {
             headers : {
                 Authorization : localStorage.getItem("token")
             }
         })
         toast.success("You Have Successfully Updated Your Password")
+        return response.data
     } catch (error) {
+        console.log(error)
         return rejectWithValue( error?.response?.data?.error );
     }
 })
@@ -137,15 +140,15 @@ const profileSlice = createSlice({
         })
 
         builders.addCase( updatePassword.pending, (  state ) => {
-            state.isLoading = true 
+            state.isLoading = true;
         })
         builders.addCase( updatePassword.fulfilled, (  state ) => {
             state.serverError = null;
-            state.isLoading = false 
+            state.isLoading = false;
         })
         builders.addCase( updatePassword.rejected, (  state, action  ) => {
             state.serverError = action.payload;
-            state.isLoading = false 
+            state.isLoading = false; 
         })
     }
 })
