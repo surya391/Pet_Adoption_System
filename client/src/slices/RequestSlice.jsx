@@ -156,8 +156,6 @@ export const singleRequestView = createAsyncThunk(
     }
 );
 
-
-
 export const createRequestTypes = createAsyncThunk('post/createRequestTypes', async (formData, { rejectWithValue }) => {
     console.log(formData)
     try {

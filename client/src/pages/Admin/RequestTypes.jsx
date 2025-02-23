@@ -9,7 +9,7 @@ const RequestTypes = () => {
     const [editId, setEditId] = useState(null);
     const [clientErrors, setClientErrors] = useState(null);
 
-    console.log("requestId", requestId)
+    // console.log("requestId", requestId)
 
     useEffect(() => {
         // console.log("page open")

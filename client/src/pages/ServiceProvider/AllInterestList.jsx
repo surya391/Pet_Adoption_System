@@ -6,6 +6,7 @@ function AllInterestList() {
     const dispatch = useDispatch();
     const { getYourInterests, interestLoading, serverError } = useSelector((state) => state.interest);
     const { userInfo } = useSelector((state) => state.auth);
+    // console.log(userInfo)
 
     useEffect(() => {
         if (userInfo?.role === "serviceProvider") {
@@ -70,6 +71,25 @@ function AllInterestList() {
                                     ))}
                                 </div>
                             )}
+
+
+{/* {interest.interestedServiceProviders.length > 0 && (
+    <div className="mt-3 bg-gray-50 p-3 rounded-lg">
+        <h4 className="font-semibold text-gray-700">Your Status</h4>
+        {interest.interestedServiceProviders.map((provider, index) => {
+            if (provider._id === userInfo?._id || provider.ownerId === userInfo?._id) {
+                return (
+                    <p key={index} className="text-sm text-gray-600">
+                        Status - <span className="font-semibold">{provider.status || "Not Available"}</span>
+                    </p>
+                );
+            }
+            return null; // Return nothing if the condition isn't met
+        })}
+    </div>
+)} */}
+
+
 
 
                             <button

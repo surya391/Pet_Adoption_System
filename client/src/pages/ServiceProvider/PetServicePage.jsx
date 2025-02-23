@@ -33,7 +33,7 @@ function PetServicePage() {
     const timeout = setTimeout(() => {
       setSelectedRequest(request);
       setShowModal(true);
-    }, 300); 
+    }, 500); 
     setLongPressTimeout(timeout);
   };
 
@@ -120,6 +120,9 @@ function PetServicePage() {
                 <p className="text-sm text-gray-600">Pet Name: {request?.pet?.petName}</p>
                 <p className="text-sm text-gray-600">Pet Age: {request?.pet?.petAge}</p>
                 <p className="text-sm text-gray-600">Amount: {request.amount} ₹</p>
+
+                <p className="text-sm text-gray-600">Service Type: {request.requestType}</p>
+                
                 <p className="text-sm text-gray-600">Start: {new Date(request.startDatetime).toLocaleString()}</p>
                 <p className="text-sm text-gray-600"> End: {new Date(request.endDatetime).toLocaleString()}</p>
                 <button

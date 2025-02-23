@@ -6,6 +6,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import Register from './pages/Register';
 import Login from './pages/Login';
 import AccountVerify from './pages/AccountVerify';
+import ForgotPassword from './pages/Frontpage/ForgotPassword';
+import ResetPassword from './pages/Frontpage/ResetPassword';
+import ChangePassword from './pages/Frontpage/ChangePassword';
+
 import Home from './pages/Home';
 import Navbar from './pages/Frontpage/Navbar';
 import ServiceProviderNavbar from './pages/Frontpage/SeviceProviderNavbar';
@@ -39,7 +43,7 @@ function App() {
   const location = useLocation();
   const { userInfo } = useSelector(state => state.auth)
   const token = localStorage.getItem("token");
-  const showFooter = ["/", "/login", "/register"];
+  const showFooter = ["/", "/login", "/register","/reset-password", "/forgot-password"];
 // console.log('appPage')
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -105,12 +109,18 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/verify' element={<AccountVerify />} />
           <Route path='/loginwithemail' element={<EmailLogin />} />
+          <Route path='/forgot-password' element={<ForgotPassword />} />
+          <Route path='/reset-password' element={<ResetPassword />} />
+          <Route path='/changepassword'  element={<PrivateRoute permittedRoles={["admin", "serviceProvider", "owner"]}> <ChangePassword /></PrivateRoute>}/>
+
+
+
           <Route path='/profilepage' element={<PrivateRoute> <ProfilePage /></PrivateRoute>} />
           <Route path='/dashboard' element={<PrivateRoute> <Dashboard /></PrivateRoute>} />
 
           <Route path='/petType' element={<PrivateRoute permittedRoles={["admin"]}> <PetTypes /></PrivateRoute>} />
           <Route path='/requestTypes' element={<PrivateRoute permittedRoles={["admin"]}> <RequestTypes /></PrivateRoute>} />
-          
+
           <Route path='/petProfile' element={<PrivateRoute permittedRoles={["owner"]}> <PetProfile /></PrivateRoute>} />
           <Route path='/yoursPetList' element={<PrivateRoute permittedRoles={["owner"]}> <YourPets /></PrivateRoute>} />
           <Route path='/requestpets' element={<PrivateRoute permittedRoles={["owner"]}> <RequestPets /></PrivateRoute>} />
@@ -128,3 +138,4 @@ function App() {
 }
 
 export default App;
+    

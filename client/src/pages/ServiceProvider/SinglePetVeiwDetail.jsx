@@ -4,14 +4,17 @@ import { useParams } from 'react-router-dom';
 import { singleRequestView } from '../../slices/RequestSlice';
 import Spinner from "../Frontpage/Spinner";
 import { serviceProCreateInterest } from '../../slices/IntersetSlice';
+import { useNavigate } from "react-router-dom";
 
 const SinglePetVeiwDetail = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
     const { requestView, isLoading } = useSelector((state) => state.request);
-    // console.log("requestView",requestView)
+    console.log("requestView",requestView)
     const { interestLoading, serverError } = useSelector((state) => state.interest);
     
     useEffect(() => {
@@ -39,6 +42,7 @@ const SinglePetVeiwDetail = () => {
                 // console.log(error?.response?.data?.message)
                 alert("⚠ Failed to add interest or already added.", );
                 setIsButtonDisabled(false); // Re-enable button if there's an error
+                navigate('/petServicePage')
             });
     };
 

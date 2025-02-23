@@ -1,14 +1,20 @@
-
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {  createProfile, updateProfile } from '../../slices/ProfileSlice';
 import { format } from "date-fns"
 import Spinner from '../Frontpage/Spinner';
 import SideNavbar from '../Frontpage/SideNavBar';
+
+import { useNavigate } from "react-router-dom";
+
 function ProfilePage() {
     const dispatch = useDispatch();
     // const { serverError, userDetails, isLoading, profile } = useSelector(state => state.profile);
     const { serverError, userDetails, isLoading  } = useSelector(state => state.profile);
+
+    const navigate = useNavigate();
+
+
     const { userInfo } = useSelector((state) => state.auth)
     const [formData, setFormData] = useState({
         profilePic: null,
@@ -48,20 +54,6 @@ function ProfilePage() {
         }
     }, [userDetails]);
 
-    
-
-    // const options = userDetails.map(ele => ({ value: ele.value, label: ele.label }));
-
-    // const handleProfileChange = (selectedOptions) => {
-    //     setUserDetail(selectedOptions);
-    // };
-
-    // const handleCreate = async (newSpecialization) => {
-    //     const exists = options.some(opt => opt.value === newSpecialization);
-    //     if (!exists) {
-    //         setUserDetail([...userDetail, { value: newSpecialization, label: newSpecialization }]);
-    //     }
-    // };
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -243,7 +235,7 @@ function ProfilePage() {
             </div>
 
             {/* Submit Button */}
-            <div className="flex justify-center">
+            {/* <div className="flex justify-center">
               <button
                 type="submit"
                 className={`px-6 py-2 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition duration-300 ${
@@ -253,7 +245,32 @@ function ProfilePage() {
               >
                 {isLoading ? "Submitting..." : "Submit"}
               </button>
-            </div>
+            </div> */}
+
+
+<div className="flex space-x-4"> 
+  <button
+    type="submit"
+    className={`px-6 py-2 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition duration-300 ${
+      isLoading ? "opacity-50 cursor-not-allowed" : ""
+    }`}
+    disabled={isLoading}
+  >
+    {isLoading ? "Submitting..." : "Submit"}
+  </button>
+  
+  <button 
+  onClick={() => navigate('/changepassword')}
+  className={`px-6 py-2 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition duration-300 ${
+    isLoading ? "opacity-50 cursor-not-allowed" : ""
+  }`}
+  disabled={isLoading}
+>
+  Update Password
+</button>
+
+</div>
+
           </div>
         </div>
       </form>
