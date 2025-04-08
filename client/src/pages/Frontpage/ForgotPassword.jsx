@@ -31,8 +31,16 @@ const ForgotPassword = () => {
         } else {
             setClientErrors({});
             const actionResult = await dispatch(forgotPassword(email));
+            console.log(actionResult)
             if (actionResult.type === forgotPassword.fulfilled.type) {
-                navigate("/");
+                // toast.success('wow')
+                // navigate("/login");
+                // toast.success("Your Password Has Been Reset Successfully");
+
+                // Delay navigation by 5 seconds (5000 milliseconds)
+                setTimeout(() => {
+                    navigate('/login');
+                }, 3000);
             }
         }
     };
@@ -47,7 +55,6 @@ const ForgotPassword = () => {
             }}
         >
             {isLoading && <Spinner />}
-
             {/* Navigation Bar */}
             <div className="absolute top-5 left-10 right-0 flex justify-center">
                 <div className="flex gap-6 bg-white shadow-md px-6 py-2 rounded-full opacity-80">

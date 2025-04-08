@@ -4,6 +4,8 @@ import profileReducer from './slices/ProfileSlice'
 import petReducer from './slices/PetSlice'
 import requestReducer from "./slices/RequestSlice"
 import interestReducer from "./slices/IntersetSlice"
+import reviewReducer from "./slices/ReviewSlice"
+import paymentReducer from "./slices/PaymentSlice"
 const store = configureStore({
     reducer:{
         auth:authReducer,
@@ -11,6 +13,8 @@ const store = configureStore({
         pet : petReducer,
         request : requestReducer,
         interest: interestReducer,
+        review: reviewReducer,
+        payment: paymentReducer
     }
 })
 

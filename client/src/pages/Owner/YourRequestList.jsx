@@ -61,7 +61,7 @@ function YourRequestList() {
 
                                 <div className="flex justify-between mt-5">
                                     <div>
-                                        <p className="mr-5 text-sm font-semibold hover:text-blue-500 hover:underline cursor-pointer" onClick={()=>navigate(`/allRequestInterest?requestId=${request._id}`)}> Interest people</p>
+                                        <p className="mr-5 text-sm font-semibold hover:text-blue-500 hover:underline cursor-pointer" onClick={()=>navigate(`/allRequestInterest?requestId=${request._id}`,   { state: { amount: request.amount } })}> Interest people</p>
                                     </div>
                                     <div>
                                         <button

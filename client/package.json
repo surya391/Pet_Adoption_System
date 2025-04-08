@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.1",
+    "@smastrom/react-rating": "^1.5.0",
+    "@stripe/react-stripe-js": "^3.3.0",
+    "@stripe/stripe-js": "^5.9.2",
     "@tailwindcss/vite": "^4.0.0",
     "axios": "^1.7.9",
     "date-fns": "^4.1.0",

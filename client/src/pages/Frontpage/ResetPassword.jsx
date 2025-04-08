@@ -7,6 +7,8 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import { isStrongPassword } from "validator";
 import Spinner from "./Spinner";
 import petImage from "../image/petImage9.jpg";
+import { ToastContainer } from "react-toastify";
+
 
 const ResetPassword = () => {
     const dispatch = useDispatch();
@@ -50,7 +52,9 @@ const ResetPassword = () => {
             setClientErrors({})
             const actionResult = await dispatch(resetPassword({ userId, token, password: formData.password }));
             if (actionResult.type === resetPassword.fulfilled.type) {
-                navigate("/login");
+                setTimeout(() => {
+                    navigate('/login');
+                }, 3000);
             }
         }
     }
@@ -146,6 +150,18 @@ const ResetPassword = () => {
                     </div>
                 </div>
             </div>
+            <ToastContainer
+                position="top-right"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
         </div>
     )
 }

@@ -29,7 +29,7 @@ export const getPet = createAsyncThunk('get/getPet', async(_,{rejectWithValue})=
     }
 })
 
-export const singlePet = createAsyncThunk('get/singlePet', async(_,{rejectWithValue})=>{
+export const singlePet = createAsyncThunk('get/singlePet', async(_, {rejectWithValue})=>{
     try {
         const response = await axiosInstance.get(`/pet/singlePet`,{
             headers:{
@@ -42,7 +42,7 @@ export const singlePet = createAsyncThunk('get/singlePet', async(_,{rejectWithVa
     }
 })
 
-export const profilePet = createAsyncThunk('post/profilePet',async(formData,{rejectWithValue})=>{
+export const profilePet = createAsyncThunk('post/profilePet',async(formData, {rejectWithValue})=>{
     try {
         const response = await axiosInstance.post(`/pet/addPet`,formData,{
             headers:{

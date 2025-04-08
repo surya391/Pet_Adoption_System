@@ -12,6 +12,7 @@ import requestRouter from './config/routes/request-route.js'
 import requestTypeRouter from './config/routes/request-type-route.js'
 import reviewRouter from './config/routes/review-router.js'
 import interestRouter from './config/routes/interest-route.js'
+import paymentRoute from './config/routes/payment-route.js'
 
 const app = express()
 configureDB()
@@ -32,6 +33,7 @@ app.use('/api/request', requestRouter);
 app.use('/api/request-types', requestTypeRouter);
 app.use('/api/review',reviewRouter)
 app.use('/api/interest',interestRouter)
+app.use('/api/payment', paymentRoute)
 
 
 

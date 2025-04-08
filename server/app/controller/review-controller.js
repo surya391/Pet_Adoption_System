@@ -32,7 +32,6 @@ reviewCltr.create = async (req, res) => {
       return res.status(500).json({ error: [{ msg:"Something went wrong." }] })
     }
   };
-
 // Update a review
 reviewCltr.update = async (req, res) => {
   const errors = validationResult(req);
@@ -64,7 +63,6 @@ reviewCltr.update = async (req, res) => {
     return res.status(500).json({ error: [{ msg: "Something went wrong."}] })
   }
 };
-
 // Delete a review
 reviewCltr.destroy = async (req, res) => {
   try {
@@ -85,16 +83,15 @@ reviewCltr.destroy = async (req, res) => {
     return res.status(500).json({ error: [{ msg: "Something went wrong."}] })
   }
 };
-
+//serviceProviders can see the Review 
 reviewCltr.listServiceProviderReviews = async (req, res) => {
   try {
+    // const { userId } = _.pick(req.currentUser, [ "userId" ] );
       const { serviceProviderId } = _.pick(req.query, ["serviceProviderId"]);
-      
       // Fetch reviews for the given service provider
       const reviews = await Review.find({ serviceProviderId })
           .sort({ createdAt: -1 }) // Sort by newest first
           .populate("reviewerId", "name"); // Populate reviewer details
-
       res.json(reviews);
   } catch (error) {
       return res.status(500).json({ error: [{ msg: error.message }] });
@@ -102,55 +99,18 @@ reviewCltr.listServiceProviderReviews = async (req, res) => {
 };
 
 
-
-// List reviews by user
-// reviewCltr.listByUser = async (req, res) => {
-//   const { userId } = req.currentUser;
-//   try {
-//     const reviews = await Review.find({ reviewerId: userId });
-//     if (!reviews.length) {
-//       return res.status(500).json({ error: [{ msg:"No reviews found for this user."  }] })
-//     }
-//     res.json(reviews);
-//   } catch (error) {
-//     return res.status(500).json({ error: [{ msg: "Something went wrong."}] })
-//   }
-// };
-
-// List reviews for a service provider
-// reviewCltr.listByServiceProvider = async (req, res) => {
-//     const { serviceProviderId } = req.params; // Extract serviceProviderId from the request params
-//     try {
-//       // Correct the query to use serviceProviderId, not userId
-//       const reviews = await Review.find({ serviceProviderId: serviceProviderId });
-  
-//       if (!reviews.length) {
-//         return res.status(404).json({ error: "No reviews found for this service provider." });
-//       }
-  
-//       // Return the reviews if found
-//       res.json(reviews);
-//     } catch (err) {
-//       console.error("Error while fetching reviews:", err);
-//       res.status(500).json({ error: "Something went wrong." });
-//     }
-//   };
-  
-
-// Get a single review by ID
-reviewCltr.show = async (req, res) => {
-  const { id } = req.params;
+reviewCltr.listOwnerReviews = async (req, res) => {
   try {
-    const review = await Review.findById(id);
-    if (!review) {
-    return res.status(404).json({ error: [{ msg: "Review not found."}] })
-    }
-    res.json(review);
+      const { userId } = _.pick(req.currentUser, [ "userId" ] );
+      const reviews = await Review.find({  reviewerId: userId })
+          .sort({ createdAt: -1 })
+          .populate( "serviceProviderId", "name" )
+      res.json( reviews );
   } catch (error) {
-    return res.status(500).json({ error: [{ msg: "Something went wrong."}] })
-
+      return res.status(500).json({ error: [{ msg: error.message }] })
   }
-};
+}
+
 
 
 export default reviewCltr;

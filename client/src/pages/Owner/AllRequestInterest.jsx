@@ -1,17 +1,26 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { allRequestInterest, handleEditStatus } from "../../slices/IntersetSlice";
+import { createOwnerSecret } from "../../slices/PaymentSlice"
 import { useLocation, useNavigate } from "react-router-dom";
 
 function AllRequestInterest() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
     const { getOwnerInterests, interestLoading, serverError } = useSelector(
         (state) => state.interest
     );
+
+    const { clientSecret } = useSelector(
+        (state) => state.payment
+    )
+
+    console.log("clientSecret", clientSecret)
     // console.log(serverError)
     const location = useLocation();
+    const amount = location.state?.amount;
+    console.log('aaa', amount)
+
     const queryParams = new URLSearchParams(location.search);
     const requestId = queryParams.get("requestId");
 
@@ -28,15 +37,14 @@ function AllRequestInterest() {
     };
 
     const handleAccept = (requestId, providerId, status) => {
-        // console.log("requestId", requestId)
-        // console.log("providerId", providerId)
-        // console.log("status", status)
+        if(amount){
         dispatch(handleEditStatus({ requestId, providerId, status }))
+        dispatch(createOwnerSecret({ amount }))
+        } else{
+            navigate(-1)
+        }
     }
     const handleRemove = (requestId, providerId, status) => {
-        // console.log("requestId", requestId)
-        // console.log("providerId", providerId)
-        // console.log("status", status)
         dispatch(handleEditStatus({ requestId, providerId, status }))
     }
 

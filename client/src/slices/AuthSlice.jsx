@@ -29,7 +29,7 @@ export const userLogin = createAsyncThunk('post/userLogin',async(formData,{rejec
         const response = await axiosInstance.post(`/auth/signIn`,formData)
         toast.success('User Login successfully')
         localStorage.setItem('token',response.data.token)
-        console.log(response.data)
+        // console.log(response.data)
         return response.data
     } catch (error) {
         return rejectWithValue(error?.response?.data?.error)

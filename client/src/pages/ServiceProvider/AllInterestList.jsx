@@ -52,7 +52,7 @@ function AllInterestList() {
                             )}
 
                             <p className="text-gray-700"><strong>Description:</strong> {interest.requestId?.description}</p>
-                            <p className="text-gray-700"><strong>Amount:</strong> ${interest.requestId?.amount}</p>
+                            <p className="text-gray-700"><strong>Amount:</strong> ₹{interest.requestId?.amount}</p>
                             <p className="text-gray-700"><strong>Start Date:</strong> {new Date(interest.requestId?.startDatetime).toLocaleDateString()}</p>
                             <p className="text-gray-700"><strong>End Date:</strong> {new Date(interest.requestId?.endDatetime).toLocaleDateString()}</p>
                             <p className="text-sm text-gray-600">

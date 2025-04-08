@@ -34,9 +34,10 @@ import { getRequestTypes, myPetList } from './slices/RequestSlice';
 import YourRequestList from './pages/Owner/YourRequestList';
 import PetServicePage from './pages/ServiceProvider/PetServicePage';
 import SinglePetVeiwDetail from './pages/ServiceProvider/SinglePetVeiwDetail';
-// import AddedInterest from './pages/ServiceProvider/AddedInterest';
 import AllInterestList from './pages/ServiceProvider/AllInterestList';
 import AllRequestInterest from './pages/Owner/AllRequestInterest';
+import Review from "./pages/Owner/Review"
+import MyReviews from './pages/Owner/MyReviews';
 
 
 function App() {
@@ -44,8 +45,7 @@ function App() {
   const location = useLocation();
   const { userInfo } = useSelector(state => state.auth)
   const token = localStorage.getItem("token");
-  const showFooter = ["/", "/login", "/register","/reset-password", "/forgot-password"];
-// console.log('appPage')
+  const showFooter = ["/", "/login", "/register", "/reset-password", "/forgot-password"];
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (token) {
@@ -70,39 +70,20 @@ function App() {
     return <Spinner />
   }
 
-  // const hideNavbarRoutes = ["/login", "/register"];
-  // const currentPath = window.location.pathname;
-
-  // if (hideNavbarRoutes.includes(currentPath)) {
-  //   return <Navbar />
-  // }
-
   const showNavbar = ["/login", "/register"];
 
   return (
     <div className="flex flex-col ">
-      {/* {<Navbar/>} */}
 
-      {/* {showNavbar.includes(location.pathname) ? (
+      {showNavbar.includes(location.pathname) ? (
         <Navbar />
       ) : (
-        (userInfo?.role === "owner" || userInfo?.role === "admin") && <Navbar />
+        (userInfo?.role === "owner" && <Navbar />)
       )}
-      {userInfo?.role === "serviceProvider" && <ServiceProviderNavbar />} */}
 
+      {userInfo?.role === "serviceProvider" && <ServiceProviderNavbar />}
+      {userInfo?.role === "admin" && <AdminNavbar />}
 
-{showNavbar.includes(location.pathname) ? (
-  <Navbar />
-) : (
-  (userInfo?.role === "owner" && <Navbar />)
-)}
-{userInfo?.role === "serviceProvider" && <ServiceProviderNavbar />}
-{userInfo?.role === "admin" && <AdminNavbar />}
-
-
-      {/* 
-      {(userInfo?.role === "owner" || userInfo?.role === "admin") && <Navbar />}
-      {userInfo?.role === "serviceProvider" && <ServiceProviderNavbar />} */}
       <div className="flex-grow">
         <Routes>
           <Route path='/' element={<Home />} />
@@ -112,9 +93,7 @@ function App() {
           <Route path='/loginwithemail' element={<EmailLogin />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
           <Route path='/reset-password' element={<ResetPassword />} />
-          <Route path='/changepassword'  element={<PrivateRoute permittedRoles={["admin", "serviceProvider", "owner"]}> <ChangePassword /></PrivateRoute>}/>
-
-
+          <Route path='/changepassword' element={<PrivateRoute permittedRoles={["admin", "serviceProvider", "owner"]}> <ChangePassword /></PrivateRoute>} />
 
           <Route path='/profilepage' element={<PrivateRoute> <ProfilePage /></PrivateRoute>} />
           <Route path='/dashboard' element={<PrivateRoute> <Dashboard /></PrivateRoute>} />
@@ -128,9 +107,12 @@ function App() {
           <Route path='/requestList' element={<PrivateRoute permittedRoles={["admin", "owner", "serviceProvider"]}> <YourRequestList /></PrivateRoute>} />
           <Route path='/petServicePage' element={<PrivateRoute permittedRoles={["admin", "serviceProvider"]}> <PetServicePage /></PrivateRoute>} />
           <Route path='/singlePetVeiwDetail/:id' element={<PrivateRoute permittedRoles={["admin", "serviceProvider"]}> <SinglePetVeiwDetail /></PrivateRoute>} />
-          {/* <Route path='/addInterest' element={<PrivateRoute permittedRoles={["admin", "serviceProvider"]}> <AddedInterest /></PrivateRoute>} /> */}
           <Route path='/getServiceProviderInterests' element={<PrivateRoute permittedRoles={["admin", "serviceProvider"]}> <AllInterestList /></PrivateRoute>} />
           <Route path='/allRequestInterest' element={<PrivateRoute permittedRoles={["owner"]}> <AllRequestInterest /></PrivateRoute>} />
+          <Route path='/review' element={<PrivateRoute permittedRoles={["owner"]}> <Review /></PrivateRoute>} />
+          <Route path='/my-reviews' element={<PrivateRoute permittedRoles={["owner"]}> <MyReviews /></PrivateRoute>} />
+          {/* <Route path='/payment' element={<PrivateRoute permittedRoles={["owner","serviceProvider","admin"]}> <Payment /></PrivateRoute>} /> */}
+
         </Routes>
       </div>
       {showFooter.includes(location.pathname) && <Footer />}
@@ -139,4 +121,3 @@ function App() {
 }
 
 export default App;
-    

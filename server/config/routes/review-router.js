@@ -12,16 +12,18 @@ const ownerRole = ['owner'];  // Only owners can create, list, and delete review
 // Create a new review (Owner only)
 reviewRouter.post('/create', authenticationUser, authorizeUser(ownerRole),  checkSchema(reviewSchema), reviewController.create);
 
-// Get all reviews (Owner only)
-// reviewRouter.get('/my-reviews', authenticationUser, authorizeUser(ownerRole), reviewController.listByUser);
-
-
 // Update review details by review ID 
 reviewRouter.put('/update', authenticationUser, authorizeUser(ownerRole), checkSchema(reviewSchema), reviewController.update);
 
 // Delete a review by review ID (Owner only)
 reviewRouter.delete('/delete', authenticationUser, authorizeUser(['owner','admin']), reviewController.destroy);
 
-reviewRouter.get("/my-reviews", authenticationUser, authorizeUser(["serviceProvider"]), reviewController.listServiceProviderReviews );
+//  all review created by owner
+reviewRouter.get("/my-reviews", authenticationUser, authorizeUser(["owner"]), reviewController.listOwnerReviews );
+
+// all review belongs to serviceProvider
+reviewRouter.get("/all-reviews", authenticationUser, authorizeUser(["owner"]), reviewController.listServiceProviderReviews );
+
+
 
 export default reviewRouter;

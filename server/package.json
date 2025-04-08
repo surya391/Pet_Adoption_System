@@ -24,6 +24,7 @@
     "nodemailer": "^6.10.0",
     "opencage-api-client": "^1.0.7",
     "rand-token": "^1.0.1",
+    "stripe": "^17.7.0",
     "twilio": "^5.4.2"
   }
 }
