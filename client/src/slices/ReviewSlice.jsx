@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../utils/axiosInstance";
 import { toast } from "react-toastify";
 
-export const allServiceReviews = createAsyncThunk("get/allServiceReviews", async (ownerId, { rejectWithValue }) => {
+export const getMyreviews = createAsyncThunk("get/getMyreviews", async (ownerId, { rejectWithValue }) => {
     try {
         const response = await axiosInstance.get(`/review/list?ownerId=${ownerId}`, {
             headers: {
@@ -43,9 +43,9 @@ export const deleteReview = createAsyncThunk("delete/deleteReview", async (id, {
         return rejectWithValue(error?.response?.data?.error);
     }
 })
-export const getMyReviews = createAsyncThunk("get/getMyReviews", async (_, { rejectWithValue }) => {
+export const getProviderReviews = createAsyncThunk("get/getProviderReviews", async (serviceProviderId, { rejectWithValue }) => {
     try {
-        const response = await axiosInstance.get("/review/my-reviews", {
+        const response = await axiosInstance.get(`/review/reviews?serviceProviderId=${serviceProviderId}`, {
             headers: {
                 Authorization: localStorage.getItem("token")
             }
@@ -78,18 +78,18 @@ const reviewSlice = createSlice({
         myReviews: [],
     },
     extraReducers: (builders) => {
-        builders.addCase(allServiceReviews.pending, (state) => {
+        builders.addCase(getMyreviews.pending, (state) => {
             state.isLoading = true;
         })
-        builders.addCase(allServiceReviews.fulfilled, (state, action) => {
+        builders.addCase(getMyreviews.fulfilled, (state, action) => {
             state.isLoading = false;
             state.serverError = null;
-            state.serviceProviderReviews = action.payload;
+            state.myReviews = action.payload;
         })
-        builders.addCase(allServiceReviews.rejected, (state, action) => {
+        builders.addCase(getMyreviews.rejected, (state, action) => {
             state.isLoading = false;
             state.serverError = action.payload;
-            state.serviceProviderReviews = [];
+            state.myReviews = [];
         })
 
         builders.addCase(createReview.pending, (state) => {
@@ -105,17 +105,18 @@ const reviewSlice = createSlice({
             state.serverError = action.payload;
         })
 
-        builders.addCase(getMyReviews.pending, (state) => {
+        builders.addCase(getProviderReviews.pending, (state) => {
             state.isLoading = true;
         })
-        builders.addCase(getMyReviews.fulfilled, (state, action) => {
+        builders.addCase(getProviderReviews.fulfilled, (state, action) => {
             state.isLoading = false;
             state.serverError = null;
-            state.myReviews = action.payload;
+            state.serviceProviderReviews = action.payload;
         })
-        builders.addCase(getMyReviews.rejected, (state, action) => {
+        builders.addCase(getProviderReviews.rejected, (state, action) => {
             state.isLoading = false;
             state.serverError = action.payload;
+            state.serviceProviderReviews = [];
         })
 
         builders.addCase(deleteReview.pending, (state) => {

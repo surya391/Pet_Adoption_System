@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns"
-import { deleteReview, getMyReviews } from "../../slices/ReviewSlice"
+import { deleteReview, getMyreviews} from "../../slices/ReviewSlice"
 import Spinner from "../Frontpage/Spinner";
 
 const MyReviews = () => {
@@ -15,7 +15,7 @@ const MyReviews = () => {
 
     useEffect(() => {
         if (myReviews?.length === 0) {
-            dispatch(getMyReviews());
+            dispatch(getMyreviews());
         }
     }, []);
     const handleDelete = (id) => {

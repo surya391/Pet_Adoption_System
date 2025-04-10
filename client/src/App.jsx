@@ -36,8 +36,10 @@ import PetServicePage from './pages/ServiceProvider/PetServicePage';
 import SinglePetVeiwDetail from './pages/ServiceProvider/SinglePetVeiwDetail';
 import AllInterestList from './pages/ServiceProvider/AllInterestList';
 import AllRequestInterest from './pages/Owner/AllRequestInterest';
+
 import Review from "./pages/Owner/Review"
 import MyReviews from './pages/Owner/MyReviews';
+import AllReviews from './pages/review/AllReviews';
 
 
 function App() {
@@ -111,6 +113,8 @@ function App() {
           <Route path='/allRequestInterest' element={<PrivateRoute permittedRoles={["owner"]}> <AllRequestInterest /></PrivateRoute>} />
           <Route path='/review' element={<PrivateRoute permittedRoles={["owner"]}> <Review /></PrivateRoute>} />
           <Route path='/my-reviews' element={<PrivateRoute permittedRoles={["owner"]}> <MyReviews /></PrivateRoute>} />
+          <Route path='/reviews' element={<PrivateRoute permittedRoles={["owner"]}> <AllReviews /></PrivateRoute>} />
+
           {/* <Route path='/payment' element={<PrivateRoute permittedRoles={["owner","serviceProvider","admin"]}> <Payment /></PrivateRoute>} /> */}
 
         </Routes>

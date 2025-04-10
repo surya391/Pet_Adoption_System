@@ -15,7 +15,15 @@ const aggrigatorForCustomer = ({ location, petType }) => {
         $unwind: "$profile"
     });
 
-
+    pipeLine.push({
+        $lookup: {
+            from: "requesttypes", // <-- Must match the actual collection name (usually plural & lowercase)
+            localField: "requestType",
+            foreignField: "_id",
+            as: "requestType"
+        }
+    });
+    pipeLine.push({ $unwind: "$requestType" });
 
     // Project required fields
     pipeLine.push({
@@ -28,9 +36,41 @@ const aggrigatorForCustomer = ({ location, petType }) => {
             "profile.__v": 0,
             "profile.gender": 0,
             "profile.dateOfBirth": 0,
-            "profile.profilePic": 0
+            "profile.profilePic": 0,
+
+            "requestType.createdAt": 0,
+            "requestType.updatedAt": 0,
+            "requestType.__v": 0,
+            "requestType.userId": 0,
         }
     });
+
+    // pipeLine.push({
+    //     $lookup: {
+    //         from: "requestTypes",
+    //         localField: "requestType",
+    //         foreignField: "_id",
+    //         as: "requestType"
+    //     }
+    // });
+
+    // // Unwind profile array
+    // pipeLine.push({
+    //     $unwind: "$requestType"
+    // });
+
+
+
+    // // Project required fields
+    // pipeLine.push({
+    //     $project: {
+    //         "requestType.createdAt": 0,
+    //         "requestType.updatedAt": 0,
+    //         "requestType.__v": 0,
+    //     }
+    // });
+
+
     pipeLine.push({
         $lookup: {
             from: "pets",

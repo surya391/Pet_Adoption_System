@@ -10,7 +10,7 @@ function AllRequestInterest() {
     const { getOwnerInterests, interestLoading, serverError } = useSelector(
         (state) => state.interest
     );
-
+    console.log('getOwnerInterests', getOwnerInterests)
     const { clientSecret } = useSelector(
         (state) => state.payment
     )
@@ -37,10 +37,10 @@ function AllRequestInterest() {
     };
 
     const handleAccept = (requestId, providerId, status) => {
-        if(amount){
-        dispatch(handleEditStatus({ requestId, providerId, status }))
-        dispatch(createOwnerSecret({ amount }))
-        } else{
+        if (amount) {
+            dispatch(handleEditStatus({ requestId, providerId, status }))
+            dispatch(createOwnerSecret({ amount }))
+        } else {
             navigate(-1)
         }
     }
@@ -89,19 +89,33 @@ function AllRequestInterest() {
                                             <p className="text-gray-600">
                                                 Location: {provider?.profile?.address?.city}, {provider?.profile?.address?.state}, {provider?.profile?.address?.country}
                                             </p>
-                                            <div className="flex space-x-4">
-                                                <button
-                                                    onClick={() => { handleAccept(requestId, provider.pID, "accepted") }}
-                                                    className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" >
-                                                    Accept
-                                                </button>
+                                            <div className="flex justify-between items-center">
+                                                <div className="flex space-x-4">
+                                                    <button
+                                                        onClick={() => handleAccept(requestId, provider.pID, "accepted")}
+                                                        className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                                                    >
+                                                        Accept
+                                                    </button>
 
-                                                <button
-                                                 onClick={() => { handleRemove(requestId, provider.pID, "rejected") }}
-                                                 className="mt-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
-                                                    Reject
-                                                </button>
+                                                    <button
+                                                        onClick={() => handleRemove(requestId, provider.pID, "rejected")}
+                                                        className="mt-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+                                                    >
+                                                        Reject
+                                                    </button>
+                                                </div>
+
+                                                <div className="ml-50">
+                                                    <p className="mt-2 text-blue-600 font-medium cursor-pointer hover:underline hover:text-blue-800 transition-colors duration-300"
+                                                        onClick={() => navigate(`/reviews?serviceProviderId=${provider?.pID}`)}
+
+                                                    >
+                                                        View Reviews
+                                                    </p>
+                                                </div>
                                             </div>
+
                                         </div>
                                     </li>
                                 ))}

@@ -22,7 +22,7 @@ reviewRouter.delete('/delete', authenticationUser, authorizeUser(['owner','admin
 reviewRouter.get("/my-reviews", authenticationUser, authorizeUser(["owner"]), reviewController.listOwnerReviews );
 
 // all review belongs to serviceProvider
-reviewRouter.get("/all-reviews", authenticationUser, authorizeUser(["owner"]), reviewController.listServiceProviderReviews );
+reviewRouter.get("/reviews", authenticationUser, authorizeUser(["owner"]), reviewController.listServiceProviderReviews );
 
 
 
