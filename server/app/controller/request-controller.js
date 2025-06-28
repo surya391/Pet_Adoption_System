@@ -65,8 +65,9 @@ requestController.listPendingRequests = async (req, res) => {
       status: "pending"
     }).populate({
       path: "petId",
-      select: "petName petType petAge gender petImage"
-    });
+      select: "petName petType petAge gender petImage "
+    })
+    .populate({ path: "requestType", select: "type" }) 
 
     if (!pendingRequests || pendingRequests.length === 0) {
       return res.status(404).json({ error: [{ msg: "No pending requests found." }] })
@@ -121,7 +122,8 @@ requestController.search = async (req, res) => {
   try {
     const { petType, location } = _.pick(req.query, ["petType", "location"]);
     const pipeLine = aggrigatorForCustomer({ location, petType });
-    const response = await Request.aggregate(pipeLine);
+    const response = await Request.aggregate(pipeLine)
+
     res.json({
       data: response,
       total: response.length
