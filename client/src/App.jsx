@@ -19,7 +19,7 @@ import EmailLogin from './pages/Frontpage/EmailLogin';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import Dashboard from './pages/Dashboard';
 
-import PrivateRoute from './pages/Components/PrivateRoute';
+import PrivateRoute from './pages/components/PrivateRoute';
 
 import { getProfile } from "./slices/ProfileSlice";
 import { getUser } from "./slices/AuthSlice";
